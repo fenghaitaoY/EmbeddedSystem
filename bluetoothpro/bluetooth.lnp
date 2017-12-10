@@ -1,0 +1,4 @@
+"STARTUP.obj",
+"bluetooth_main.obj" 
+TO "bluetooth" 
+RAMSIZE(256) 

@@ -1,0 +1,503 @@
+C51 COMPILER V9.52.0.0   BLUETOOTH_MAIN                                                    12/10/2017 00:56:11 PAGE 1   
+
+
+C51 COMPILER V9.52.0.0, COMPILATION OF MODULE BLUETOOTH_MAIN
+OBJECT MODULE PLACED IN bluetooth_main.OBJ
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE bluetooth_main.c BROWSE DEBUG OBJECTEXTEND TABS(2)
+
+line level    source
+
+   1          /*
+   2            名称：蓝牙串口通信显示在lcd上
+   3            日期：2017.12.08
+   4            修改：初版
+   5            内容：连接好串口或者usb转串口至电脑，下载该程序，打开电源
+   6                  打开串口调试程序，将波特率设置为9600，无奇偶校验
+   7                  晶振11.0592MHz，发送和接收使用的格式相同，如都使用
+   8                  字符型格式，在发送框输入 hello ，在接收框中同样可以
+   9              看到相同字符，说明设置和通信正确,讲SBUF收到的数据
+  10              显示到LCD上
+  11           */
+  12          #include<reg52.h>
+  13          #include "bluetooth.h"
+  14          #include <intrins.h>
+  15          #include <stdio.h>
+  16          #include <math.h>
+  17          #include <string.h>
+  18          
+  19          /************************************************
+  20              定义串口使用接口信息
+  21          *************************************************/
+  22          typedef struct serial_var{
+  23              unsigned char recData;           //读取SBUF存储的数据
+  24              unsigned char serial_rec_ok;       //串口接收成功标志
+  25              unsigned char serial_send_ok;      //串口发生成功标志
+  26          
+  27          }serial_var_t;
+  28          
+  29          serial_var_t  serial={'\0', 0, 1};
+  30          
+  31          /************************************************
+  32              定义LCD12864使用接口信息
+  33          *************************************************/
+  34          sbit RS  = P2^4;
+  35          sbit WRD = P2^5;
+  36          sbit E   = P2^6;
+  37          sbit PSB = P2^1;
+  38          sbit RES = P2^3;
+  39          sbit BUSY_FLAG = P0^7;
+  40          #define LCD_DATA P0
+  41          
+  42          //unsigned char code pic2[];
+  43          //unsigned char code pic3[];
+  44          
+  45          unsigned char code IC_DAT[]={
+  46          "上海浩豚电子科技"  
+  47          "单片机开发板系列"
+  48          "中文字库测试程序"
+  49          "恭喜发财身体健康"
+  50          };
+  51          unsigned char code IC_DAT2[]={
+  52          "海纳百川宽容为先"
+  53          "欲成大业诚信为先"
+  54          "游弋商海济世为先"
+  55          "人立于世守法为先"
+C51 COMPILER V9.52.0.0   BLUETOOTH_MAIN                                                    12/10/2017 00:56:11 PAGE 2   
+
+  56          };
+  57          
+  58          unsigned char temp;
+  59          #define LOG serial_write_str
+  60          
+  61          
+  62          /************************************************
+  63                  主程序
+  64          *************************************************/
+  65          void main()
+  66          {
+  67   1          init_graphic();            //调用LCD显示图片(扩展)初始化程序
+  68   1        
+  69   1          DisplayGraphic(pic2);  //显示图片2
+  70   1          delayms(200);
+  71   1        
+  72   1          serial_init();
+  73   1          
+  74   1                init_lcd_characters();       //调用LCD字库初始化程序
+  75   1                delay(100);            //大于100uS的延时程序 
+  76   1                lcd_mesg(IC_DAT2);     //显示中文汉字2
+  77   1                delayms(240);
+  78   1          while(1){
+  79   2            if(serial.serial_rec_ok ==1){
+  80   3                temp = serial_read();
+  81   3                init_lcd_characters();       //调用LCD字库初始化程序
+  82   3                delay(100);            //大于100uS的延时程序
+  83   3                switch(temp){
+  84   4                  case 0x61: //a
+  85   4                    lcd_mesg(IC_DAT);      //显示中文汉字1
+  86   4                    break;
+  87   4                  case 0x62:
+  88   4                    clear_screen();
+  89   4                    break;
+  90   4                  case 0x63:
+  91   4                    lcdDisplayString(1,0,"冯海涛LOVE杨晶晶");
+  92   4                    break;
+  93   4                  case 0x64:
+  94   4                    lcdDisplayString(3,0,"蓝牙打开. . .");
+  95   4                    break;
+  96   4                  case 0x65:
+  97   4                    lcdDisplayString(2,1,"abcdefghijklmnopqrstuvw");
+  98   4                    break;
+  99   4                  case 0x66:
+ 100   4                    break;
+ 101   4                  case 0x67:
+ 102   4                    break;
+ 103   4                      
+ 104   4                }
+ 105   3                delayms(240);
+ 106   3                
+ 107   3            }
+ 108   2            
+ 109   2          }
+ 110   1          /*while(1)
+ 111   1            {
+ 112   1            init_graphic();            //调用LCD显示图片(扩展)初始化程序
+ 113   1        
+ 114   1                DisplayGraphic(pic2);  //显示图片2
+ 115   1                delayms(200);
+ 116   1      
+ 117   1                DisplayGraphic(pic3);  //显示图片3
+C51 COMPILER V9.52.0.0   BLUETOOTH_MAIN                                                    12/10/2017 00:56:11 PAGE 3   
+
+ 118   1                delayms(200);
+ 119   1                
+ 120   1                init_lcd_characters();       //调用LCD字库初始化程序
+ 121   1                delay(100);            //大于100uS的延时程序
+ 122   1                lcd_mesg(IC_DAT);      //显示中文汉字1
+ 123   1                delayms(240);
+ 124   1                delayms(240);
+ 125   1          
+ 126   1                init_lcd_characters();       //调用LCD字库初始化程序
+ 127   1                delay(100);            //大于100uS的延时程序 
+ 128   1                lcd_mesg(IC_DAT2);     //显示中文汉字2
+ 129   1                delayms(240);
+ 130   1            delayms(240);
+ 131   1              }
+ 132   1            */
+ 133   1      }
+ 134          
+ 135          
+ 136          /************************************************
+ 137                  串口初始化
+ 138          *************************************************/
+ 139          void serial_init()
+ 140          {
+ 141   1        SCON = 0x50;    /*scon 模式1,10位数据传输方式，双机通信，允许接收外部串口数据 */
+ 142   1        TMOD |=0x20;    /*TMOD 定时器1，模式2,8位自动重载*/
+ 143   1        TH1 = 0xFD;   /*TH1 设定重载值， 波特率9600,11.0592M晶振*/
+ 144   1        TR1 = 1;    /*定时器设置好，打开定时器*/
+ 145   1        EA = 1;     /*打开总中断*/
+ 146   1        ES =1;      /*打开串口中断*/
+ 147   1        ET1=0;      /*因为采用8位重载模式，不用中断函数设置重载值*/
+ 148   1      }
+ 149          
+ 150          /************************************************
+ 151                串口中断程序
+ 152          *************************************************/
+ 153           void serial_interrupt(void) interrupt 4
+ 154           {
+ 155   1      
+ 156   1          if(RI)
+ 157   1        {
+ 158   2          RI =0; /*RI 当接收到一帧完成，RI变为1，触发中断，需软件恢复0*/
+ 159   2          serial.recData = SBUF; /*读取接收缓存寄存器的值*/
+ 160   2          serial.serial_rec_ok = 1; /*接收成功标志*/
+ 161   2          if(serial.serial_rec_ok==1) /*把接收到的值再发回去，如电脑*/
+ 162   2          {
+ 163   3            serial_write(serial.recData);
+ 164   3          }
+ 165   2        }
+ 166   1        if(TI)
+ 167   1        {
+ 168   2          TI=0; /*TI 当发送一帧完成，TI变为1，触发中断，需软件恢复0*/
+ 169   2          serial.serial_send_ok = 1; /*发送成功标志*/
+ 170   2        }
+ 171   1      
+ 172   1       }
+ 173          
+ 174          /************************************************
+ 175          @fuc 从串口种读取1字节的数据返回
+ 176          @return 读取的 unsigned char 类型数据
+ 177          此函数只做拿取数据，调用前先判断是否接收数据完成
+ 178          *************************************************/
+ 179          unsigned char serial_read()
+C51 COMPILER V9.52.0.0   BLUETOOTH_MAIN                                                    12/10/2017 00:56:11 PAGE 4   
+
+ 180          {
+ 181   1        serial.serial_rec_ok = 0;
+ 182   1        return serial.recData;
+ 183   1      
+ 184   1      }
+ 185          
+ 186          /************************************************
+ 187          @func 写1个字节数据到串口
+ 188          @param value unsigned char 类型数据
+ 189          *************************************************/
+ 190          void serial_write(unsigned char value)
+ 191          {
+ 192   1        serial.serial_send_ok = 0;
+ 193   1        SBUF = value; 
+ 194   1      }
+ 195          
+ 196          /************************************************
+ 197          @func 发送1个字符串
+ 198          @param str 字符串地址，确保以'\0'结尾
+ 199          *************************************************/
+ 200          void serial_write_str(unsigned char *str)
+ 201          {
+ 202   1        while(*str)
+ 203   1        {
+ 204   2          while(!serial.serial_send_ok); //等待前一个字符发送完成才能发送下一字节
+ 205   2          serial_write(*str++);
+ 206   2      
+ 207   2        }
+ 208   1      
+ 209   1      }
+ 210          
+ 211          /*****************************************************************************
+ 212          ----------------------- LCD显示部分-------------------------------------------
+ 213          ******************************************************************************/
+ 214          /************************************************
+ 215                LCD初始化字库
+ 216          *************************************************/
+ 217          void init_lcd_characters(void)
+ 218          {
+ 219   1        delay(40);    //大于40ms的延时程序
+ 220   1        PSB=1;      //设置为8BIT并口工作模式
+ 221   1        delay(1);   //延时
+ 222   1        RES=0;      //复位
+ 223   1        delay(1);   //延时
+ 224   1        RES=1;      //拉高复位
+ 225   1        delay(10);
+ 226   1        TransferData(0x30,0); //  RE=0
+ 227   1        delay(100);
+ 228   1        TransferData(0x30,0); //功能设定 0011 0000
+ 229   1        delay(37);
+ 230   1        TransferData(0x08,0); //显示控制 0000 1000
+ 231   1        delay(100);
+ 232   1        TransferData(0x10,0); //光标控制 0001 0000
+ 233   1        delay(100);
+ 234   1        TransferData(0x0c,0); //显示开   0000 1100
+ 235   1        delay(100);
+ 236   1        TransferData(0x01,0); //清屏     0000 0001
+ 237   1        delay(10);
+ 238   1        TransferData(0x06,0); //Enry Mode Set ,光标从右向左加1位移动 0000 0110
+ 239   1        delay(100);
+ 240   1      }
+ 241          
+C51 COMPILER V9.52.0.0   BLUETOOTH_MAIN                                                    12/10/2017 00:56:11 PAGE 5   
+
+ 242          /************************************************
+ 243                液晶初始化--图形
+ 244          *************************************************/
+ 245          void init_graphic(void)
+ 246          {
+ 247   1        delay(40);
+ 248   1        PSB=1;      //设置为8BIT并口工作模式
+ 249   1        delay(1);   
+ 250   1        RES=0;
+ 251   1        delay(1);
+ 252   1        RES=1;
+ 253   1        delay(10);
+ 254   1      
+ 255   1        TransferData(0x36,0);  //RE =1
+ 256   1        delay(100);
+ 257   1        TransferData(0x36,0);
+ 258   1        delay(37);
+ 259   1        TransferData(0x3E,0);  //DL 8bits RE=1，G=1
+ 260   1        delay(100);
+ 261   1        TransferData(0x01,0);  //clear Screen
+ 262   1        delay(100);
+ 263   1      }
+ 264          
+ 265          /************************************************
+ 266                 LCD显示中文汉字
+ 267          *************************************************/
+ 268          void lcd_mesg(unsigned char code *adder1)
+ 269          {
+ 270   1         unsigned char i;
+ 271   1         unsigned char len;
+ 272   1         len = strlen(adder1);
+ 273   1         TransferData(0x80,0); //设置图形显示RAM地址
+ 274   1         for(i=0;i<32;i++){
+ 275   2          TransferData(*adder1,1);
+ 276   2          adder1++;
+ 277   2         }
+ 278   1      
+ 279   1         TransferData(0x90,0); //设置图形显示RAM地址
+ 280   1         delay(100);
+ 281   1      
+ 282   1         for(i=0;i<32;i++){
+ 283   2            TransferData(*adder1,1);
+ 284   2            adder1++;
+ 285   2         }
+ 286   1      }
+ 287          
+ 288          /*************************************************
+ 289          在指定行和列显示汉字
+ 290          x-行数值 0-3 12864可以显示4行汉字
+ 291          y-列数值0-7  12864可以显示8列汉字
+ 292          一个地址对应一个汉字
+ 293          0x80 - 0x87
+ 294          0x90 - 0x97
+ 295          0x88 - 0x8F
+ 296          0x98 - 0x9F
+ 297          可以显示32个汉字，64个字符
+ 298          ***************************************************/
+ 299          void lcdDisplayString(unsigned char x, unsigned char y, unsigned char *str)
+ 300          {
+ 301   1        unsigned char row,n=0;
+ 302   1      
+ 303   1        TransferData(0x30,0);  //基本指令
+C51 COMPILER V9.52.0.0   BLUETOOTH_MAIN                                                    12/10/2017 00:56:11 PAGE 6   
+
+ 304   1        TransferData(0x06,0);  //地址计数器自动累加，光标右移
+ 305   1        if(x==0){
+ 306   2          row = 0x80;
+ 307   2        }else if(x == 1){
+ 308   2          row = 0x90;
+ 309   2        }else if(x == 2){
+ 310   2          row = 0x88;
+ 311   2        }else if(x == 3){
+ 312   2          row = 0x98;
+ 313   2        }
+ 314   1        TransferData((row+y),0);
+ 315   1        while(*str != '\0'){
+ 316   2          TransferData(*str,1);
+ 317   2          str++;
+ 318   2          n++;
+ 319   2          
+ 320   2          if((n+y*2) == 16) //写满一行，继续写第二行
+ 321   2          {
+ 322   3            if(x==0){
+ 323   4              TransferData(0x90,0);
+ 324   4            }else if(x==1){
+ 325   4              TransferData(0x88,0);
+ 326   4            }else if(x==2){
+ 327   4              TransferData(0x98,0);
+ 328   4            }
+ 329   3          }else if((n+y*2) == 32) //写满第二行，继续第三行
+ 330   2          {
+ 331   3            if(x==0){
+ 332   4              TransferData(0x88,0);
+ 333   4            }else if(x==1){
+ 334   4              TransferData(0x98,0);
+ 335   4            }
+ 336   3          }else if((n+y*2) == 48)  //写满第三行，继续第四行
+ 337   2          {
+ 338   3            if(x==0){
+ 339   4              TransferData(0x98,0);
+ 340   4            }
+ 341   3          } 
+ 342   2        }
+ 343   1        
+ 344   1      }
+ 345          
+ 346          /***********************************************
+ 347                      清屏
+ 348          ************************************************/
+ 349          void clear_screen()
+ 350          {
+ 351   1          TransferData(0x01,0);
+ 352   1          TransferData(0x00,0);
+ 353   1      }
+ 354          
+ 355          /************************************************
+ 356          @func 传送数据或者命令
+ 357          @param DI =0 传送命令, =1 传送数据
+ 358          RS=L RW=L，E=H ，写指令
+ 359          RS=H RW=L, E=H , 写数据
+ 360          *************************************************/
+ 361          void TransferData(char data1,bit DI)
+ 362          {
+ 363   1        lcd_check_busy();
+ 364   1        WRD=0;
+ 365   1        RS=DI;
+C51 COMPILER V9.52.0.0   BLUETOOTH_MAIN                                                    12/10/2017 00:56:11 PAGE 7   
+
+ 366   1        delay(1);
+ 367   1        LCD_DATA=data1;
+ 368   1        E=1; //E 1-0所存有效數據
+ 369   1        delay(1);
+ 370   1        E=0;
+ 371   1      }
+ 372          
+ 373          /************************************************
+ 374            延时 10xn毫秒程序
+ 375          *************************************************/
+ 376          void delayms(unsigned int n)
+ 377          {
+ 378   1        unsigned int i,j;
+ 379   1        for(i=0;i<n;i++){
+ 380   2          for(j=0;j<2000;j++);
+ 381   2        } 
+ 382   1      }
+ 383          
+ 384          /************************************************
+ 385            延时程序
+ 386          *************************************************/
+ 387          void delay(unsigned int m)
+ 388          {
+ 389   1        unsigned int i,j;
+ 390   1        for(i=0;i<m;i++){
+ 391   2          for(j=0;j<10;j++);
+ 392   2        }
+ 393   1      
+ 394   1      }
+ 395          
+ 396          /************************************************
+ 397                图像显示
+ 398          *************************************************/
+ 399          void DisplayGraphic(unsigned char code *adder)
+ 400          {
+ 401   1        int i,j;
+ 402   1        /************显示上半屏内容设置***********/
+ 403   1        for(i=0;i<32;i++){
+ 404   2          TransferData((0x80+i),0); //set vertical adder
+ 405   2          TransferData(0x80,0);   //set horizontal adder
+ 406   2          for(j=0;j<16;j++){
+ 407   3            TransferData(*adder,1);
+ 408   3            adder++;
+ 409   3          }
+ 410   2        }
+ 411   1        /*************显示下半屏内容设置*********/
+ 412   1        for(i=0;i<32;i++){
+ 413   2          TransferData((0x80+i),0); //set vertical adder
+ 414   2          TransferData(0x88,0);   //set horizontal adder
+ 415   2          for(j=0;j<16;j++){
+ 416   3            TransferData(*adder,1);
+ 417   3            adder++;
+ 418   3          }
+ 419   2        }
+ 420   1      }
+ 421          
+ 422          /************************************************
+ 423                          LCD忙检测
+ 424          *************************************************/
+ 425          void lcd_check_busy()
+ 426          {
+ 427   1          LCD_DATA = 0xff;
+C51 COMPILER V9.52.0.0   BLUETOOTH_MAIN                                                    12/10/2017 00:56:11 PAGE 8   
+
+ 428   1          RS = 0;
+ 429   1          WRD = 1;
+ 430   1          E = 1;
+ 431   1          while(BUSY_FLAG);
+ 432   1          E = 0;
+ 433   1      }
+ 434          
+ 435          
+ 436          
+ 437          
+ 438          
+ 439          
+ 440          
+ 441          
+ 442          
+ 443          
+ 444          
+ 445          
+ 446          
+ 447          
+ 448          
+ 449          
+ 450          
+ 451          
+ 452          
+ 453          
+ 454          
+ 455          
+ 456          
+ 457          
+ 458          
+ 459          
+ 460          
+ 461          
+ 462          
+ 463          
+ 464          
+ 465          
+ 466          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1127    ----
+   CONSTANT SIZE    =   2233    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      4      21
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----       1
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
