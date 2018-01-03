@@ -1,0 +1,60 @@
+<resources>
+    <string name="app_name">智能家居</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="music">Music</string>
+    <string name="action_settings">刷新</string>
+    <string name="textview">...</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="sure">OK</string>
+    <string name="_4_3">4:3</string>
+    <string name="_16_9">16:9</string>
+    <string name="_00_00_00">00:00:00</string>
+    <string name="drawer_bar_music">Music</string>
+    <string name="drawer_bar_video">Video</string>
+    <string name="drawer_bar_tools">Settings</string>
+    <string name="drawer_bar_share">Share</string>
+    <string name="drawer_bar_yourname">Login</string>
+    <string name="drawer_bar_email">2711192776@qq.com</string>
+    <string name="dialog_delete">移除</string>
+    <string name="dialog_delete_message">是否移除该视频</string>
+    <string name="dialog_checkbox_text">删除原文件</string>
+    <string name="video_resources">No More Videos</string>
+    <string name="title_activity_login_qq">LoginQQActivity</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="screen_scoll_keyguard">滑动解锁</string>
+    <string name="screen_scoll_keyguard_1">滑</string>
+    <string name="screen_scoll_keyguard_2">动</string>
+    <string name="screen_scoll_keyguard_3">解</string>
+    <string name="screen_scoll_keyguard_4">锁</string>
+
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="username">用户名</string>
+    <string name="password">密码</string>
+    <string name="forgot_your_password">忘记密码</string>
+    <string name="repeat_password">重新输入</string>
+    <string name="next">下一步</string>
+    <string name="go">登录</string>
+    <string name="register_email">邮箱(忘记密码找回使用)</string>
+    <string name="navigation_home">设备</string>
+    <string name="navigation_music">音乐</string>
+    <string name="navigation_video">视频</string>
+    <string name="navigation_people">我的</string>
+
+    <string name="et_cmd">输入指令或对话</string>
+    <string name="bt_send">发送</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string
+        name="hello_blank_fragment">
+        Hello
+        blank
+        fragment
+    </string>
+</resources>

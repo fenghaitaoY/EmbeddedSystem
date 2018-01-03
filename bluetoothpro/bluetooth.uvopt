@@ -158,7 +158,7 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>79</LineNumber>
+          <LineNumber>86</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -234,10 +234,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>56</ColumnNumber>
+      <ColumnNumber>12</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>392</TopLine>
-      <CurrentLine>406</CurrentLine>
+      <TopLine>72</TopLine>
+      <CurrentLine>135</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\bluetooth_main.c</PathWithFileName>
       <FilenameWithoutPath>bluetooth_main.c</FilenameWithoutPath>

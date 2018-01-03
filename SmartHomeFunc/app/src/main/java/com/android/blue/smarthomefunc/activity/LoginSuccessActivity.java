@@ -1,0 +1,157 @@
+package com.android.blue.smarthomefunc.activity;
+
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.internal.BottomNavigationMenuView;
+import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
+import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.android.blue.smarthomefunc.LogUtils;
+import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.fragment.DeviceControlFragment;
+import com.android.blue.smarthomefunc.fragment.MusicFragment;
+import com.android.blue.smarthomefunc.fragment.PeopleSetitingFragment;
+import com.android.blue.smarthomefunc.fragment.VideoFragment;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public class LoginSuccessActivity extends BaseActivity implements DeviceControlFragment.OnFragmentInteractionListener {
+
+    @BindView(R.id.viewpager)
+    public ViewPager viewpager;
+
+    @BindView(R.id.navigation_bottom)
+    public BottomNavigationView bottomNavi;
+
+    private long time;
+
+    List<Fragment> fragments = new ArrayList<>();
+
+
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.navigation_home:
+                    LogUtils.i("select device");
+                    viewpager.setCurrentItem(0);
+                    return true;
+                case R.id.navigation_music:
+                    LogUtils.i("select music");
+                    viewpager.setCurrentItem(1);
+                    return true;
+                case R.id.navigation_video:
+                    LogUtils.i("select video");
+                    viewpager.setCurrentItem(2);
+                    return true;
+                case R.id.navigation_people:
+                    LogUtils.i("select people");
+                    viewpager.setCurrentItem(3);
+                    return true;
+            }
+            return false;
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setContentView(R.layout.activity_login_success);
+
+
+
+        ButterKnife.bind(this);
+        //设置进入界面效果
+//        Explode explode = new Explode();
+//        explode.setDuration(500);
+//        getWindow().setExitTransition(explode);
+//        getWindow().setEnterTransition(explode);
+
+        bottomNavi.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        BottomNavigationMenuView bottomMenuView = (BottomNavigationMenuView) bottomNavi.getChildAt(0);
+        try {
+            Field shiftingMode = bottomMenuView.getClass().getDeclaredField("mShiftingMode");
+            shiftingMode.setAccessible(true);
+            shiftingMode.setBoolean(bottomMenuView, false);
+            shiftingMode.setAccessible(false);
+            for (int i = 0; i < bottomMenuView.getChildCount(); i++) {
+                BottomNavigationItemView itemView = (BottomNavigationItemView) bottomMenuView.getChildAt(i);
+                itemView.setShiftingMode(false);
+                itemView.setChecked(itemView.getItemData().isChecked());
+            }
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        viewpager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager()));
+        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                bottomNavi.getMenu().getItem(position).setChecked(true);
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+        fragments.add(DeviceControlFragment.newInstance("device", "control"));
+        fragments.add(MusicFragment.newInstance("music", "show"));
+        fragments.add(VideoFragment.newInstance("video", "play"));
+        fragments.add(PeopleSetitingFragment.newInstance("people", "setting"));
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    class MyViewPagerAdapter extends FragmentPagerAdapter {
+        public MyViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return 4;
+        }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == event.KEYCODE_BACK){
+            if (System.currentTimeMillis() - time  > 2000){
+                time = System.currentTimeMillis();
+                Toast.makeText(getApplicationContext(), "再点击一次退出应用程序",Toast.LENGTH_SHORT).show();
+            }else{
+                removeAllActivity(); //finish 所有打开的activity
+            }
+        }
+        return  true;
+    }
+}

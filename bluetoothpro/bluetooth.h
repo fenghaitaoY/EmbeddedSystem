@@ -12,7 +12,7 @@ void serial_init();
 unsigned char serial_read();
 void serial_write(unsigned char value);
 void serial_write_str(unsigned char *str);
-
+void show_serial_TRX(unsigned char type);
 
 
 

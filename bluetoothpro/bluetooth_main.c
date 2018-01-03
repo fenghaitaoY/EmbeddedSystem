@@ -28,6 +28,10 @@ typedef struct serial_var{
 
 serial_var_t  serial={'\0', 0, 1};
 
+sbit TX_LED = P1^6;
+sbit RX_LED = P1^7;
+sbit RELAY = P1^0;
+
 /************************************************
 		定义LCD12864使用接口信息
 *************************************************/
@@ -64,72 +68,76 @@ unsigned char temp;
 *************************************************/
 void main()
 {
-		init_graphic();            //调用LCD显示图片(扩展)初始化程序
-  
-    DisplayGraphic(pic2);  //显示图片2
+	init_graphic();            //调用LCD显示图片(扩展)初始化程序 
+	DisplayGraphic(pic2);  //显示图片2
+	delayms(200);
+	
+//串口初始化
+	RELAY = 0;
+	TX_LED = 1;
+	RX_LED = 1;
+	serial_init();
+		
+	init_lcd_characters();   		 //调用LCD字库初始化程序
+    delay(100);            //大于100uS的延时程序 
+    lcd_mesg(IC_DAT2);     //显示中文汉字2
     delayms(200);
 	
-	  serial_init();
-		
-					init_lcd_characters();   		 //调用LCD字库初始化程序
-          delay(100);            //大于100uS的延时程序 
-          lcd_mesg(IC_DAT2);     //显示中文汉字2
-          delayms(240);
-	  while(1){
-			if(serial.serial_rec_ok ==1){
-					temp = serial_read();
-					init_lcd_characters();   		 //调用LCD字库初始化程序
-          delay(100);            //大于100uS的延时程序
-					switch(temp){
-						case 0x61: //a
-							lcd_mesg(IC_DAT);      //显示中文汉字1
-							break;
-						case 0x62:
-							clear_screen();
-							break;
-						case 0x63:
-							lcdDisplayString(1,0,"冯海涛LOVE杨晶晶");
-							break;
-						case 0x64:
-							lcdDisplayString(3,0,"蓝牙打开. . .");
-							break;
-						case 0x65:
-							lcdDisplayString(2,1,"abcdefghijklmnopqrstuvw");
-							break;
-						case 0x66:
-							break;
-						case 0x67:
-							break;
-								
-					}
-          delayms(240);
+	while(1){
+		if(serial.serial_rec_ok ==1){
+			show_serial_TRX('R');
+			temp = serial_read();
+							
+			switch(temp){
+				case 0x61: //a
+					init_lcd_characters();  //调用LCD字库初始化程序
+					delay(100);            //大于100uS的延时程序
+					lcd_mesg(IC_DAT);      //显示中文汉字1
+					delayms(200);
+					break;
+				case 0x62: //b
+					init_lcd_characters();  //调用LCD字库初始化程序
+					delay(100);            //大于100uS的延时程序
+					clear_screen();
+					delayms(200);
+					break;
+				case 0x63: //c
+					init_lcd_characters();  //调用LCD字库初始化程序
+					delay(100);            //大于100uS的延时程序
+					lcdDisplayString(1,0,"冯海涛LOVE杨晶晶");
+					delayms(200);
+					break;
+				case 0x64: //d
+					init_lcd_characters();  //调用LCD字库初始化程序
+					delay(100);            //大于100uS的延时程序
+					lcdDisplayString(3,0,"蓝牙打开. . .");
+					delayms(200);
+					break;
+				case 0x65: //e
+					init_lcd_characters();  //调用LCD字库初始化程序
+					delay(100);            //大于100uS的延时程序
+					lcdDisplayString(2,1,"abcdefghijklmnopqrstuvw");
+					delayms(200);
+					break;
+				case 0x66: //f
+					RELAY = ~RELAY;
+					break;
+				case 0x67: //g
 					
+					break;					
 			}
+					
+		}else if(serial.serial_rec_ok == 0){
+			show_serial_TRX('R');
+		}
+		
+		if(serial.serial_send_ok == 1){
 			
 		}
-	  /*while(1)
-	    {
-		  init_graphic();            //调用LCD显示图片(扩展)初始化程序
-  
-          DisplayGraphic(pic2);  //显示图片2
-          delayms(200);
-
-          DisplayGraphic(pic3);  //显示图片3
-          delayms(200);
-					
-          init_lcd_characters();   		 //调用LCD字库初始化程序
-          delay(100);            //大于100uS的延时程序
-          lcd_mesg(IC_DAT);      //显示中文汉字1
-          delayms(240);
-          delayms(240);
- 	  
-          init_lcd_characters();   		 //调用LCD字库初始化程序
-          delay(100);            //大于100uS的延时程序 
-          lcd_mesg(IC_DAT2);     //显示中文汉字2
-          delayms(240);
-		  delayms(240);
-        }
-			*/
+		
+		
+			
+	}
 }
 
 
@@ -147,6 +155,20 @@ void serial_init()
 	ET1=0;			/*因为采用8位重载模式，不用中断函数设置重载值*/
 }
 
+/**************************************************
+			串口接收发送显示led
+@param type 显示类型
+**************************************************/
+void show_serial_TRX(unsigned char type){
+	delay(20);
+	if(type == 'T'){
+		TX_LED = ~TX_LED;
+	}else if (type == 'R'){
+		RX_LED = ~RX_LED;
+	}
+}
+
+
 /************************************************
 			串口中断程序
 *************************************************/
@@ -155,20 +177,22 @@ void serial_init()
 
   	if(RI)
 	{
-		RI =0; /*RI 当接收到一帧完成，RI变为1，触发中断，需软件恢复0*/
-		serial.recData = SBUF; /*读取接收缓存寄存器的值*/
-		serial.serial_rec_ok = 1; /*接收成功标志*/
-		if(serial.serial_rec_ok==1) /*把接收到的值再发回去，如电脑*/
-		{
-		 	serial_write(serial.recData);
-		}
+			RI =0; /*RI 当接收到一帧完成，RI变为1，触发中断，需软件恢复0*/
+			serial.recData = SBUF; /*读取接收缓存寄存器的值*/
+			serial.serial_rec_ok = 1; /*接收成功标志*/
+			if(serial.serial_rec_ok==1) /*把接收到的值再发回去，如电脑*/
+			{
+				serial_write(serial.recData);
+			}
+			
 	}
 	if(TI)
 	{
-	 	TI=0; /*TI 当发送一帧完成，TI变为1，触发中断，需软件恢复0*/
-		serial.serial_send_ok = 1; /*发送成功标志*/
+			TI=0; /*TI 当发送一帧完成，TI变为1，触发中断，需软件恢复0*/
+			serial.serial_send_ok = 1; /*发送成功标志*/
+			
 	}
-
+	
  }
 
 /************************************************
