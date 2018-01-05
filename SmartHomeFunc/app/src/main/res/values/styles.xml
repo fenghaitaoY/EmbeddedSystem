@@ -96,7 +96,7 @@
     <style name="Text_lab" parent="TextAppearance.AppCompat">
         <!-- 默认状态提示颜色和字体-->
         <item name="android:textColorHint">#e0e2ed</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">30sp</item>
         <!-- Label标签的颜色 -->
         <item name="colorAccent">#b4c92f</item>
         <!-- 默认状态状态设置底线颜色 -->
@@ -104,7 +104,7 @@
         <!-- 选择的底线颜色 -->
         <item name="colorControlActivated">#dfd6d9</item>
         <item name="textColor">#ffffff</item>
-        <item name="textSize">20dp</item>
+        <item name="textSize">40sp</item>
         <item name="android:textColor">#ffffff</item>
     </style>
 </resources>

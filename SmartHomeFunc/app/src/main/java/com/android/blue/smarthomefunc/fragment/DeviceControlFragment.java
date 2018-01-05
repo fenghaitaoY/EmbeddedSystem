@@ -25,12 +25,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.blue.smarthomefunc.BluetoothLeService;
 import com.android.blue.smarthomefunc.LogUtils;
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.adapter.GrideAdapter;
+import com.android.blue.smarthomefunc.entity.BluetoothControlDevice;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -56,20 +59,16 @@ public class DeviceControlFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    @BindView(R.id.tv_control_device_name)
-    TextView mControlDeviceName;
-    @BindView(R.id.tv_status)
-    TextView mDeviceStatus;
-    @BindView(R.id.tv_name)
-    TextView mDevicetName;
     @BindView(R.id.cmd_et)
     EditText mCmdEdit;
     @BindView(R.id.device_control_bt)
     Button mSendButton;
+    @BindView(R.id.gridView_layout)
+    GridView mGridView;
 
     private View mRootView;
     private Context mContext;
-
+    private List<BluetoothControlDevice> mDevices = new ArrayList<>();
     //蓝牙适配器
     BluetoothAdapter mBluetoothAdapter;
     //蓝牙信号强度
@@ -182,7 +181,20 @@ public class DeviceControlFragment extends Fragment {
         mContext = getActivity();
         //fragment ButterKnife 使用这种方法，直接bind(view)不生效
         ButterKnife.bind(this,mRootView);
+        getDatas();
+        mGridView.setAdapter(new GrideAdapter(mContext, mDevices));
         return mRootView;
+    }
+
+    public void getDatas(){
+        for (int i =0;i<3;i++){
+            BluetoothControlDevice device = new BluetoothControlDevice();
+            device.setModeName("MODE"+i);
+            device.setDeviceName("device"+i);
+            device.setStatus("-"+i);
+            device.setDeviceSwitch(true);
+            mDevices.add(device);
+        }
     }
 
     @Override

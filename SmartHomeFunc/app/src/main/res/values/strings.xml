@@ -50,6 +50,7 @@
 
     <string name="et_cmd">输入指令或对话</string>
     <string name="bt_send">发送</string>
+    <string name="add_device">添加设备</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string
         name="hello_blank_fragment">
