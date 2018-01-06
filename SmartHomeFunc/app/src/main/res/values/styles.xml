@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">
             @color/colorPrimary
@@ -107,4 +107,10 @@
         <item name="textSize">40sp</item>
         <item name="android:textColor">#ffffff</item>
     </style>
+
+    <!--沉浸式状态栏主题设置-->
+    <style name="TranslucentTheme" parent="AppTheme">
+
+    </style>
+
 </resources>

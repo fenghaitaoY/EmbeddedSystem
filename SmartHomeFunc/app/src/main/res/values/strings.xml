@@ -51,6 +51,8 @@
     <string name="et_cmd">输入指令或对话</string>
     <string name="bt_send">发送</string>
     <string name="add_device">添加设备</string>
+    <string name="search_device">搜索设备</string>
+    <string name="search_dialog_tv">搜索中．．．</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string
         name="hello_blank_fragment">

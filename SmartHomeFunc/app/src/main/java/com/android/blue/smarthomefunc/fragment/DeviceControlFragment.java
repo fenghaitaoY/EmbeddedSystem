@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.android.blue.smarthomefunc.BluetoothLeService;
 import com.android.blue.smarthomefunc.LogUtils;
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.activity.SearchAddDeviceActivity;
 import com.android.blue.smarthomefunc.adapter.GrideAdapter;
 import com.android.blue.smarthomefunc.entity.BluetoothControlDevice;
 
@@ -65,6 +66,8 @@ public class DeviceControlFragment extends Fragment {
     Button mSendButton;
     @BindView(R.id.gridView_layout)
     GridView mGridView;
+    @BindView(R.id.add_device_tv)
+    Button mAddDevice;
 
     private View mRootView;
     private Context mContext;
@@ -269,10 +272,20 @@ public class DeviceControlFragment extends Fragment {
         }
     }
 
-    @OnClick(R.id.device_control_bt)
-    public void onViewClicked() {
-        LogUtils.i("send et text");
-        new SendMessageThread().start();
+    @OnClick({R.id.device_control_bt, R.id.add_device_tv})
+    public void onViewClicked(View view) {
+        switch (view.getId()){
+            case R.id.device_control_bt:
+                LogUtils.i("send et text");
+                new SendMessageThread().start();
+                break;
+            case R.id.add_device_tv:
+                Intent intent = new Intent(mContext, SearchAddDeviceActivity.class);
+                startActivity(intent);
+                break;
+
+        }
+
     }
 
     /**
