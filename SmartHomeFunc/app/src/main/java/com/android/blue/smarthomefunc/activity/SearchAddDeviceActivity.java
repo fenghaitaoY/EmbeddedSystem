@@ -87,7 +87,8 @@ public class SearchAddDeviceActivity extends BaseActivity {
         WindowManager.LayoutParams lp = mDialog.getWindow().getAttributes();
         lp.alpha = 0.3f;
         mDialog.getWindow().setAttributes(lp);
-        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable());
+        mDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);//去掉这句话，背景会变暗
+        mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         mDialog.setContentView(view);
         mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {

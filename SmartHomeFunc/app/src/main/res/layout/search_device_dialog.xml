@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:indicatorName="LineScalePulseOutIndicator"
-        app:indicatorColor="@color/yellow"
+        app:indicatorColor="@color/color_gray"
         android:visibility="visible"
         />
 
@@ -21,7 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
         android:text="@string/search_dialog_tv"
-        android:textColor="@color/dialog_white"
+        android:textColor="@color/color_gray"
         />
 
 
