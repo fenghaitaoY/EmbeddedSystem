@@ -53,6 +53,11 @@
     <string name="add_device">添加设备</string>
     <string name="search_device">搜索设备</string>
     <string name="search_dialog_tv">搜索中．．．</string>
+    <string name="setting_notify">消息中心</string>
+    <string name="setting_set">设置</string>
+    <string name="setting_about">关于</string>
+    <string name="setting_exit">退出登录</string>
+    <string name="setting_user_name">未设置</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string
         name="hello_blank_fragment">
