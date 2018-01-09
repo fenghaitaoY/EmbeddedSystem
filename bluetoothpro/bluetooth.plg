@@ -4,211 +4,127 @@
 <h1>礦ision Build Log</h1>
 <h2>Project:</h2>
 C:\Users\fht\Desktop\bluetoothpro\bluetooth.uvproj
-Project File Date:  12/09/2017
+Project File Date:  12/16/2017
 
 <h2>Output:</h2>
 Build target '目标 1'
 compiling bluetooth_main.c...
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SHOW_SERIAL_TRX?BLUETOOTH_MAIN
+    SEGMENT: ?PR?SERIAL_READ?BLUETOOTH_MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3574
+    SEGMENT: ?PR?_FACTORY_RESET?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MODE_RESTART?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CHANGE_BLUETOOTH_NAME?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_GET_BLUETOOTH_NAME?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CLEAR_HOST?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SET_LED_OPENORCLOSE?HC_BLUETOOTH
+Program Size: data=88.2 xdata=0 code=5265
 creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 2 Warning(s).
+"bluetooth" - 0 Error(s), 7 Warning(s).
+Build target '目标 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SERIAL_READ?BLUETOOTH_MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_FACTORY_RESET?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MODE_RESTART?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CHANGE_BLUETOOTH_NAME?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_GET_BLUETOOTH_NAME?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CLEAR_HOST?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SET_LED_OPENORCLOSE?HC_BLUETOOTH
+Program Size: data=88.2 xdata=0 code=5265
+creating hex file from "bluetooth"...
+"bluetooth" - 0 Error(s), 7 Warning(s).
+Build target '目标 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SERIAL_READ?BLUETOOTH_MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_FACTORY_RESET?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MODE_RESTART?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CHANGE_BLUETOOTH_NAME?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_GET_BLUETOOTH_NAME?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CLEAR_HOST?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SET_LED_OPENORCLOSE?HC_BLUETOOTH
+Program Size: data=88.2 xdata=0 code=5265
+creating hex file from "bluetooth"...
+"bluetooth" - 0 Error(s), 7 Warning(s).
 Build target '目标 1'
 compiling bluetooth_main.c...
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3588
+    SEGMENT: ?PR?SERIAL_READ?BLUETOOTH_MAIN
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_FACTORY_RESET?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_MODE_RESTART?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CHANGE_BLUETOOTH_NAME?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_GET_BLUETOOTH_NAME?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CLEAR_HOST?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SET_LED_OPENORCLOSE?HC_BLUETOOTH
+Program Size: data=85.2 xdata=0 code=5220
 creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
+"bluetooth" - 0 Error(s), 7 Warning(s).
 Build target '目标 1'
 compiling bluetooth_main.c...
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3588
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
+    SEGMENT: ?PR?SERIAL_READ?BLUETOOTH_MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3584
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3584
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
+    SEGMENT: ?PR?_FACTORY_RESET?HC_BLUETOOTH
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3584
+    SEGMENT: ?PR?_MODE_RESTART?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CHANGE_BLUETOOTH_NAME?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_GET_BLUETOOTH_NAME?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CLEAR_HOST?HC_BLUETOOTH
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SET_LED_OPENORCLOSE?HC_BLUETOOTH
+Program Size: data=88.2 xdata=0 code=5200
 creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
+"bluetooth" - 0 Error(s), 8 Warning(s).
 Build target '目标 1'
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3584
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
+    SEGMENT: ?PR?SERIAL_READ?BLUETOOTH_MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3588
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=25.1 xdata=0 code=3601
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
+    SEGMENT: ?PR?_FACTORY_RESET?HC_BLUETOOTH
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=25.1 xdata=0 code=3635
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
+    SEGMENT: ?PR?_MODE_RESTART?HC_BLUETOOTH
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=25.1 xdata=0 code=3642
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
+    SEGMENT: ?PR?_CHANGE_BLUETOOTH_NAME?HC_BLUETOOTH
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=25.1 xdata=0 code=3635
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
+    SEGMENT: ?PR?_GET_BLUETOOTH_NAME?HC_BLUETOOTH
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=25.1 xdata=0 code=3642
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
+    SEGMENT: ?PR?_CLEAR_HOST?HC_BLUETOOTH
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=25.1 xdata=0 code=3635
+    SEGMENT: ?PR?_SET_LED_OPENORCLOSE?HC_BLUETOOTH
+Program Size: data=88.2 xdata=0 code=5200
 creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=25.1 xdata=0 code=3635
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SHOW_SERIAL_TRX?BLUETOOTH_MAIN
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=25.1 xdata=0 code=3621
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 2 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-bluetooth_main.c(87): warning C206: 'show_serial_TRX': missing function-prototype
-bluetooth_main.c(87): error C267: 'show_serial_TRX': requires ANSI-style prototype
-bluetooth_main.c(157): error C231: 'show_serial_TRX': redefinition
-bluetooth_main.c(164): error C231: 'show_serial_TRX': redefinition
-Target not created
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3675
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3675
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3648
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3677
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3677
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3677
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3677
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3659
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
-Build target '目标 1'
-compiling bluetooth_main.c...
-linking...
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SERIAL_WRITE_STR?BLUETOOTH_MAIN
-Program Size: data=24.1 xdata=0 code=3643
-creating hex file from "bluetooth"...
-"bluetooth" - 0 Error(s), 1 Warning(s).
+"bluetooth" - 0 Error(s), 8 Warning(s).

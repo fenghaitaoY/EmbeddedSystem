@@ -1,4 +1,5 @@
 "STARTUP.obj",
-"bluetooth_main.obj" 
+"bluetooth_main.obj",
+"hc_bluetooth.obj" 
 TO "bluetooth" 
 RAMSIZE(256) 

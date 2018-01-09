@@ -58,6 +58,9 @@
     <string name="setting_about">关于</string>
     <string name="setting_exit">退出登录</string>
     <string name="setting_user_name">未设置</string>
+    <string name="device_name">设备名称:</string>
+    <string name="device_address">地址:</string>
+    <string name="device_rssi">Rssi:</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string
         name="hello_blank_fragment">

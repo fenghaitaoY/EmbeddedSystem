@@ -61,7 +61,7 @@ public class GrideAdapter extends BaseAdapter {
         BluetoothControlDevice mDevice = mDevices.get(position);
         holder.mModeName.setText(mDevice.getModeName());
         holder.mDeviceName.setText(mDevice.getDeviceName());
-        holder.mStatus.setText(mDevice.getStatus());
+        holder.mStatus.setText(mDevice.getStatusRssi());
         holder.mDeviceSwitch.setChecked(mDevice.isDeviceSwitch());
 
         return  view;

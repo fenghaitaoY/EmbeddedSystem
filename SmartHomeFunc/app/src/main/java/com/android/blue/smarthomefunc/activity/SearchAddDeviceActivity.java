@@ -9,6 +9,9 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +20,12 @@ import android.widget.Button;
 
 import com.android.blue.smarthomefunc.LogUtils;
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.adapter.RecycleAdapter;
+import com.android.blue.smarthomefunc.entity.BluetoothControlDevice;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,8 +37,12 @@ public class SearchAddDeviceActivity extends BaseActivity {
     @BindView(R.id.search_device)
     Button mSearchBt;
 
+    @BindView(R.id.search_content_view)
+    RecyclerView mRecyclerView;
 
+    List<BluetoothControlDevice> listDevices = new ArrayList<>();
     boolean loading=false;
+    RecycleAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +66,25 @@ public class SearchAddDeviceActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.add_device));
+
+        //RecyclerView
+        mAdapter = new RecycleAdapter(this, listDevices);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+
+        mAdapter.setmOnItemClickListener(new RecycleAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+
+            }
+        });
+        
         //返回键设置
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <string.h>
+#include "hc_bluetooth.h"   //汇承蓝牙模块设置指令
 
 /************************************************
 		定义串口使用接口信息
@@ -45,13 +46,13 @@ sbit BUSY_FLAG = P0^7;
 
 //unsigned char code pic2[];
 //unsigned char code pic3[];
+unsigned char date[24]={'\0'};
+unsigned char n=0;//计数缓冲接收
 
-unsigned char code IC_DAT[]={
-"上海浩豚电子科技"  
-"单片机开发板系列"
-"中文字库测试程序"
-"恭喜发财身体健康"
-};
+unsigned char code welcome[] = "欢迎使用";
+unsigned char code bluetooth[] = "蓝牙控制";
+unsigned char code home_system[] = "智能家居系统";
+unsigned char code time_create[] = "Time:2017-12-16";
 unsigned char code IC_DAT2[]={
 "海纳百川宽容为先"
 "欲成大业诚信为先"
@@ -60,6 +61,9 @@ unsigned char code IC_DAT2[]={
 };
 
 unsigned char temp;
+//用于恢复初始欢迎页面
+unsigned char welcome_count;
+unsigned char serial_using_activity=0;
 #define LOG serial_write_str
 
 
@@ -68,31 +72,29 @@ unsigned char temp;
 *************************************************/
 void main()
 {
+
 	init_graphic();            //调用LCD显示图片(扩展)初始化程序 
-	DisplayGraphic(pic2);  //显示图片2
+	DisplayGraphic(pic2);  	   //显示图片2
 	delayms(200);
 	
-//串口初始化
+	//串口初始化
 	RELAY = 0;
 	TX_LED = 1;
 	RX_LED = 1;
 	serial_init();
-		
-	init_lcd_characters();   		 //调用LCD字库初始化程序
-    delay(100);            //大于100uS的延时程序 
-    lcd_mesg(IC_DAT2);     //显示中文汉字2
-    delayms(200);
+	//开机欢迎页面
+	lcd_welcome_smartHome();
 	
 	while(1){
 		if(serial.serial_rec_ok ==1){
-			show_serial_TRX('R');
-			temp = serial_read();
-							
+			//temp = serial_read();
+			
+			
 			switch(temp){
 				case 0x61: //a
 					init_lcd_characters();  //调用LCD字库初始化程序
 					delay(100);            //大于100uS的延时程序
-					lcd_mesg(IC_DAT);      //显示中文汉字1
+					lcd_mesg(IC_DAT2);      //显示中文汉字1
 					delayms(200);
 					break;
 				case 0x62: //b
@@ -134,12 +136,79 @@ void main()
 		if(serial.serial_send_ok == 1){
 			
 		}
-		
+		//serial_write_str("今天天气好晴朗");
 		
 			
 	}
 }
 
+/**********************************************
+			定时器０初始化,50ms计时
+	设定计数初值，计满到65536向cpu申请一个中断,一个机器周期大约１us，
+	从０到满大约65ms，设定n ms,就要设定初值
+ **********************************************/
+void init_time0(){
+	TMOD |= 0x01;
+	TH0 = (65536 - 50000)/256;　
+	TL0 = (65536 - 50000)%256;
+	EA = 1;
+	ET0 = 1;
+	TR0 = 1;
+}
+
+/**
+ * 计时中断触发函数50ms 触发一次
+ */
+void Timer0_interrupt() interrupt 1 using 1{
+	TH0 = (65536 - 50000)/256;
+	TL0 = (65536 - 50000)%256;
+
+	//监测是否有数据过来
+	lcd_rec_data_show();
+	//在一定时间串口没有数据过来，显示欢迎页面
+	if(serial_using_activity == 1){
+		welcome_count++;
+		if(welcome_count > 20 * 60){
+			serial_using_activity = 0;
+			welcome_count = 0;
+			
+			lcd_welcome_smartHome();
+		}
+
+	}
+}
+
+/***********************************************
+			串口数据监视
+　旨在当串口有数据传过来时能显示在LCD屏上
+　
+ ***********************************************/
+void lcd_rec_data_show(){
+	//实时显示串口发来的数据
+	if(serial.serial_rec_ok){
+		init_lcd_characters();
+		delay(50);
+		lcdDisplayString(0,0,date);
+		delayms(100);
+		memset(date,0,sizeof(date));
+		n=0;
+		serial.serial_rec_ok =0;
+	}
+	
+}
+
+/************************************************
+			　欢迎页面显示
+ ************************************************/
+void lcd_welcome_smartHome(){
+	init_lcd_characters(); //调用LCD字库初始化程序
+    delay(50);            //大于50uS的延时程序 
+	lcdDisplayString(0,2, welcome);
+    lcdDisplayString(1,2, bluetooth);    //显示中文汉字2
+	lcdDisplayString(2,1, home_system);
+	lcdDisplayString(3,0, time_create);
+    delayms(100);
+}
 
 /************************************************
 			  串口初始化
@@ -180,9 +249,15 @@ void show_serial_TRX(unsigned char type){
 			RI =0; /*RI 当接收到一帧完成，RI变为1，触发中断，需软件恢复0*/
 			serial.recData = SBUF; /*读取接收缓存寄存器的值*/
 			serial.serial_rec_ok = 1; /*接收成功标志*/
+			serial_using_activity = 1; /*串口有数据过来*/
+			if(n<24){
+				date[n++]= SBUF;
+			}else{
+				n =0;
+			}
 			if(serial.serial_rec_ok==1) /*把接收到的值再发回去，如电脑*/
 			{
-				serial_write(serial.recData);
+				//serial_write(serial.recData);
 			}
 			
 	}

@@ -6,7 +6,7 @@ package com.android.blue.smarthomefunc.entity;
 
 public class BluetoothControlDevice {
    private String mDeviceName;
-   private String mStatus;
+   private String mStatusRssi;
    private String mModeName;
    private String mDeviceAddress;
    private boolean mDeviceSwitch;
@@ -22,12 +22,12 @@ public class BluetoothControlDevice {
         this.mDeviceName = mDeviceName;
     }
 
-    public String getStatus() {
-        return mStatus;
+    public String getStatusRssi() {
+        return mStatusRssi;
     }
 
-    public void setStatus(String mStatus) {
-        this.mStatus = mStatus;
+    public void setStatusRssi(String mStatus) {
+        this.mStatusRssi = mStatus;
     }
 
     public String getModeName() {
