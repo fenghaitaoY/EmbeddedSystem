@@ -122,13 +122,6 @@ public class SearchAddDeviceActivity extends BaseActivity {
             }
         });
 
-        /*for (int i =0;i<5;i++){
-            BleDeviceEntity be= new BleDeviceEntity();
-            be.setDeviceName("dd"+i);
-            be.setStatusRssi("-"+i);
-            be.setDeviceAddress("address"+i);
-            mListEntitys.add(be);
-        }*/
     }
 
 

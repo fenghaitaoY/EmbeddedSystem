@@ -40,7 +40,6 @@ public class HCBluetoothControl {
 
     //扫描蓝牙的状态
     private boolean mScanning;
-    private boolean scan_flag;
     private Handler mHandler;
     private Context mContext;
     private String mSendMsg;
@@ -70,17 +69,20 @@ public class HCBluetoothControl {
 
     //蓝牙回调
     private OnHcBluetoothListener mOnHcBluetoothListener;
+    //定时一段时间停止扫描
+    private ScanRunnable mScanRunnable;
 
     private static HCBluetoothControl INSTANCE = null;
 
     private HCBluetoothControl(Context context) {
         mContext = context;
 
-        scan_flag = true;
         mHandler = new Handler();
         rssis = new ArrayList<>();
         mListDevice = new ArrayList<>();
         mControlDevies = new ArrayList<>();
+
+        mScanRunnable = new ScanRunnable();
 
         //注册蓝牙状态广播
         IntentFilter mBlueStateFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
@@ -254,32 +256,36 @@ public class HCBluetoothControl {
 
     public void scanLeDevice(final boolean enable) {
         if (enable) {
-            mHandler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mScanning = false;
-                    scan_flag = true;
-                    LogUtils.i("定时一段时间后　stop scan le device");
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
-                    mListDevice.clear();
-                    mOnHcBluetoothListener.stopScan();
-
-                }
-            }, SCAN_PERIOD);
             LogUtils.i("scan le begin..");
+            mHandler.postDelayed(mScanRunnable, SCAN_PERIOD);
             mScanning = true;
-            scan_flag = false;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
             mOnHcBluetoothListener.startScan();
         } else {
             LogUtils.i("stoping scan ");
             mScanning = false;
+            mHandler.removeCallbacks(mScanRunnable);
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
-            scan_flag = true;
             mListDevice.clear();
             mOnHcBluetoothListener.stopScan();
         }
 
+    }
+
+    /**
+     * 实现扫描runnable，解决重复调用scanLeDevice，延迟扔存在，导致短时间停止扫描问题
+     */
+    class ScanRunnable implements Runnable {
+        @Override
+        public void run() {
+            if (mScanning) {
+                mScanning = false;
+                LogUtils.i("定时一段时间后　stop scan le device");
+                mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                mListDevice.clear();
+                mOnHcBluetoothListener.stopScan();
+            }
+        }
     }
 
     /**
@@ -320,7 +326,6 @@ public class HCBluetoothControl {
                 case BluetoothAdapter.STATE_TURNING_OFF:
                     LogUtils.i("蓝牙正在关闭");
                     break;
-
             }
         }
     }
