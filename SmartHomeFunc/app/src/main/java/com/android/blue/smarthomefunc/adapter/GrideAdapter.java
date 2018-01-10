@@ -6,11 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
-import com.android.blue.smarthomefunc.entity.BluetoothControlDevice;
+import com.android.blue.smarthomefunc.entity.BleDeviceEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +20,9 @@ import java.util.List;
 
 public class GrideAdapter extends BaseAdapter {
     private Context mContext;
-    private List<BluetoothControlDevice> mDevices = new ArrayList<>();
+    private List<BleDeviceEntity> mDevices = new ArrayList<>();
 
-    public GrideAdapter(Context context, List<BluetoothControlDevice> datas){
+    public GrideAdapter(Context context, List<BleDeviceEntity> datas){
         mContext = context;
         mDevices = datas;
     }
@@ -58,7 +57,7 @@ public class GrideAdapter extends BaseAdapter {
             holder = (ViewHolder) view.getTag();
         }
 
-        BluetoothControlDevice mDevice = mDevices.get(position);
+        BleDeviceEntity mDevice = mDevices.get(position);
         holder.mModeName.setText(mDevice.getModeName());
         holder.mDeviceName.setText(mDevice.getDeviceName());
         holder.mStatus.setText(mDevice.getStatusRssi());

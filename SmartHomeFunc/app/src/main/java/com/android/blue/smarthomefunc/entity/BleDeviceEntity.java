@@ -4,15 +4,14 @@ package com.android.blue.smarthomefunc.entity;
  * Created by root on 1/4/18.
  */
 
-public class BluetoothControlDevice {
+public class BleDeviceEntity {
    private String mDeviceName;
    private String mStatusRssi;
    private String mModeName;
    private String mDeviceAddress;
    private boolean mDeviceSwitch;
 
-    public BluetoothControlDevice() {
-    }
+
 
     public String getDeviceName() {
         return mDeviceName;
@@ -56,6 +55,6 @@ public class BluetoothControlDevice {
 
     @Override
     public String toString() {
-        return "MODENAME:"+mModeName+", DeviceName:"+mDeviceName+", Status:"+mStatus+", switch:"+mDeviceSwitch;
+        return "MODENAME:"+mModeName+", DeviceName:"+mDeviceName+", Status:"+mStatusRssi+", switch:"+mDeviceSwitch;
     }
 }

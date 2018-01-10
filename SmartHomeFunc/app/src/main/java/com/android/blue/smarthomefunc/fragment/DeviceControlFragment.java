@@ -2,23 +2,13 @@ package com.android.blue.smarthomefunc.fragment;
 
 import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattDescriptor;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,26 +16,17 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.blue.smarthomefunc.BluetoothLeService;
 import com.android.blue.smarthomefunc.LogUtils;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.activity.SearchAddDeviceActivity;
-import com.android.blue.smarthomefunc.adapter.GrideAdapter;
-import com.android.blue.smarthomefunc.entity.BluetoothControlDevice;
-
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
-import static android.content.Context.BIND_AUTO_CREATE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -153,13 +134,7 @@ public class DeviceControlFragment extends Fragment {
     }
 
     public void getDatas(){
-        for (int i =0;i<3;i++){
-            BluetoothControlDevice device = new BluetoothControlDevice();
-            device.setModeName("MODE"+i);
-            device.setDeviceName("device"+i);
-            device.setStatus("-"+i);
-            device.setDeviceSwitch(true);
-        }
+
     }
 
     @Override

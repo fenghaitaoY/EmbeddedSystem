@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
-import com.android.blue.smarthomefunc.entity.BluetoothControlDevice;
+import com.android.blue.smarthomefunc.entity.BleDeviceEntity;
 
 import java.util.List;
 
@@ -20,8 +20,8 @@ import java.util.List;
 public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<BluetoothControlDevice> list;
-    public RecycleAdapter(Context context, List<BluetoothControlDevice> list){
+    private List<BleDeviceEntity> list;
+    public RecycleAdapter(Context context, List<BleDeviceEntity> list){
         mContext = context;
         this.list = list;
     }
@@ -39,7 +39,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHo
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.recycle_item_layout, parent, false))
+        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.recycle_item_layout, parent, false));
         return holder;
     }
 

@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
+import android.bluetooth.BluetoothManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -16,7 +17,6 @@ import android.os.IBinder;
 
 import com.android.blue.smarthomefunc.BluetoothLeService;
 import com.android.blue.smarthomefunc.LogUtils;
-import com.android.blue.smarthomefunc.fragment.DeviceControlFragment;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -30,12 +30,13 @@ import static android.content.Context.BIND_AUTO_CREATE;
 
 public class HCBluetoothControl {
 
-    private List<BluetoothControlDevice> mDevices = new ArrayList<>();
+    private List<BleDeviceEntity> mDevices = new ArrayList<>();
     //蓝牙适配器
     BluetoothAdapter mBluetoothAdapter;
     //蓝牙信号强度
     private ArrayList<Integer> rssis;
     private ArrayList<BluetoothDevice> mListDevice;
+    private ArrayList<BleDeviceEntity> mControlDevies;
 
     //扫描蓝牙的状态
     private boolean mScanning;
@@ -67,6 +68,8 @@ public class HCBluetoothControl {
     //蓝牙特征值
     private static BluetoothGattCharacteristic targetChara = null;
 
+    //蓝牙回调
+    private OnHcBluetoothListener mOnHcBluetoothListener;
 
     private static HCBluetoothControl INSTANCE = null;
 
@@ -77,12 +80,17 @@ public class HCBluetoothControl {
         mHandler = new Handler();
         rssis = new ArrayList<>();
         mListDevice = new ArrayList<>();
+        mControlDevies = new ArrayList<>();
 
         //注册蓝牙状态广播
         IntentFilter mBlueStateFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         mBlueChangeBroadcast = new BluetoothStateChangeBroadcastReceiver();
         mContext.registerReceiver(mBlueChangeBroadcast, mBlueStateFilter);
         mContext.registerReceiver(mGattUpdateReceiver, makeGattUpdateIntentFilter());
+
+        //获取手机本地蓝牙适配
+        final BluetoothManager mBlueManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = mBlueManager.getAdapter();
 
         /* 启动蓝牙service */
         Intent gattServiceIntent = new Intent(mContext, BluetoothLeService.class);
@@ -137,9 +145,9 @@ public class HCBluetoothControl {
      *
      * @return
      */
-    public List<BluetoothDevice> getBluetoothHcDevice() {
+    public List<BleDeviceEntity> getBluetoothHcDevice() {
 
-        return mListDevice;
+        return mControlDevies;
     }
 
     /**
@@ -253,6 +261,8 @@ public class HCBluetoothControl {
                     scan_flag = true;
                     LogUtils.i("定时一段时间后　stop scan le device");
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    mListDevice.clear();
+                    mOnHcBluetoothListener.stopScan();
 
                 }
             }, SCAN_PERIOD);
@@ -260,12 +270,14 @@ public class HCBluetoothControl {
             mScanning = true;
             scan_flag = false;
             mBluetoothAdapter.startLeScan(mLeScanCallback);
-
+            mOnHcBluetoothListener.startScan();
         } else {
             LogUtils.i("stoping scan ");
             mScanning = false;
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
             scan_flag = true;
+            mListDevice.clear();
+            mOnHcBluetoothListener.stopScan();
         }
 
     }
@@ -276,7 +288,11 @@ public class HCBluetoothControl {
     public BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
         @Override
         public void onLeScan(final BluetoothDevice bluetoothDevice, final int rssi, byte[] bytes) {
+
             if (!mListDevice.contains(bluetoothDevice)) {
+                if (mOnHcBluetoothListener != null){
+                    mOnHcBluetoothListener.scanBluetoothDevice(bluetoothDevice, rssi);
+                }
                 mListDevice.add(bluetoothDevice);
                 rssis.add(rssi);
             }
@@ -412,4 +428,16 @@ public class HCBluetoothControl {
         }
     }
 
+    public void setOnHcBluetoothListener(OnHcBluetoothListener listener){
+        mOnHcBluetoothListener = listener;
+    }
+
+    public interface OnHcBluetoothListener{
+        //扫描蓝牙设备
+        void scanBluetoothDevice(BluetoothDevice device, int rssi);
+        //蓝牙扫描结束通知
+        void stopScan();
+        //蓝牙扫描开始通知
+        void startScan();
+    }
 }

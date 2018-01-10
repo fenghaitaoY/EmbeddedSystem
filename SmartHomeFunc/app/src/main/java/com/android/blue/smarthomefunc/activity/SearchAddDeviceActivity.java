@@ -1,13 +1,11 @@
 package com.android.blue.smarthomefunc.activity;
 
 import android.app.Dialog;
+import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,8 +19,8 @@ import android.widget.Button;
 import com.android.blue.smarthomefunc.LogUtils;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.adapter.RecycleAdapter;
-import com.android.blue.smarthomefunc.entity.BluetoothControlDevice;
-import com.wang.avi.AVLoadingIndicatorView;
+import com.android.blue.smarthomefunc.entity.BleDeviceEntity;
+import com.android.blue.smarthomefunc.entity.HCBluetoothControl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +38,14 @@ public class SearchAddDeviceActivity extends BaseActivity {
     @BindView(R.id.search_content_view)
     RecyclerView mRecyclerView;
 
-    List<BluetoothControlDevice> listDevices = new ArrayList<>();
+    List<BleDeviceEntity> mListEntitys = new ArrayList<>();
     boolean loading=false;
     RecycleAdapter mAdapter;
+
+    private HCBluetoothControl mHcControl;
+
+    //显示搜索框
+    private Dialog mSearchDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,23 +71,29 @@ public class SearchAddDeviceActivity extends BaseActivity {
         getSupportActionBar().setTitle(getResources().getString(R.string.add_device));
 
         //RecyclerView
-        mAdapter = new RecycleAdapter(this, listDevices);
+        mAdapter = new RecycleAdapter(this, mListEntitys);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
+        mHcControl = HCBluetoothControl.getInstance(this);
+        mHcControl.setOnHcBluetoothListener(new BluetoothControlListener());
+
+        mSearchDialog = createDialog();
+
+
         mAdapter.setmOnItemClickListener(new RecycleAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
+                LogUtils.i("recycadapter item click");
             }
 
             @Override
             public void onItemLongClick(View view, int position) {
-
+                LogUtils.i("recycadapter item long click");
             }
         });
-        
+
         //返回键设置
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,21 +106,34 @@ public class SearchAddDeviceActivity extends BaseActivity {
         mSearchBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(loading){
-                    loading=false;
-                    showDialog();
-                }else{
-                    loading = true;
-                    showDialog();
-                }
+                mListEntitys.clear();
+                mAdapter.notifyDataSetChanged();
+                mSearchDialog.show();
+                mHcControl.scanLeDevice(true);
+
             }
         });
 
+        mSearchDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialogInterface) {
+                LogUtils.i(" cancel dialog ");
+                mHcControl.scanLeDevice(false);
+            }
+        });
+
+        /*for (int i =0;i<5;i++){
+            BleDeviceEntity be= new BleDeviceEntity();
+            be.setDeviceName("dd"+i);
+            be.setStatusRssi("-"+i);
+            be.setDeviceAddress("address"+i);
+            mListEntitys.add(be);
+        }*/
     }
 
 
 
-    public void showDialog(){
+    public Dialog createDialog(){
         Dialog mDialog = new Dialog(this);
         LayoutInflater inflater= getLayoutInflater();
         View view = inflater.inflate(R.layout.search_device_dialog, null);
@@ -122,16 +144,35 @@ public class SearchAddDeviceActivity extends BaseActivity {
         mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         mDialog.setContentView(view);
-        mDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                LogUtils.i("cancel dialog");
+
+
+        return mDialog;
+    }
+
+
+    class BluetoothControlListener implements HCBluetoothControl.OnHcBluetoothListener {
+        @Override
+        public void scanBluetoothDevice(BluetoothDevice device, int rssi) {
+            LogUtils.i(" scan blue device "+device.getAddress());
+            BleDeviceEntity mEntity = new BleDeviceEntity();
+            mEntity.setDeviceName(device.getName());
+            mEntity.setDeviceAddress(device.getAddress());
+            mEntity.setStatusRssi(rssi+"");
+            if (!mListEntitys.contains(mEntity)) {
+                mListEntitys.add(mEntity);
+                mAdapter.notifyDataSetChanged();
             }
-        });
-        if (!loading) {
-            mDialog.show();
-        }else {
-            mDialog.dismiss();
+        }
+
+        @Override
+        public void stopScan() {
+            LogUtils.i("stop scan");
+            mSearchDialog.dismiss();
+        }
+
+        @Override
+        public void startScan() {
+
         }
     }
 }
