@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,6 +22,12 @@ import android.widget.Toast;
 import com.android.blue.smarthomefunc.LogUtils;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.activity.SearchAddDeviceActivity;
+import com.android.blue.smarthomefunc.adapter.GrideAdapter;
+import com.android.blue.smarthomefunc.database.DBinfo;
+import com.android.blue.smarthomefunc.entity.BleDeviceEntity;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -62,6 +69,8 @@ public class DeviceControlFragment extends Fragment {
 
     private BluetoothAdapter mBluetoothAdapter;
     int REQUEST_ENABLE_BT = 1;
+
+    private List<BleDeviceEntity> mBleRegistDeviceList = new ArrayList<>();
 
     public DeviceControlFragment() {
         // Required empty public constructor
@@ -128,8 +137,7 @@ public class DeviceControlFragment extends Fragment {
         mContext = getActivity();
         //fragment ButterKnife 使用这种方法，直接bind(view)不生效
         ButterKnife.bind(this,mRootView);
-        getDatas();
-        //mGridView.setAdapter(new GrideAdapter(mContext, mDevices));
+        mGridView.setAdapter(new GrideAdapter(mContext, mBleRegistDeviceList));
         return mRootView;
     }
 
@@ -149,8 +157,36 @@ public class DeviceControlFragment extends Fragment {
         LogUtils.i("Device control onResume");
         initBluetooth(); //初始化蓝牙
 
-
+        checkAlreadyRegistDevice();
     }
+
+
+    private void checkAlreadyRegistDevice(){
+        mBleRegistDeviceList.clear();
+        Uri uri = Uri.parse("content://com.android.blue.smarthomeprovider/device");
+
+        Cursor cursor = mContext.getContentResolver().query(uri,null, null, null,null);
+        LogUtils.i(" database count"+cursor.getCount());
+        if (cursor != null && cursor.getCount() > 0) {
+            LogUtils.i("ColumnCount:"+cursor.getColumnCount());
+            for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+                for (int i=1;i<cursor.getColumnCount();i++){
+                    LogUtils.i(cursor.getColumnName(i)+": "+cursor.getString(i));
+                }
+                BleDeviceEntity entity = new BleDeviceEntity();
+                entity.setModeName(cursor.getString(cursor.getColumnIndex(DBinfo.Table.TABLE_COLUMN_MODE_NAME)));
+                entity.setDeviceName(cursor.getString(cursor.getColumnIndex(DBinfo.Table.TABLE_COLUMN_DEVICE_NAME)));
+                entity.setDeviceAddress(cursor.getString(cursor.getColumnIndex(DBinfo.Table.TABLE_COLUMN_DEVICE_ADDRESS)));
+                entity.setStatusRssi(cursor.getInt(cursor.getColumnIndex(DBinfo.Table.TABLE_COLUMN_RSSI))+"");
+                entity.setDeviceSwitch(cursor.getInt(cursor.getColumnIndex(DBinfo.Table.TABLE_COLUMN_SWITCH_STATUS)) == 1);
+
+                mBleRegistDeviceList.add(entity);
+
+            }
+
+        }
+    }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {

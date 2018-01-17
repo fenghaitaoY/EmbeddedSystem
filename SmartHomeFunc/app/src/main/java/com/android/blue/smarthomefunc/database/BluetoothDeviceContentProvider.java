@@ -22,18 +22,19 @@ public class BluetoothDeviceContentProvider extends ContentProvider {
     private static final int DEVICE  = 2;
 
 
-    private DBHelper mDBHelper = null;
+    private MyHelper mDBHelper = null;
 
     static {
         //content://xxxxxxx/device
-        matcher.addURI("com.android.blue.smarthome", "device", DEVICES);
-        matcher.addURI("com.android.blue.smarthome", "device/#",DEVICE);
+        matcher.addURI("com.android.blue.smarthomeprovider", "device", DEVICES);
+        matcher.addURI("com.android.blue.smarthomeprovider", "device/#",DEVICE);
     }
 
     @Override
     public boolean onCreate() {
-        LogUtils.i("device database create");
-        mDBHelper = new DBHelper(getContext(), DBinfo.DB.DB_NAME, null, DBinfo.DB.DB_VERSION);
+
+        mDBHelper = new MyHelper(getContext(), DBinfo.DB.DB_NAME, null, DBinfo.DB.DB_VERSION);
+        LogUtils.i("device database create :"+ mDBHelper);
         return (mDBHelper == null)? false : true;
     }
 
@@ -45,8 +46,11 @@ public class BluetoothDeviceContentProvider extends ContentProvider {
             if (matcher.match(uri) == DEVICES) {
                 LogUtils.i("insert data");
                 SQLiteDatabase db = mDBHelper.getWritableDatabase();
+                LogUtils.i("db is ok :"+db.isDatabaseIntegrityOk()+", path="+db.getPath());
                 long rowid = db.insert(DBinfo.Table.TABLE_NAME, null, contentValues);
+                LogUtils.i(" insert data rowid="+rowid);
                 insertUri = ContentUris.withAppendedId(uri, rowid);
+                db.close();
             } else {
                 throw new IllegalArgumentException("PATH ERROR, DO NOT INSET DATA");
             }
@@ -131,7 +135,9 @@ public class BluetoothDeviceContentProvider extends ContentProvider {
 
     public String getType(Uri uri){
         if (matcher.match(uri) == DEVICES){
-            return "com.android.blue.smarthome";
+            return "vnd.android.cursor.dir/devices";
+        }else if(matcher.match(uri) == DEVICE){
+            return "vnd.android.cursor.item/device";
         }
         return null;
     }

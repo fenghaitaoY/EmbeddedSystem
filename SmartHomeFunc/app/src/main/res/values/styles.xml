@@ -109,8 +109,12 @@
     </style>
 
     <!--沉浸式状态栏主题设置-->
-    <style name="TranslucentTheme" parent="AppTheme">
-
+    <style name="BottomDialogStyle" parent="@style/Base.V7.Theme.AppCompat.Light.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-
+    <style name="BottomDialog.Animation" parent="Animation.AppCompat.Dialog">
+        <item name="android:windowEnterAnimation">@anim/translate_dialog_in</item>
+        <item name="android:windowExitAnimation">@anim/translate_dialog_out</item>
+    </style>
 </resources>

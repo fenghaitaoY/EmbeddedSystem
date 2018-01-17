@@ -7,6 +7,19 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> <!-- 有些机型上需要获取位置信息才能扫描到蓝牙设备 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+
+
     <uses-feature
         android:name="android.hardware.bluetooth_le"
         android:required="true"/>
@@ -46,18 +59,17 @@
         <!-- 输入法将ottomNavigationView 顶上去设置　inputmode -->
         <activity
             android:name=".activity.LoginSuccessActivity"
-            android:windowSoftInputMode="adjustPan"
-            >
+            android:windowSoftInputMode="adjustPan">
         </activity>
+
 
         <provider
             android:name=".database.BluetoothDeviceContentProvider"
-            android:authorities="com.android.blue.smarthome"
-            android:enabled="true"
-            android:exported="true">
+            android:authorities="com.android.blue.smarthomeprovider">
         </provider>
 
-        <activity android:name=".activity.SearchAddDeviceActivity"
+        <activity
+            android:name=".activity.SearchAddDeviceActivity"
             android:theme="@style/TranslucentTheme">
         </activity>
     </application>

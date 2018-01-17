@@ -61,6 +61,10 @@
     <string name="device_name">设备名称:</string>
     <string name="device_address">地址:</string>
     <string name="device_rssi">Rssi:</string>
+    <string name="device_add_dialog">添加</string>
+    <string name="device_cancel_dialog">取消</string>
+    <string name="toast_already_register_device">该设备已经添加，请选择其他设备</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string
         name="hello_blank_fragment">

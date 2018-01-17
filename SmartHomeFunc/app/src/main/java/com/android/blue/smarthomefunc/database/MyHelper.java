@@ -4,19 +4,22 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.android.blue.smarthomefunc.LogUtils;
+
 /**
  * Created by root on 1/4/18.
  */
 
-public class DBHelper extends SQLiteOpenHelper {
+public class MyHelper extends SQLiteOpenHelper {
 
-    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public MyHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        LogUtils.i("create db");
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(DBinfo.Table.CREAT_DEVICE_TABLE);
+    public void onCreate(SQLiteDatabase db) {
+        db.execSQL(DBinfo.Table.CREAT_DEVICE_TABLE);
     }
 
     @Override
