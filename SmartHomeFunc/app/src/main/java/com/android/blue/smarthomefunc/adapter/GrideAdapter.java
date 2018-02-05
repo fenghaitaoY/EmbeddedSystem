@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.entity.BleDeviceEntity;
+import com.android.blue.smarthomefunc.view.AlwaysMarqueeTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +51,9 @@ public class GrideAdapter extends BaseAdapter {
             view = LayoutInflater.from(mContext).inflate(R.layout.gridview_item, null);
             holder.mModeName = view.findViewById(R.id.grid_mode_name);
             holder.mDeviceName = view.findViewById(R.id.grid_device_name);
-            holder.mStatus = view.findViewById(R.id.grid_status);
+            holder.mDeviceAddress = view.findViewById(R.id.grid_device_address);
             holder.mDeviceSwitch = view.findViewById(R.id.grid_switch);
+            holder.mDeviceRssi = view.findViewById(R.id.grid_device_rssi);
             view.setTag(holder);
         }else{
             holder = (ViewHolder) view.getTag();
@@ -59,8 +61,14 @@ public class GrideAdapter extends BaseAdapter {
 
         BleDeviceEntity mDevice = mDevices.get(position);
         holder.mModeName.setText(mDevice.getModeName());
-        holder.mDeviceName.setText(mDevice.getDeviceName());
-        holder.mStatus.setText(mDevice.getStatusRssi());
+        if (mDevice.getDeviceName()==null){
+            holder.mDeviceName.setText("null");
+        }else{
+            holder.mDeviceName.setText(mDevice.getDeviceName());
+        }
+
+        holder.mDeviceAddress.setText(mDevice.getDeviceAddress());
+        holder.mDeviceRssi.setText(mDevice.getStatusRssi());
         holder.mDeviceSwitch.setChecked(mDevice.isDeviceSwitch());
 
         return  view;
@@ -68,9 +76,10 @@ public class GrideAdapter extends BaseAdapter {
 
 
     class ViewHolder {
-        TextView mModeName;
+        AlwaysMarqueeTextView mModeName;
         TextView mDeviceName;
-        TextView mStatus;
+        TextView mDeviceAddress;
+        TextView mDeviceRssi;
         SwitchCompat mDeviceSwitch;
     }
 

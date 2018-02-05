@@ -20,10 +20,11 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.blue.smarthomefunc.entity.LogUtils;
+import com.android.blue.smarthomefunc.service.BluetoothLeService;
+
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Ble_Activity extends AppCompatActivity implements View.OnClickListener{

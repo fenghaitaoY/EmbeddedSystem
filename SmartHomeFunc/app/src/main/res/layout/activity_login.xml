@@ -7,8 +7,10 @@
                 android:background="@drawable/login_wallpaper7"
                 tools:context=".activity.LoginActivity">
 
+    <include layout="@layout/include_app_bar"
+             android:visibility="gone"/>
+
     <ImageView
-        android:id="@+id/register_user"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_centerHorizontal="true"

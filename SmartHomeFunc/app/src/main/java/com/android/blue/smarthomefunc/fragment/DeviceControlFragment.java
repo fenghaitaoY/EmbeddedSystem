@@ -19,12 +19,13 @@ import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.android.blue.smarthomefunc.LogUtils;
+import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.activity.SearchAddDeviceActivity;
 import com.android.blue.smarthomefunc.adapter.GrideAdapter;
 import com.android.blue.smarthomefunc.database.DBinfo;
 import com.android.blue.smarthomefunc.entity.BleDeviceEntity;
+import com.android.blue.smarthomefunc.entity.HCBluetoothControl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,9 +69,13 @@ public class DeviceControlFragment extends Fragment {
 
 
     private BluetoothAdapter mBluetoothAdapter;
+    private GrideAdapter mGrideAdapter;
     int REQUEST_ENABLE_BT = 1;
 
     private List<BleDeviceEntity> mBleRegistDeviceList = new ArrayList<>();
+
+    //蓝牙扫描，连接操作
+    private HCBluetoothControl mHCBleControl;
 
     public DeviceControlFragment() {
         // Required empty public constructor
@@ -137,7 +142,8 @@ public class DeviceControlFragment extends Fragment {
         mContext = getActivity();
         //fragment ButterKnife 使用这种方法，直接bind(view)不生效
         ButterKnife.bind(this,mRootView);
-        mGridView.setAdapter(new GrideAdapter(mContext, mBleRegistDeviceList));
+        mGrideAdapter = new GrideAdapter(mContext, mBleRegistDeviceList);
+        mGridView.setAdapter(mGrideAdapter);
         return mRootView;
     }
 
@@ -181,10 +187,12 @@ public class DeviceControlFragment extends Fragment {
                 entity.setDeviceSwitch(cursor.getInt(cursor.getColumnIndex(DBinfo.Table.TABLE_COLUMN_SWITCH_STATUS)) == 1);
 
                 mBleRegistDeviceList.add(entity);
-
+                //蓝牙连接
+                //mHCBleControl.connectDevice(entity.getDeviceAddress());
             }
 
         }
+        mGrideAdapter.notifyDataSetChanged();
     }
 
 
@@ -212,6 +220,9 @@ public class DeviceControlFragment extends Fragment {
         super.onDetach();
         LogUtils.i("Device control onDetach ");
         mListener = null;
+        //蓝牙关闭
+        mHCBleControl.disconnectBle();
+        mHCBleControl.closeBleGAT();
     }
 
     @Override

@@ -2,26 +2,20 @@ package com.android.blue.smarthomefunc.activity;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.transition.Explode;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.android.blue.smarthomefunc.LogUtils;
+import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnTouch;
 
 public class LoginActivity extends BaseActivity {
 

@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.android.blue.smarthomefunc.LogUtils;
+import com.android.blue.smarthomefunc.entity.LogUtils;
 
 /**
  * Created by root on 1/4/18.

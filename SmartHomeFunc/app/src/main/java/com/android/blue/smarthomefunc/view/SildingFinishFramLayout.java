@@ -2,14 +2,13 @@ package com.android.blue.smarthomefunc.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Scroller;
 
-import com.android.blue.smarthomefunc.LogUtils;
+import com.android.blue.smarthomefunc.entity.LogUtils;
 
 
 /**

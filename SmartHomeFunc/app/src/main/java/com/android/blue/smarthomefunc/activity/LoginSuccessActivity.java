@@ -3,7 +3,6 @@ package com.android.blue.smarthomefunc.activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
@@ -11,14 +10,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.Toolbar;
-import android.transition.Explode;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.android.blue.smarthomefunc.LogUtils;
+import com.android.blue.smarthomefunc.application.SmartHomeApplication;
+import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.entity.HCBluetoothControl;
 import com.android.blue.smarthomefunc.fragment.DeviceControlFragment;
 import com.android.blue.smarthomefunc.fragment.MusicFragment;
 import com.android.blue.smarthomefunc.fragment.PeopleSetitingFragment;
@@ -72,17 +71,7 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login_success);
-
-
-
-        ButterKnife.bind(this);
-        //设置进入界面效果
-//        Explode explode = new Explode();
-//        explode.setDuration(500);
-//        getWindow().setExitTransition(explode);
-//        getWindow().setEnterTransition(explode);
 
         bottomNavi.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         BottomNavigationMenuView bottomMenuView = (BottomNavigationMenuView) bottomNavi.getChildAt(0);
@@ -127,6 +116,11 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
 
     }
 
+    @Override
+    public void setActivityFullScreen(boolean flag) {
+
+    }
+
     class MyViewPagerAdapter extends FragmentPagerAdapter {
         public MyViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -142,6 +136,14 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
             return 4;
         }
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        //关闭广播注册
+        HCBluetoothControl.getInstance(this).unregisterBroadcast();
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == event.KEYCODE_BACK){
@@ -149,7 +151,8 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
                 time = System.currentTimeMillis();
                 Toast.makeText(getApplicationContext(), "再点击一次退出应用程序",Toast.LENGTH_SHORT).show();
             }else{
-                removeAllActivity(); //finish 所有打开的activity
+                ((SmartHomeApplication)getApplication()).removeAllActivity(); //finish 所有打开的activity
+
             }
         }
         return  true;

@@ -10,7 +10,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -26,7 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.blue.smarthomefunc.LogUtils;
+import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.adapter.RecycleAdapter;
 import com.android.blue.smarthomefunc.database.DBinfo;
@@ -38,11 +37,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class SearchAddDeviceActivity extends BaseActivity {
-    @BindView(R.id.search_toolbar)
-    Toolbar mToolbar;
 
     @BindView(R.id.search_device)
     Button mSearchBt;
@@ -71,24 +67,6 @@ public class SearchAddDeviceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_add_device);
-        ButterKnife.bind(this);
-        //透明状态栏
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {//5.0及以上
-            View decorView = getWindow().getDecorView();
-            int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
-            decorView.setSystemUiVisibility(option);
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {//4.4到5.0
-            WindowManager.LayoutParams localLayoutParams = getWindow().getAttributes();
-            localLayoutParams.flags = (WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS | localLayoutParams.flags);
-        }
-
-        //添加Toolbar设置
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.add_device));
 
         //RecyclerView
         mAdapter = new RecycleAdapter(this, mListEntitys);
@@ -114,15 +92,6 @@ public class SearchAddDeviceActivity extends BaseActivity {
             @Override
             public void onItemLongClick(View view, int position) {
                 LogUtils.i("recycadapter item long click");
-            }
-        });
-
-        //返回键设置
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LogUtils.i("点击");
-                finish();
             }
         });
 
@@ -210,19 +179,22 @@ public class SearchAddDeviceActivity extends BaseActivity {
                         //读出数据库已经存在的，与之对比蓝牙地址，如果已经存在，取消添加并提示已经加入
                         Cursor cursor = getContentResolver().query(uri,null, null, null,null);
                         LogUtils.i(" database count"+cursor.getCount());
+                        boolean isAlreadyRegister = false;
                         if (cursor != null) {
                             if (cursor.getCount()>0){
                                 for (cursor.moveToFirst(); !cursor.isAfterLast();cursor.moveToNext()){
                                     if(bleEntity.getDeviceAddress().equals(
                                             cursor.getString(cursor.getColumnIndex(DBinfo.Table.TABLE_COLUMN_DEVICE_ADDRESS)))){
 
+                                        isAlreadyRegister = true;
                                         Toast.makeText(getApplicationContext(),getResources().getString(R.string.toast_already_register_device),Toast.LENGTH_SHORT).show();
-
-                                    }else{
-                                        getContentResolver().insert(uri, values);
                                     }
                                 }
-                            }else{
+
+                            }
+
+                            if (cursor.getCount() ==0 || !isAlreadyRegister){
+                                LogUtils.i("insert database");
                                 getContentResolver().insert(uri, values);
                             }
                         }

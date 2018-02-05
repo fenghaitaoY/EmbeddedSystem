@@ -15,7 +15,7 @@ import android.view.animation.AccelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.android.blue.smarthomefunc.LogUtils;
+import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.R;
 
 import butterknife.BindView;
@@ -47,6 +47,11 @@ public class RegisterActivity extends BaseActivity {
             ShowEnterAnimation();
         }
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     /**

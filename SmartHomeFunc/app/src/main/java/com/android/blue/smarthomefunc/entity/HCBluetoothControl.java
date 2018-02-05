@@ -15,8 +15,7 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 
-import com.android.blue.smarthomefunc.BluetoothLeService;
-import com.android.blue.smarthomefunc.LogUtils;
+import com.android.blue.smarthomefunc.service.BluetoothLeService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -188,8 +187,9 @@ public class HCBluetoothControl {
      * @return
      */
     public boolean connectDevice(final String address) {
+        final boolean[] result = {false};
         if (blueAddress.isEmpty()) {
-            return false;
+            return result[0];
         }
 
         mHandler.postDelayed(new Runnable() {
@@ -197,18 +197,42 @@ public class HCBluetoothControl {
             public void run() {
                 if (mBluetoothLeService != null && mBluetoothLeService.initialize()) {
                     LogUtils.i("--connect--");
-                    mBluetoothLeService.connect(address);
+                    result[0] = mBluetoothLeService.connect(address);
                 }
             }
         }, 200);
 
-        return true;
+        return result[0];
     }
 
+    /**
+     * 断开蓝牙连接
+     */
+    public void disconnectBle(){
+        mBluetoothLeService.disconnect();
+    }
 
+    /**
+     * 关闭连接
+     */
+    public void closeBleGAT(){
+        mBluetoothLeService.close();
+    }
 
+    /**
+     *
+     * @return
+     */
     public boolean isBluetoothConnect(){
         return false;
+    }
+
+    /**
+     * 取消广播监听
+     */
+    public void unregisterBroadcast(){
+        mContext.unregisterReceiver(mBlueChangeBroadcast);
+        mContext.unregisterReceiver(mGattUpdateReceiver);
     }
 
     /**
