@@ -16,10 +16,12 @@
         <item name="android:windowContentTransitions">
             true
         </item>
-        <item name="playBarBackground">@drawable/play_bar_bg_selector</item>
+        <item name="playBarBackground">
+            @drawable/play_bar_bg_selector
+        </item>
     </style>
 
-    <attr name="playBarBackground" format="reference" />
+    <attr name="playBarBackground" format="reference"/>
 
     <style name="Translucent" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimaryDark">
@@ -46,28 +48,57 @@
 
     <style name="Text_lab" parent="TextAppearance.AppCompat">
         <!-- 默认状态提示颜色和字体-->
-        <item name="android:textColorHint">#e0e2ed</item>
-        <item name="android:textSize">30sp</item>
+        <item name="android:textColorHint">
+            #e0e2ed
+        </item>
+        <item name="android:textSize">
+            30sp
+        </item>
         <!-- Label标签的颜色 -->
-        <item name="colorAccent">#b4c92f</item>
+        <item name="colorAccent">
+            #b4c92f
+        </item>
         <!-- 默认状态状态设置底线颜色 -->
-        <item name="colorControlNormal">#3F51b5</item>
+        <item name="colorControlNormal">
+            #3F51b5
+        </item>
         <!-- 选择的底线颜色 -->
-        <item name="colorControlActivated">#dfd6d9</item>
-        <item name="textColor">#ffffff</item>
-        <item name="textSize">40sp</item>
-        <item name="android:textColor">#ffffff</item>
+        <item name="colorControlActivated">
+            #dfd6d9
+        </item>
+        <item name="textColor">
+            #ffffff
+        </item>
+        <item name="textSize">
+            40sp
+        </item>
+        <item name="android:textColor">
+            #ffffff
+        </item>
     </style>
 
     <!--沉浸式状态栏主题设置-->
     <style name="BottomDialogStyle" parent="@style/Base.V7.Theme.AppCompat.Light.Dialog">
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-    <style name="BottomDialog.Animation" parent="Animation.AppCompat.Dialog">
-        <item name="android:windowEnterAnimation">@anim/translate_dialog_in</item>
-        <item name="android:windowExitAnimation">@anim/translate_dialog_out</item>
+        <item name="android:windowNoTitle">
+            true
+        </item>
+        <item name="android:windowBackground">
+            @android:color/transparent
+        </item>
     </style>
 
-    <style name="AppTheme.Text" parent="TextAppearance.AppCompat" />
+    <style name="BottomDialog.Animation" parent="Animation.AppCompat.Dialog">
+        <item name="android:windowEnterAnimation">
+            @anim/translate_dialog_in
+        </item>
+        <item name="android:windowExitAnimation">
+            @anim/translate_dialog_out
+        </item>
+    </style>
+
+    <style name="AppTheme.Text" parent="TextAppearance.AppCompat"/>
+
+    <style
+        name="AppTheme.PopupOverlay"
+        parent="ThemeOverlay.AppCompat.Light"/>
 </resources>

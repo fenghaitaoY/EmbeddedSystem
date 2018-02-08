@@ -51,6 +51,7 @@
     <string name="copyright">Copyright © 2015&#045;<xliff:g id="YEAR">%1$d</xliff:g> SmartHome</string>
     <!--音乐-->
     <string name="fragment_music_tool_bar">听</string>
+    <string name="fragment_video_tool_bar">看</string>
     <string name="local_music_bar">本地音乐</string>
     <string name="local_love_bar">喜欢</string>
     <string name="local_download_bar">下载</string>
@@ -59,4 +60,6 @@
     <string name="music_list">列表</string>
     <string name="null_music">无音乐</string>
     <string name="null_artist">无</string>
+    <string name="title_activity_local_music">本地音乐</string>
+    <string name="list_footer_show_music_count">共<xliff:g id="song">%1$d</xliff:g>首歌曲</string>
 </resources>

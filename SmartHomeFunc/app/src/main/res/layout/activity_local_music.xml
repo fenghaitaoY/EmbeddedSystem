@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.android.blue.smarthomefunc.activity.LocalMusicActivity">
+
+    <include layout="@layout/include_app_bar"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:layout_weight="1"
+             android:visibility="visible"/>
+
+    <ListView
+        android:id="@+id/list_local"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="8"
+        android:divider="@drawable/listview_divider"
+        android:choiceMode="singleChoice"
+        android:dividerHeight="0.1dp"/>
+
+    <include
+        layout="@layout/include_music_play_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.1"
+        android:layout_gravity="bottom"
+        />
+
+</LinearLayout>

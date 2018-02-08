@@ -3,18 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_10"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="70dp"
         android:layout_marginTop="@dimen/margin_10"
         android:orientation="vertical"
         android:background="@color/dialog_white"
         >
 
         <SeekBar
-            android:id="@+id/seekBar"
+            android:id="@+id/music_bar_seekBar"
             style="@android:style/Widget.Material.SeekBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -40,6 +41,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/music_title"
                     style="@style/AppTheme.Text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -49,6 +51,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/music_artist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
@@ -59,6 +62,7 @@
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/music_bar_playing"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -68,6 +72,7 @@
                 />
 
             <ImageView
+                android:id="@+id/music_bar_next"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -77,6 +82,7 @@
                 />
 
             <ImageView
+                android:id="@+id/music_bar_list"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -89,13 +95,14 @@
     </LinearLayout>
 
     <com.android.blue.smarthomefunc.view.CircleImageView
+        android:id="@+id/music_bar_cover"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="@dimen/margin_5"
         android:background="@drawable/round_image_background"
-        android:elevation="10dp"
+        android:elevation="15dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/login_wallpaper7"
+        android:src="@drawable/register_user"
         />
 
 

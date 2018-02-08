@@ -30,11 +30,12 @@
             android:text="@string/local_music_bar"
             />
         <TextView
+            android:id="@+id/music_local_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
             android:textColor="@color/selector_textview_music_bar_sumary"
-            android:text="1"/>
+            android:text="0"/>
     </LinearLayout>
 
     <LinearLayout
@@ -60,11 +61,12 @@
             android:text="@string/local_love_bar"
             />
         <TextView
+            android:id="@+id/music_love_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
             android:textColor="@color/selector_textview_music_bar_sumary"
-            android:text="1"/>
+            android:text="0"/>
     </LinearLayout>
 
     <LinearLayout
@@ -90,11 +92,12 @@
             android:text="@string/local_download_bar"
             />
         <TextView
+            android:id="@+id/music_download_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
             android:textColor="@color/selector_textview_music_bar_sumary"
-            android:text="1"/>
+            android:text="0"/>
     </LinearLayout>
 
     <LinearLayout
@@ -120,10 +123,11 @@
             android:text="@string/local_recent_bar"
             />
         <TextView
+            android:id="@+id/music_recent_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="10sp"
             android:textColor="@color/selector_textview_music_bar_sumary"
-            android:text="1"/>
+            android:text="0"/>
     </LinearLayout>
 </LinearLayout>

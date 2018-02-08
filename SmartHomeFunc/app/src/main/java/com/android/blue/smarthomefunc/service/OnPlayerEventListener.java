@@ -27,7 +27,7 @@ public interface OnPlayerEventListener {
      * 更新进度
      * @param progress
      */
-    void onPublish(int progress);
+    void onPublishProgress(int progress);
 
     /**
      * 缓冲百分比

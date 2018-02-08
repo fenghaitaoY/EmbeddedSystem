@@ -77,6 +77,15 @@ public class MusicUtils {
 
             LogUtils.i("id ="+id+" , title="+title+" , artist ="+artist+" , album="+album+" ,albumId="+albumId+" , duration="+duration
                     +", path＝"+path+" , fileName="+fileName+" , fileSize="+fileSize);
+
+            //顺序错误导致split　title和artist错误
+            if (artist.contains("unknown") || artist.contains("?")){
+                artist = title.split("-")[0].trim();
+            }
+
+            if (title.contains("-")){
+                title = title.split("-")[1].trim();
+            }
             Music music = new Music();
             music.setId(id);
             music.setType(Music.Type.LOCAL);

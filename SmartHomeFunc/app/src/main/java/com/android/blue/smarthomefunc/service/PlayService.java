@@ -179,6 +179,9 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                     }
                 }
             });
+            if (mListener != null) {
+                mListener.onChange(music);
+            }
             //通知
             mMediaSessionManager.updateMetaData(mPlayingMusic);
             mMediaSessionManager.updatePlaybackState();
@@ -253,11 +256,11 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     /**
      * 播放开始
      */
-    protected void start(){
-        if (!isPreparing() && isPausing()){
+    public void start(){
+        if (!isPreparing() && !isPausing()){
             return;
         }
-
+        LogUtils.i("do start ");
         if (mAudioFocusManager.requestAudioFocus()){
             mPlayer.start();
             mPlayState = STATE_PLAYING;
@@ -291,7 +294,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             mPlayer.seekTo(msec);
             mMediaSessionManager.updatePlaybackState();
             if (mListener !=null){
-                mListener.onPublish(msec);
+                mListener.onPublishProgress(msec);
             }
         }
     }
@@ -342,7 +345,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
      * 获取正在播放的歌曲
      * @return
      */
-    public Music getmPlayingMusic(){
+    public Music getPlayingMusic(){
         return mPlayingMusic;
     }
 
@@ -379,7 +382,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         @Override
         public void run() {
             if (isPlaying() && mListener != null){
-                mListener.onPublish(mPlayer.getCurrentPosition());
+                mListener.onPublishProgress(mPlayer.getCurrentPosition());
             }
             mHandler.postDelayed(this, TIME_UPDATE);
         }
