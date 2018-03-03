@@ -8,4 +8,6 @@ package com.android.blue.smarthomefunc.adapter;
 public interface OnMusicAdapterItemClickListener {
     void onMoreClick(int position);
     void onAddPlayingListClick(int position);
+    void onLoverClick(int position);
+    void onShareMusicClick(int position);
 }

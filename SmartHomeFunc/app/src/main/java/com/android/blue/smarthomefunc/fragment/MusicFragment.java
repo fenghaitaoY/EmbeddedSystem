@@ -14,7 +14,12 @@ import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.activity.LocalMusicActivity;
+import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
+import com.android.blue.smarthomefunc.model.Music;
+import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
+import com.android.blue.smarthomefunc.service.PlayService;
+import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 import com.android.blue.smarthomefunc.view.CircleImageView;
 
 import butterknife.BindView;
@@ -29,7 +34,7 @@ import butterknife.Unbinder;
  * Use the {@link MusicFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class MusicFragment extends Fragment {
+public class MusicFragment extends Fragment implements OnPlayerEventListener, SeekBar.OnSeekBarChangeListener{
 
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -51,6 +56,7 @@ public class MusicFragment extends Fragment {
     LinearLayout mOnlineMusicBt;
     @BindView(R.id.music_list_layout)
     LinearLayout mListMusicBt;
+
     @BindView(R.id.music_bar_seekBar)
     SeekBar mSeekbar;
     @BindView(R.id.music_title)
@@ -65,8 +71,9 @@ public class MusicFragment extends Fragment {
     ImageView mBarListBt;
     @BindView(R.id.music_bar_cover)
     CircleImageView mBarImageCover;
-    @BindView(R.id.music_local_count)
 
+
+    @BindView(R.id.music_local_count)
     TextView mMusicLocalCount;
     @BindView(R.id.music_love_count)
     TextView mMusicLoveCount;
@@ -120,9 +127,46 @@ public class MusicFragment extends Fragment {
         mMusicFragmentView = inflater.inflate(R.layout.fragment_music, container, false);
         butterknife = ButterKnife.bind(this, mMusicFragmentView);
         mContext = getActivity();
+
+
         return mMusicFragmentView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initMusicCountShow();
+        initMusicBar();
+        getPlayService().setOnPlayerEventListener(this);
+        mSeekbar.setOnSeekBarChangeListener(this);
+        if (getPlayService().isPlaying()){
+            mBarPlayingBt.setImageResource(R.drawable.selector_music_bar_pause);
+        }else {
+            mBarPlayingBt.setImageResource(R.drawable.selector_music_bar_playing);
+        }
+    }
+
+    private void initMusicCountShow(){
+        mMusicLocalCount.setText(AppCache.get().getMusicList().size()+"");
+
+    }
+
+    private void initMusicBar(){
+        mBarImageCover.setImageBitmap(MusicCoverLoaderUtils.getInstance().loadThumbnail(getPlayService().getPlayingMusic()));
+        mSeekbar.setMax((int)getPlayService().getPlayingMusic().getDuration());
+        mMusicTitle.setText(getPlayService().getPlayingMusic().getTitle());
+        mMusicArtist.setText(getPlayService().getPlayingMusic().getArtist());
+        mSeekbar.setProgress((int) getPlayService().getCurrentPosition());
+    }
+
+
+    public PlayService getPlayService(){
+        PlayService playService = AppCache.get().getPlayService();
+        if (playService == null){
+            throw new NullPointerException("Playservice is null");
+        }
+        return playService;
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -170,13 +214,73 @@ public class MusicFragment extends Fragment {
                 break;
             case R.id.music_bar_playing:
                 LogUtils.i("playing bar ");
+                getPlayService().playPause();
+                if (getPlayService().isPlaying()){
+                    mBarPlayingBt.setImageResource(R.drawable.selector_music_bar_pause);
+                }else {
+                    mBarPlayingBt.setImageResource(R.drawable.selector_music_bar_playing);
+                }
                 break;
             case R.id.music_bar_next:
                 LogUtils.i(" next bar ");
+                getPlayService().next();
                 break;
             case R.id.music_bar_list:
                 LogUtils.i(" list bar ");
                 break;
         }
+    }
+
+    @Override
+    public void onChange(Music music) {
+        initMusicBar();
+    }
+
+    @Override
+    public void onPlayerStart() {
+        mBarPlayingBt.setImageResource(R.drawable.selector_music_bar_pause);
+    }
+
+    @Override
+    public void onPlayerPause() {
+        mBarPlayingBt.setImageResource(R.drawable.selector_music_bar_playing);
+    }
+
+    @Override
+    public void onPublishProgress(int progress) {
+        if (mSeekbar != null)
+            mSeekbar.setProgress(progress);
+    }
+
+    @Override
+    public void onBufferingUpdate(int percent) {
+
+    }
+
+    @Override
+    public void onTimer(long remain) {
+
+    }
+
+    @Override
+    public void onMusicListUpdate() {
+
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int position, boolean press) {
+        if (press){
+            getPlayService().seekTo(position);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
     }
 }

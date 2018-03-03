@@ -62,4 +62,20 @@
     <string name="null_artist">无</string>
     <string name="title_activity_local_music">本地音乐</string>
     <string name="list_footer_show_music_count">共<xliff:g id="song">%1$d</xliff:g>首歌曲</string>
+    <string name="share">分享</string>
+    <string name="share_music">我用%1$s分享了歌曲《%2$s》%3$s</string>
+    <string name="tips">温馨提示</string>
+    <string name="download_tips">当前处于移动网络，下载将消耗较多流量，是否继续下载？</string>
+    <string name="download_tips_sure">继续下载</string>
+    <string name="cancel">取消</string>
+    <string name="sure">确定</string>
+    <string name="delete">删除</string>
+    <string name="delete_music">删除<xliff:g id="name">%1$s</xliff:g>?</string>
+    <string name="play_tips">当前处于移动网络，确定打开移动网络播放开关吗？</string>
+    <string name="play_tips_sure">立即打开</string>
+    <string name="downloading">正在下载．．．</string>
+    <string name="download_fail">下载失败</string>
+    <string name="unable_to_share">分享失败</string>
+
+
 </resources>

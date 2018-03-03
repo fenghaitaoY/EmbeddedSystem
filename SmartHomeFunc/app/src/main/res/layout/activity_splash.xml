@@ -15,6 +15,7 @@
         android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:contentDescription="@null"
+        android:layout_marginBottom="120dp"
         android:scaleType="centerCrop"
         android:background="@color/gray"
         />
@@ -29,12 +30,19 @@
         android:textSize="10sp"
         android:text="@string/splash_button_skip"/>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:layout_gravity="bottom"
+        android:background="@color/dialog_white"/>
+
     <TextView
         android:id="@+id/splash_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:gravity="center_horizontal"
+        android:drawableTop="@drawable/smarthome_login"
         android:textSize="10sp"
         android:layout_marginBottom="@dimen/margin_5"
         android:text="@string/copyright"/>

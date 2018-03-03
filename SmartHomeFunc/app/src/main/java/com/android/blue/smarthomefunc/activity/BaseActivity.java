@@ -11,12 +11,14 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.blue.smarthomefunc.R;
@@ -40,7 +42,6 @@ public class BaseActivity extends AppCompatActivity {
         setVolumeControlStream(AudioManager.STREAM_MUSIC); //设置基于BASE的activity 音量键是设置音乐音量
 
         mContext = this;
-
 
     }
 

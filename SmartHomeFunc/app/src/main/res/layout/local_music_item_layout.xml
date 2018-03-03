@@ -2,61 +2,143 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="fill_parent"
     android:descendantFocusability="blocksDescendants"
     android:background="?android:selectableItemBackground">
 
-
-    <ImageButton
-        android:id="@+id/add_playing_local"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_20"
-        android:background="@drawable/selector_music_add_icon"/>
-
-
-    <TextView
-        android:id="@+id/local_item_title"
-        style="@style/AppTheme.Text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textSize="16sp"
-        android:layout_toRightOf="@id/add_playing_local"
-        android:layout_marginTop="@dimen/margin_10"
-        android:text="@string/null_music"/>
-
-    <TextView
-        android:id="@+id/local_item_artist"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/add_playing_local"
-        android:layout_below="@id/local_item_title"
-        android:layout_marginTop="3dp"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:textSize="12sp"
-        android:text="@string/null_artist"/>
-
-
-    <ImageButton
-        android:id="@+id/ellipsis_detail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="@dimen/margin_20"
-        android:layout_marginTop="@dimen/margin_20"
-        android:background="@drawable/selsector_ellipsis_icon"/>
-
-
-    <!--<View
-        android:id="@+id/view"
+    <RelativeLayout
+        android:id="@+id/item_music_empty_layout"
         android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:layout_below="@id/local_item_artist"
-        android:layout_toRightOf="@id/add_playing_local"
-        android:layout_marginTop="@dimen/margin_5"
-        android:background="@color/gray"/>
--->
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/add_playing_local"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_20"
+            android:background="@drawable/selector_music_add_icon"/>
+
+
+        <TextView
+            android:id="@+id/local_item_title"
+            style="@style/AppTheme.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_toRightOf="@id/add_playing_local"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/null_music"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/local_item_artist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/local_item_title"
+            android:layout_marginTop="3dp"
+            android:layout_toRightOf="@id/add_playing_local"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="@string/null_artist"
+            android:textSize="12sp"/>
+
+
+        <ImageButton
+            android:id="@+id/ellipsis_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/margin_20"
+            android:layout_marginTop="@dimen/margin_20"
+            android:background="@drawable/selsector_ellipsis_icon"/>
+    </RelativeLayout>
+
+    <!--选中状态布局-->
+    <LinearLayout
+        android:id="@+id/item_music_select_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_music_empty_layout"
+        >
+
+        <!--设为８０dp 解决填充不满问题-->
+        <ImageView
+            android:id="@+id/local_item_cover"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="6"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/local_item_child_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_20"
+                android:layout_marginTop="@dimen/margin_10"
+                android:singleLine="true"
+                android:ellipsize="end"
+                style="@style/AppTheme.Text"
+                android:text="@string/null_music"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/margin_10"
+                android:layout_marginTop="@dimen/margin_20"
+                android:layout_marginBottom="@dimen/margin_10"
+                android:gravity="center|bottom"
+                android:orientation="horizontal">
+
+
+                <ImageButton
+                    android:id="@+id/local_item_heart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:background="@color/white_8p"
+                    android:src="@drawable/selector_item_music_heart"/>
+
+                <ImageButton
+                    android:id="@+id/local_item_share"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center"
+                    android:background="@color/white_8p"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:src="@drawable/selector_item_music_share"/>
+
+                <ImageButton
+                    android:id="@+id/local_item_down"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/margin_10"
+                    android:background="@color/white_8p"
+                    android:src="@drawable/selector_item_music_download"/>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/ellipsis_child_detail"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_10"
+            android:layout_marginEnd="@dimen/margin_10"
+            android:background="@color/white_8p"
+            android:src="@drawable/selsector_ellipsis_icon"/>
+    </LinearLayout>
 </RelativeLayout>
