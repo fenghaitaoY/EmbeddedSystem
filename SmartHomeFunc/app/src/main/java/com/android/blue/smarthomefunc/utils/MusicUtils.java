@@ -10,9 +10,11 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 
+import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.Music;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -115,5 +117,18 @@ public class MusicUtils {
 
     private static boolean isIntentAvailable(Context context, Intent intent) {
         return context.getPackageManager().resolveActivity(intent, PackageManager.GET_RESOLVED_FILTER) != null;
+    }
+
+    /**
+     * 分享音乐
+     *
+     * @param music
+     */
+    public static void sharedMusic(Context context, Music music) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        File file = new File(music.getPath());
+        shareIntent.setType("audio/*");
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+        context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share)));
     }
 }

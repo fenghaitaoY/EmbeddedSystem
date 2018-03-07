@@ -62,4 +62,8 @@ public class SystemUtils {
         String ss = String.format(Locale.getDefault(), "%02d", s);
         return pattern.replace("mm",mm).replace("ss",ss);
     }
+
+    public static String formatTime(long time){
+        return formatTime("mm:ss", time);
+    }
 }

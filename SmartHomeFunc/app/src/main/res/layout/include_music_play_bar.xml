@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/music_bar"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/margin_10"
@@ -23,6 +24,10 @@
             android:layout_marginStart="80dp"
             android:layout_marginTop="@dimen/margin_5"
             android:thumb="@drawable/seekbar_thumb"
+            android:progressDrawable="@drawable/customer_seek_bar_progress_style"
+            android:maxHeight="2dp"
+            android:minHeight="2dp"
+            android:clickable="false"
             android:progress="0"/>
 
         <LinearLayout

@@ -163,7 +163,7 @@ public class MusicFragment extends Fragment implements OnPlayerEventListener, Se
     public PlayService getPlayService(){
         PlayService playService = AppCache.get().getPlayService();
         if (playService == null){
-            throw new NullPointerException("Playservice is null");
+            //throw new NullPointerException("Playservice is null");
         }
         return playService;
     }

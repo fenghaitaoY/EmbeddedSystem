@@ -33,8 +33,7 @@
     <string name="toast_already_register_device">该设备已经添加，请选择其他设备</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string
-        name="hello_blank_fragment">
+    <string name="hello_blank_fragment">
         Hello
         blank
         fragment
@@ -76,6 +75,6 @@
     <string name="downloading">正在下载．．．</string>
     <string name="download_fail">下载失败</string>
     <string name="unable_to_share">分享失败</string>
-
+    <string name="play_time_start">00:00</string>
 
 </resources>

@@ -25,7 +25,7 @@ import java.io.File;
  * Created by wcy on 2015/11/29.
  */
 public class ImageUtils {
-    private static final int BLUR_RADIUS = 50;
+    private static final int BLUR_RADIUS = 40;
 
     @Nullable
     public static Bitmap blur(Bitmap source) {
@@ -74,7 +74,7 @@ public class ImageUtils {
         Bitmap bitmap = source.copy(source.getConfig(), true);
 
         if (radius < 1) {
-            return null;
+            return source;
         }
 
         int w = bitmap.getWidth();

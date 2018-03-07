@@ -1,24 +1,20 @@
 package com.android.blue.smarthomefunc.activity;
 
 import android.animation.ObjectAnimator;
-import android.animation.StateListAnimator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
-import android.widget.Adapter;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -33,6 +29,7 @@ import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
+import com.android.blue.smarthomefunc.utils.MusicUtils;
 import com.android.blue.smarthomefunc.view.CircleImageView;
 
 import java.io.File;
@@ -40,14 +37,13 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemClick;
 
 /**
  * android:descendantFocusability="blocksDescendants"
  * ListView中Item添加具有点击事件的控件时,ListView中item的点击事件失效，原因：焦点被子控件抢占，item失去焦点所以点击失效
  */
 public class LocalMusicActivity extends BaseActivity implements AdapterView.OnItemClickListener,
-        OnMusicAdapterItemClickListener, OnPlayerEventListener, SeekBar.OnSeekBarChangeListener{
+        OnMusicAdapterItemClickListener, OnPlayerEventListener, SeekBar.OnSeekBarChangeListener {
 
     @BindView(R.id.list_local)
     ListView mList;
@@ -68,6 +64,8 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     ImageView musicBarList;
     @BindView(R.id.music_bar_cover)
     CircleImageView musicBarCover;
+    @BindView(R.id.music_bar)
+    FrameLayout musicBar;
 
     private LocalMusicAdapter mLocalMusicAdapter;
     private View mListFooterView;
@@ -82,37 +80,30 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_local_music);
+        ButterKnife.bind(this);
 
         toolbar.setBackgroundResource(R.color.colorPrimaryDark);
 
-
         mLocalMusicAdapter = new LocalMusicAdapter();
         mList.setAdapter(mLocalMusicAdapter);
-        mLocalMusicAdapter.updatePlayingPosition(getPlayService());
 
         //添加显示歌曲数量
         mListFooterView = getLayoutInflater().inflate(R.layout.list_footer_show_music_count, null);
         listFooterMusicCountTv = mListFooterView.findViewById(R.id.list_footer_show_count);
-        mList.addFooterView(mListFooterView, null,true);
+        mList.addFooterView(mListFooterView, null, true);
         listFooterMusicCountTv.setText(getResources().getString(R.string.list_footer_show_music_count, AppCache.get().getMusicList().size()));
 
-        //list　item点击监听
-        mList.setOnItemClickListener(this);
-        mLocalMusicAdapter.setOnMusicAdapterItemClickListener(this);
-        getPlayService().setOnPlayerEventListener(this);
-        musicBarSeekBar.setOnSeekBarChangeListener(this);
+    }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
         initPlayingMusicBar();
+        setListener();
         mList.setSelection(getPlayService().getPlayingPosition());
-
+        mLocalMusicAdapter.updatePlayingPosition(getPlayService());
+        updateItem(getPlayService().getPlayingPosition());
         initAnimate();
-
-        TextView tv = new TextView(this);
-        tv.setText("13455532");
-        tv.setTextSize(100);
-        tv.setTextColor(Color.RED);
-        tv.setGravity(Gravity.RIGHT);
-        getWindow().addContentView(tv,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT));
 
     }
 
@@ -120,15 +111,33 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     protected void onResume() {
         super.onResume();
         //获取正在播放歌曲位置
+
         preSelectPosition = getPlayService().getPlayingPosition();
-        if (getPlayService().isPlaying()){
+
+
+        setSelectIndex();
+        if (getPlayService().isPlaying()) {
+            startMusicBarCoverAnimate();
             musicBarPlaying.setImageResource(R.drawable.selector_music_bar_pause);
-        }else{
+        } else {
+            stopMusicBarCoverAnimate();
             musicBarPlaying.setImageResource(R.drawable.selector_music_bar_playing);
         }
     }
 
-    private void initPlayingMusicBar(){
+    private void setSelectIndex(){
+        mList.setSelection(getPlayService().getPlayingPosition());
+    }
+
+    private void setListener(){
+        //list　item点击监听
+        mList.setOnItemClickListener(this);
+        mLocalMusicAdapter.setOnMusicAdapterItemClickListener(this);
+        getPlayService().setOnPlayerEventListener(this);
+        musicBarSeekBar.setOnSeekBarChangeListener(this);
+    }
+
+    private void initPlayingMusicBar() {
         musicBarSeekBar.setMax((int) getPlayService().getPlayingMusic().getDuration());
         musicTitle.setText(getPlayService().getPlayingMusic().getTitle());
         musicArtist.setText(getPlayService().getPlayingMusic().getArtist());
@@ -143,9 +152,9 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     /**
      * 初始化动画
      */
-    private void initAnimate(){
+    private void initAnimate() {
         //初始动画
-        coverAnimator = ObjectAnimator.ofFloat(musicBarCover, "rotation", 0f,359f);
+        coverAnimator = ObjectAnimator.ofFloat(musicBarCover, "rotation", 0f, 359f);
         LinearInterpolator interpolator = new LinearInterpolator(); //设置匀速旋转
         coverAnimator.setDuration(6000);
         coverAnimator.setInterpolator(interpolator);
@@ -156,10 +165,10 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     /**
      * 播放组合控件　专辑旋转
      */
-    private void startMusicBarCoverAnimate(){
-        if (coverAnimator.isPaused()){
+    private void startMusicBarCoverAnimate() {
+        if (coverAnimator.isPaused()) {
             coverAnimator.resume();
-        }else {
+        } else {
             coverAnimator.start();
         }
 
@@ -168,20 +177,22 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     /**
      * 停止旋转
      */
-    private void stopMusicBarCoverAnimate(){
-       // musicBarCover.clearAnimation();
+    private void stopMusicBarCoverAnimate() {
+        // musicBarCover.clearAnimation();
         coverAnimator.pause();
     }
 
     /**
      * 播放结束，下一曲切换
      * 跟新播放进度条，更新listView　item选中
+     *
      * @param music
      */
     @Override
     public void onChange(Music music) {
-        LogUtils.i("");
+        LogUtils.i("onChange music ="+music.getTitle());
         initPlayingMusicBar();
+        setSelectIndex();
         mLocalMusicAdapter.updatePlayingPosition(getPlayService());
         updateItem(getPlayService().getPlayingPosition());
         stopMusicBarCoverAnimate();
@@ -204,7 +215,7 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
 
     @Override
     public void onPublishProgress(int progress) {
-        LogUtils.i(" progress: "+progress);
+        LogUtils.i(" progress: " + progress);
         musicBarSeekBar.setProgress(progress);
     }
 
@@ -219,15 +230,15 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     @Override
-    public void onMusicListUpdate(){
+    public void onMusicListUpdate() {
         LogUtils.i("");
         updateView();
     }
 
     private void updateView() {
-        if (AppCache.get().getMusicList().isEmpty()){
+        if (AppCache.get().getMusicList().isEmpty()) {
             //本地没有歌曲
-        }else{
+        } else {
             //本地存在歌曲
         }
         mLocalMusicAdapter.updatePlayingPosition(getPlayService());
@@ -235,14 +246,14 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     }
 
 
-    @OnClick({R.id.music_bar_playing, R.id.music_bar_next, R.id.music_bar_list})
+    @OnClick({R.id.music_bar_playing, R.id.music_bar_next, R.id.music_bar_list, R.id.music_bar})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.music_bar_playing:
                 getPlayService().playPause();
-                if (getPlayService().isPlaying()){
+                if (getPlayService().isPlaying()) {
                     musicBarPlaying.setImageResource(R.drawable.selector_music_bar_pause);
-                }else {
+                } else {
                     musicBarPlaying.setImageResource(R.drawable.selector_music_bar_playing);
                 }
                 break;
@@ -252,12 +263,19 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
             case R.id.music_bar_list:
 
                 break;
+            case R.id.music_bar:
+                LogUtils.i("start PlayingMainActivity");
+                Intent intent=new Intent(this,PlayingMainActivity.class);
+                startActivity(intent);
+                //overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_left);
+                break;
         }
     }
 
 
     /**
      * Press ellipsis more action
+     *
      * @param position
      */
     @Override
@@ -267,6 +285,7 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
 
     /**
      * Press add music to Playing list
+     *
      * @param position
      */
     @Override
@@ -282,11 +301,12 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     @Override
     public void onShareMusicClick(int position) {
         LogUtils.i("");
-        sharedMusic(AppCache.get().getMusicList().get(position));
+        MusicUtils.sharedMusic(this, AppCache.get().getMusicList().get(position));
     }
 
     /**
-     * ListView ITEM click　
+     * ListView ITEM click
+     *
      * @param adapterView
      * @param view
      * @param position
@@ -294,7 +314,7 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        LogUtils.i(" position "+position+", preSelectPosition:"+preSelectPosition);
+        LogUtils.i(" position " + position + ", preSelectPosition:" + preSelectPosition);
         if (preSelectPosition != position || !getPlayService().isPlaying()) {
             preSelectPosition = position;
             getPlayService().play(position);
@@ -307,28 +327,37 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
 
     /**
      * ListView item 更新
+     *
      * @param position
      */
-    private void updateItem(int position){
-        int lastVisiblePosition = mList.getLastVisiblePosition();
+    private void updateItem(int position) {
+        int lastVisiblePosition = mList.getLastVisiblePosition()-1;
         int firstVisiblePosition = mList.getFirstVisiblePosition();
-
-        LogUtils.i("position = "+position+" , lastVisiblePosition="+lastVisiblePosition+", firstPosition="+firstVisiblePosition);
-        if (position >= firstVisiblePosition && position <= lastVisiblePosition){
-            View view = mList.getChildAt(position-firstVisiblePosition);
+        View view=null;
+        LogUtils.i("updateItem position = " + position + " , lastVisiblePosition=" + lastVisiblePosition + ", firstPosition=" + firstVisiblePosition);
+        if (position >= firstVisiblePosition && position <= lastVisiblePosition) {
+            view = mList.getChildAt(position - firstVisiblePosition);
             TextView title = view.findViewById(R.id.local_item_title);
-            LogUtils.i("title = "+title.getText());
+            LogUtils.i(" updateItem title = " + title.getText());
 
+        }else if (position < firstVisiblePosition){
+            view = mList.getChildAt(firstVisiblePosition - position);
+        }else if(position > lastVisiblePosition){
+            view = mList.getChildAt(lastVisiblePosition-position);
+        }
+        if (view != null){
             mLocalMusicAdapter.getView(position, view, mList);
             //解决点击其他item不刷新问题
             mList.invalidateViews();
         }
+
+
     }
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int position, boolean press) {
-        if (press){
-            LogUtils.i(" onProgresschage position ="+position);
+        if (press) {
+            LogUtils.i(" onProgresschage position =" + position);
             getPlayService().seekTo(position);
         }
     }
@@ -343,15 +372,5 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
 
     }
 
-    /**
-     * 分享音乐
-     * @param music
-     */
-    private void sharedMusic(Music music){
-        Intent shareIntent = new Intent(Intent.ACTION_SEND);
-        File file = new File(music.getPath());
-        shareIntent.setType("audio/*");
-        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
-        startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
-    }
+
 }

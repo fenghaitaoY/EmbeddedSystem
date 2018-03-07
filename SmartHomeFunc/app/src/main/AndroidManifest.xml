@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.android.blue.smarthomefunc">
+    package="com.android.blue.smarthomefunc">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/> <!-- 有些机型上需要获取位置信息才能扫描到蓝牙设备 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.READ_LOGS"/>
-    <uses-permission android:name="android.permission.CALL_PHONE"/>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 有些机型上需要获取位置信息才能扫描到蓝牙设备 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <uses-feature
         android:name="android.hardware.bluetooth_le"
-        android:required="true"/>
+        android:required="true" />
 
     <application
         android:name=".application.SmartHomeApplication"
@@ -32,74 +32,64 @@
         android:roundIcon="@mipmap/smarthome"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
-        </activity>
-        <activity android:name=".Ble_Activity">
-        </activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".Ble_Activity"></activity>
 
         <service
             android:name=".service.BluetoothLeService"
-            android:enabled="true"/>
+            android:enabled="true" />
 
-        <activity android:name=".activity.BaseActivity">
-        </activity>
+        <activity android:name=".activity.BaseActivity"></activity>
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/Translucent">
-        </activity>
+            android:theme="@style/Translucent"></activity>
         <activity
             android:name=".activity.RegisterActivity"
-            android:theme="@style/Translucent">
-        </activity>
+            android:theme="@style/Translucent"></activity>
         <!-- 输入法将ottomNavigationView 顶上去设置　inputmode -->
         <activity
             android:name=".activity.LoginSuccessActivity"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"></activity>
 
         <provider
             android:name=".database.BluetoothDeviceContentProvider"
-            android:authorities="com.android.blue.smarthomeprovider">
-        </provider>
+            android:authorities="com.android.blue.smarthomeprovider"></provider>
 
         <activity
             android:name=".activity.SearchAddDeviceActivity"
             android:label="@string/add_device"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
 
         <service
             android:name=".service.PlayService"
             android:enabled="true"
-            android:exported="true">
-        </service>
+            android:exported="true"></service>
 
         <receiver
             android:name=".receiver.NoisyAudioStreamReceiver"
             android:enabled="true"
-            android:exported="true">
-        </receiver>
+            android:exported="true"></receiver>
         <receiver
             android:name=".receiver.EarphoneControlReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON"/>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
 
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.LocalMusicActivity"
             android:label="@string/title_activity_local_music"
-            android:theme="@style/AppTheme">
-        </activity>
+            android:theme="@style/AppTheme"></activity>
+        <activity android:name=".activity.PlayingMainActivity"></activity>
     </application>
 
 </manifest>

@@ -164,7 +164,7 @@ public class MusicCoverLoaderUtils {
     private Bitmap getDefaultCover(Type type) {
         switch (type) {
             case BLUR:
-                return BitmapFactory.decodeResource(mContext.getResources(), R.drawable.play_page_default_bg);
+                return BitmapFactory.decodeResource(mContext.getResources(), R.drawable.smart_login_suc_bg2);
             case ROUND:
                 Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.play_page_default_cover);
                 WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
