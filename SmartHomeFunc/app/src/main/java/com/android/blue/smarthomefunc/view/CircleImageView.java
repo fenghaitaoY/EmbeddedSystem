@@ -7,6 +7,9 @@ import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.PaintFlagsDrawFilter;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -24,6 +27,8 @@ public class CircleImageView extends ImageView {
     private int mRadius; //圆形图片的半径
 
     private float mScale; //图片的缩放比例
+    //硬件加速
+    private PorterDuffXfermode xfermode=new PorterDuffXfermode(PorterDuff.Mode.MULTIPLY);
 
     public CircleImageView(Context context) {
         super(context);
@@ -64,9 +69,8 @@ public class CircleImageView extends ImageView {
         matrix.setScale(mScale, mScale);
         bitmapShader.setLocalMatrix(matrix);
 
-
         mPaint.setShader(bitmapShader);
-
+        mPaint.setAntiAlias(true);
         //画圆形，指定好中心点坐标、半径、画笔
         canvas.drawCircle(mRadius, mRadius, mRadius, mPaint);
     }

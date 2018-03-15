@@ -35,6 +35,17 @@
         </item>
     </style>
 
+    <style name="MusicBarTranslucent" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">
+            @android:color/transparent
+        </item>
+        <item name="android:windowIsTranslucent">
+            true
+        </item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
     <style name="TextLabel" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
         <item name="colorControlActivated">

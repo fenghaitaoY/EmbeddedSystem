@@ -76,5 +76,8 @@
     <string name="download_fail">下载失败</string>
     <string name="unable_to_share">分享失败</string>
     <string name="play_time_start">00:00</string>
-
+    <string name="online_loading">加载中．．．</string>
+    <string name="hard_loading">努力加载中．．．</string>
+    <string name="load_fail">加载失败，请检查网络后重试</string>
+    <string name="online_song_list_music"><xliff:g id="music">%1$s</xliff:g> - <xliff:g id="artist">%2$s</xliff:g></string>
 </resources>

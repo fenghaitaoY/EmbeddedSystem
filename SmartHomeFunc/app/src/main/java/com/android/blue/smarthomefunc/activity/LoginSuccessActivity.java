@@ -74,6 +74,7 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
         setContentView(R.layout.activity_login_success);
 
         bottomNavi.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        //去除BottomNavigationView count>3时，切换viewpage滑动效果
         BottomNavigationMenuView bottomMenuView = (BottomNavigationMenuView) bottomNavi.getChildAt(0);
         try {
             Field shiftingMode = bottomMenuView.getClass().getDeclaredField("mShiftingMode");
@@ -88,6 +89,7 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
+
         viewpager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager()));
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

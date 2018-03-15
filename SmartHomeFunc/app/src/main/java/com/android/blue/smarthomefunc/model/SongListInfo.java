@@ -30,6 +30,7 @@ public class SongListInfo implements Serializable {
     private String music1;
     private String music2;
     private String music3;
+    private String billboard;
 
     public String getTitle() {
         return title;
@@ -77,5 +78,13 @@ public class SongListInfo implements Serializable {
 
     public void setMusic3(String music3) {
         this.music3 = music3;
+    }
+
+    public String getBillboard() {
+        return billboard;
+    }
+
+    public void setBillboard(String billboard) {
+        this.billboard = billboard;
     }
 }

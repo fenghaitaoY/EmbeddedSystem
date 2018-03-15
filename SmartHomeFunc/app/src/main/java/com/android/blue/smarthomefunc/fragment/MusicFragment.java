@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.activity.LocalMusicActivity;
+import com.android.blue.smarthomefunc.activity.OnlineSongListActivity;
 import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.Music;
@@ -152,11 +153,13 @@ public class MusicFragment extends Fragment implements OnPlayerEventListener, Se
     }
 
     private void initMusicBar(){
-        mBarImageCover.setImageBitmap(MusicCoverLoaderUtils.getInstance().loadThumbnail(getPlayService().getPlayingMusic()));
-        mSeekbar.setMax((int)getPlayService().getPlayingMusic().getDuration());
-        mMusicTitle.setText(getPlayService().getPlayingMusic().getTitle());
-        mMusicArtist.setText(getPlayService().getPlayingMusic().getArtist());
-        mSeekbar.setProgress((int) getPlayService().getCurrentPosition());
+        if (getPlayService().getPlayingMusic() != null) {
+            mBarImageCover.setImageBitmap(MusicCoverLoaderUtils.getInstance().loadThumbnail(getPlayService().getPlayingMusic()));
+            mSeekbar.setMax((int) getPlayService().getPlayingMusic().getDuration());
+            mMusicTitle.setText(getPlayService().getPlayingMusic().getTitle());
+            mMusicArtist.setText(getPlayService().getPlayingMusic().getArtist());
+            mSeekbar.setProgress((int) getPlayService().getCurrentPosition());
+        }
     }
 
 
@@ -164,6 +167,9 @@ public class MusicFragment extends Fragment implements OnPlayerEventListener, Se
         PlayService playService = AppCache.get().getPlayService();
         if (playService == null){
             //throw new NullPointerException("Playservice is null");
+            Intent intent = new Intent(getActivity(), PlayService.class);
+            getActivity().startService(intent);
+            playService = AppCache.get().getPlayService();
         }
         return playService;
     }
@@ -208,6 +214,9 @@ public class MusicFragment extends Fragment implements OnPlayerEventListener, Se
                 break;
             case R.id.music_online_layout:
                 LogUtils.i("online layout ");
+                Intent onlineIntent = new Intent(getActivity(), OnlineSongListActivity.class);
+
+                startActivity(onlineIntent);
                 break;
             case R.id.music_list_layout:
                 LogUtils.i(" list layout ");

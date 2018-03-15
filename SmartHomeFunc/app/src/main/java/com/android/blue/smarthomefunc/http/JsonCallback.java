@@ -24,7 +24,7 @@ public abstract class JsonCallback<T> extends Callback<T>{
     public T parseNetworkResponse(Response response, int id) throws Exception {
         try {
             String jsonString = response.body().string();
-            LogUtils.i("parseNetworkResponse :" + jsonString);
+            //LogUtils.i("parseNetworkResponse :" + jsonString);
             return mGson.fromJson(jsonString, mClass);
         }catch (Exception e){
             e.printStackTrace();

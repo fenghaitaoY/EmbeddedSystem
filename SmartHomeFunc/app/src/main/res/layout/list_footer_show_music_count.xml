@@ -16,7 +16,8 @@
         android:id="@+id/list_footer_show_count"
         android:layout_width="match_parent"
         android:layout_height="35dp"
-        android:gravity="center|bottom"
+        android:gravity="center"
+        android:paddingTop="@dimen/margin_10"
         android:text="@string/list_footer_show_music_count"
         />
 

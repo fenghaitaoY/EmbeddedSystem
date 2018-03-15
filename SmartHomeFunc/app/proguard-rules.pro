@@ -153,3 +153,6 @@
 #okio
 -dontwarn okio.**
 -keep class okio.**{*;}
+
+-keep class com.wang.avi.** { *; }
+-keep class com.wang.avi.indicators.** { *; }

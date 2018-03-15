@@ -138,10 +138,12 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     private void initPlayingMusicBar() {
-        musicBarSeekBar.setMax((int) getPlayService().getPlayingMusic().getDuration());
-        musicTitle.setText(getPlayService().getPlayingMusic().getTitle());
-        musicArtist.setText(getPlayService().getPlayingMusic().getArtist());
-        musicBarCover.setImageBitmap(MusicCoverLoaderUtils.getInstance().loadThumbnail(getPlayService().getPlayingMusic()));
+        if (getPlayService().getPlayingMusic() != null) {
+            musicBarSeekBar.setMax((int) getPlayService().getPlayingMusic().getDuration());
+            musicTitle.setText(getPlayService().getPlayingMusic().getTitle());
+            musicArtist.setText(getPlayService().getPlayingMusic().getArtist());
+            musicBarCover.setImageBitmap(MusicCoverLoaderUtils.getInstance().loadThumbnail(getPlayService().getPlayingMusic()));
+        }
     }
 
     @Override
@@ -153,13 +155,15 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
      * 初始化动画
      */
     private void initAnimate() {
-        //初始动画
-        coverAnimator = ObjectAnimator.ofFloat(musicBarCover, "rotation", 0f, 359f);
-        LinearInterpolator interpolator = new LinearInterpolator(); //设置匀速旋转
-        coverAnimator.setDuration(6000);
-        coverAnimator.setInterpolator(interpolator);
-        coverAnimator.setRepeatCount(-1);
-        coverAnimator.setRepeatMode(ValueAnimator.RESTART);
+        if (coverAnimator == null) {
+            //初始动画
+            coverAnimator = ObjectAnimator.ofFloat(musicBarCover, "rotation", 0f, 359f);
+            LinearInterpolator interpolator = new LinearInterpolator(); //设置匀速旋转
+            coverAnimator.setDuration(6000);
+            coverAnimator.setInterpolator(interpolator);
+            coverAnimator.setRepeatCount(-1);
+            coverAnimator.setRepeatMode(ValueAnimator.RESTART);
+        }
     }
 
     /**
@@ -254,6 +258,9 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
                 if (getPlayService().isPlaying()) {
                     musicBarPlaying.setImageResource(R.drawable.selector_music_bar_pause);
                 } else {
+                    if (getPlayService().getCurrentPosition() != musicBarSeekBar.getProgress()){
+                        getPlayService().seekTo(musicBarSeekBar.getProgress());
+                    }
                     musicBarPlaying.setImageResource(R.drawable.selector_music_bar_playing);
                 }
                 break;

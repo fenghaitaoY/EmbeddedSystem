@@ -32,43 +32,43 @@
         android:roundIcon="@mipmap/smarthome"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
-        <activity android:name=".Ble_Activity"></activity>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".Ble_Activity" />
 
         <service
             android:name=".service.BluetoothLeService"
             android:enabled="true" />
 
-        <activity android:name=".activity.BaseActivity"></activity>
+        <activity android:name=".activity.BaseActivity" />
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/Translucent"></activity>
+            android:theme="@style/Translucent" />
         <activity
             android:name=".activity.RegisterActivity"
-            android:theme="@style/Translucent"></activity>
+            android:theme="@style/Translucent" />
         <!-- 输入法将ottomNavigationView 顶上去设置　inputmode -->
         <activity
             android:name=".activity.LoginSuccessActivity"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
 
         <provider
             android:name=".database.BluetoothDeviceContentProvider"
-            android:authorities="com.android.blue.smarthomeprovider"></provider>
+            android:authorities="com.android.blue.smarthomeprovider" />
 
         <activity
             android:name=".activity.SearchAddDeviceActivity"
             android:label="@string/add_device"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".service.PlayService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
 
         <receiver
             android:name=".receiver.NoisyAudioStreamReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
         <receiver
             android:name=".receiver.EarphoneControlReceiver"
             android:enabled="true"
@@ -88,8 +88,10 @@
         <activity
             android:name=".activity.LocalMusicActivity"
             android:label="@string/title_activity_local_music"
-            android:theme="@style/AppTheme"></activity>
-        <activity android:name=".activity.PlayingMainActivity"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".activity.PlayingMainActivity" />
+        <activity android:name=".activity.OnlineSongListActivity"
+            android:label="" />
     </application>
 
 </manifest>

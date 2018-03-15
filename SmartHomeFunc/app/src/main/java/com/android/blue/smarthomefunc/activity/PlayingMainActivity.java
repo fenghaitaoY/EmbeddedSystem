@@ -67,6 +67,12 @@ public class PlayingMainActivity extends BaseActivity implements SeekBar.OnSeekB
         changeMusic(getPlayService().getPlayingMusic());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mPlaySeekBar.setProgress((int) getPlayService().getCurrentPosition());
+    }
+
     private void initListen(){
         mPlayOrPause.setOnClickListener(this);
         mPlayNext.setOnClickListener(this);
