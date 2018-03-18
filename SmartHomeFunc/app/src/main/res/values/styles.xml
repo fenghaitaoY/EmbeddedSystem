@@ -19,8 +19,22 @@
         <item name="playBarBackground">
             @drawable/play_bar_bg_selector
         </item>
+        <item name="android:toolbarStyle">@style/NoSpaceActionBarTheme</item>
     </style>
 
+
+    <style name="NoSpaceActionBarTheme" parent="Base.Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+        <item name="titleTextAppearance">@style/MyToolbar.Title</item>
+        <item name="android:contentInsetStart">0dp</item>
+    </style>
+
+
+    <style name="MyToolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="textSize">20sp</item>
+        <item name="textColor">@color/white</item>
+    </style>
     <attr name="playBarBackground" format="reference"/>
 
     <style name="Translucent" parent="Theme.AppCompat.Light.NoActionBar">

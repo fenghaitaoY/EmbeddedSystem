@@ -12,5 +12,7 @@
         android:layout_height="match_parent"
         android:background="?attr/colorPrimary"
         android:fitsSystemWindows="true"
+        style="@style/NoSpaceActionBarTheme"
+        app:navigationIcon="@drawable/play_main_back_selector"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 </android.support.design.widget.AppBarLayout>

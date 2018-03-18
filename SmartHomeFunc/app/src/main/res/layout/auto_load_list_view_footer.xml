@@ -19,7 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:indicatorName="LineScalePulseOutIndicator"
-            app:indicatorColor="@color/color_gray"
+            app:indicatorColor="@color/blue"
+            app:maxHeight="20dp"
             android:visibility="visible"
             />
 
@@ -27,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+
             android:text="正在加载更多…" />
     </LinearLayout>
 </LinearLayout>

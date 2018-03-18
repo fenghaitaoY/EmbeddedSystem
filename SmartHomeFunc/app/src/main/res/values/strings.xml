@@ -80,4 +80,8 @@
     <string name="hard_loading">努力加载中．．．</string>
     <string name="load_fail">加载失败，请检查网络后重试</string>
     <string name="online_song_list_music"><xliff:g id="music">%1$s</xliff:g> - <xliff:g id="artist">%2$s</xliff:g></string>
+    <string name="play_mode_queue">顺序播放</string>
+    <string name="play_mode_random">随机播放</string>
+    <string name="play_mode_one_loop">单曲循环</string>
+    <string name="online_multi_choice">多选</string>
 </resources>

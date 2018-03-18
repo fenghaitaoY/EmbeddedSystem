@@ -4,14 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_horizontal"
+    android:id="@+id/lv_loading"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
 
     <com.wang.avi.AVLoadingIndicatorView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:indicatorName="BallClipRotateIndicator"
         app:indicatorColor="@color/color_gray"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="100dp"
         android:visibility="visible"
         />
 

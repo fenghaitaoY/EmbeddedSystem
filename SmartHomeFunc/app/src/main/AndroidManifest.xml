@@ -90,8 +90,10 @@
             android:label="@string/title_activity_local_music"
             android:theme="@style/AppTheme" />
         <activity android:name=".activity.PlayingMainActivity" />
-        <activity android:name=".activity.OnlineSongListActivity"
+        <activity
+            android:name=".activity.OnlineSongListActivity"
             android:label="" />
+        <activity android:name=".activity.OnlineMusicActivity"></activity>
     </application>
 
 </manifest>

@@ -21,20 +21,11 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHo
 
     private Context mContext;
     private List<BleDeviceEntity> list;
+    private OnItemClickListener mOnItemClickListener;
+
     public RecycleAdapter(Context context, List<BleDeviceEntity> list){
         mContext = context;
         this.list = list;
-    }
-
-    public interface OnItemClickListener{
-        void onItemClick(View view, int position);
-        void onItemLongClick(View view, int position);
-    }
-
-    private OnItemClickListener mOnItemClickListener;
-
-    public void setmOnItemClickListener(OnItemClickListener mOnItemClickListener){
-        this.mOnItemClickListener = mOnItemClickListener;
     }
 
     @Override
@@ -66,6 +57,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHo
         }
     }
 
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -74,6 +66,10 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHo
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

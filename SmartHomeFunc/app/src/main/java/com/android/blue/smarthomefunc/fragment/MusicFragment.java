@@ -20,6 +20,7 @@ import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
 import com.android.blue.smarthomefunc.service.PlayService;
+import com.android.blue.smarthomefunc.utils.ImageViewAnimator;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 import com.android.blue.smarthomefunc.view.CircleImageView;
 
@@ -89,7 +90,7 @@ public class MusicFragment extends Fragment implements OnPlayerEventListener, Se
     private View mMusicFragmentView;
     private Context mContext;
     private Unbinder butterknife;
-
+    private ImageViewAnimator mCoverAnimate;
 
     public MusicFragment() {
     }
@@ -128,7 +129,7 @@ public class MusicFragment extends Fragment implements OnPlayerEventListener, Se
         mMusicFragmentView = inflater.inflate(R.layout.fragment_music, container, false);
         butterknife = ButterKnife.bind(this, mMusicFragmentView);
         mContext = getActivity();
-
+        mCoverAnimate = new ImageViewAnimator();
 
         return mMusicFragmentView;
     }
@@ -138,11 +139,14 @@ public class MusicFragment extends Fragment implements OnPlayerEventListener, Se
         super.onResume();
         initMusicCountShow();
         initMusicBar();
+        mCoverAnimate.initAnimate(mBarImageCover);
         getPlayService().setOnPlayerEventListener(this);
         mSeekbar.setOnSeekBarChangeListener(this);
         if (getPlayService().isPlaying()){
             mBarPlayingBt.setImageResource(R.drawable.selector_music_bar_pause);
+            mCoverAnimate.startMusicBarCoverAnimate();
         }else {
+            mCoverAnimate.stopMusicBarCoverAnimate();
             mBarPlayingBt.setImageResource(R.drawable.selector_music_bar_playing);
         }
     }
@@ -243,15 +247,18 @@ public class MusicFragment extends Fragment implements OnPlayerEventListener, Se
     @Override
     public void onChange(Music music) {
         initMusicBar();
+        mCoverAnimate.stopMusicBarCoverAnimate();
     }
 
     @Override
     public void onPlayerStart() {
+        mCoverAnimate.startMusicBarCoverAnimate();
         mBarPlayingBt.setImageResource(R.drawable.selector_music_bar_pause);
     }
 
     @Override
     public void onPlayerPause() {
+        mCoverAnimate.stopMusicBarCoverAnimate();
         mBarPlayingBt.setImageResource(R.drawable.selector_music_bar_playing);
     }
 

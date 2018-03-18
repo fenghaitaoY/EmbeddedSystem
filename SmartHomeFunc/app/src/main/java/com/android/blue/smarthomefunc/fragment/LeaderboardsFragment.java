@@ -1,20 +1,24 @@
 package com.android.blue.smarthomefunc.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.activity.OnlineMusicActivity;
 import com.android.blue.smarthomefunc.adapter.LeaderBoadsAdapter;
 import com.android.blue.smarthomefunc.adapter.LocalMusicAdapter;
 import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
+import com.android.blue.smarthomefunc.entity.MusicExtrasPara;
 import com.android.blue.smarthomefunc.enums.LoadStateEnum;
 import com.android.blue.smarthomefunc.model.SongListInfo;
 import com.android.blue.smarthomefunc.utils.NetworkUtils;
@@ -32,7 +36,7 @@ import butterknife.Unbinder;
  * Use the {@link LeaderboardsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class LeaderboardsFragment extends Fragment {
+public class LeaderboardsFragment extends Fragment implements AdapterView.OnItemClickListener{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -120,6 +124,7 @@ public class LeaderboardsFragment extends Fragment {
 
         LeaderBoadsAdapter adapter = new LeaderBoadsAdapter(mSongLists);
         mSongListView.setAdapter(adapter);
+        mSongListView.setOnItemClickListener(this);
 
     }
 
@@ -127,5 +132,13 @@ public class LeaderboardsFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         butterKnife.unbind();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        SongListInfo info = mSongLists.get(position);
+        Intent onlineMusicIntent = new Intent(getContext(), OnlineMusicActivity.class);
+        onlineMusicIntent.putExtra(MusicExtrasPara.MUSIC_LIST_TYPE, info);
+        startActivity(onlineMusicIntent);
     }
 }

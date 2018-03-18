@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.blue.smarthomefunc.adapter.OnItemClickListener;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.adapter.RecycleAdapter;
@@ -81,7 +82,7 @@ public class SearchAddDeviceActivity extends BaseActivity {
 
         mAddDeviceDialog = createAddDeviceDialog();
 
-        mAdapter.setmOnItemClickListener(new RecycleAdapter.OnItemClickListener() {
+        mAdapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 LogUtils.i("recycadapter item click position=" + position + ", address=" + mListEntitys.get(position).getDeviceAddress());

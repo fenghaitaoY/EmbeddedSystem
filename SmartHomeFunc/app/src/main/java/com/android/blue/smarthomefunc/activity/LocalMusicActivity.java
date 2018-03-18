@@ -28,6 +28,7 @@ import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
+import com.android.blue.smarthomefunc.utils.ImageViewAnimator;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 import com.android.blue.smarthomefunc.utils.MusicUtils;
 import com.android.blue.smarthomefunc.view.CircleImageView;
@@ -74,7 +75,7 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     //前一次选中位置
     private int preSelectPosition;
 
-    private ObjectAnimator coverAnimator;
+    private ImageViewAnimator mCoverAnimate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +91,10 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
         //添加显示歌曲数量
         mListFooterView = getLayoutInflater().inflate(R.layout.list_footer_show_music_count, null);
         listFooterMusicCountTv = mListFooterView.findViewById(R.id.list_footer_show_count);
-        mList.addFooterView(mListFooterView, null, true);
+        mList.addFooterView(mListFooterView, null, false);
+        mList.setFooterDividersEnabled(false);
         listFooterMusicCountTv.setText(getResources().getString(R.string.list_footer_show_music_count, AppCache.get().getMusicList().size()));
-
+        mCoverAnimate = new ImageViewAnimator();
     }
 
     @Override
@@ -103,7 +105,7 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
         mList.setSelection(getPlayService().getPlayingPosition());
         mLocalMusicAdapter.updatePlayingPosition(getPlayService());
         updateItem(getPlayService().getPlayingPosition());
-        initAnimate();
+        mCoverAnimate.initAnimate(musicBarCover);
 
     }
 
@@ -117,13 +119,14 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
 
         setSelectIndex();
         if (getPlayService().isPlaying()) {
-            startMusicBarCoverAnimate();
+            mCoverAnimate.startMusicBarCoverAnimate();
             musicBarPlaying.setImageResource(R.drawable.selector_music_bar_pause);
         } else {
-            stopMusicBarCoverAnimate();
+            mCoverAnimate.stopMusicBarCoverAnimate();
             musicBarPlaying.setImageResource(R.drawable.selector_music_bar_playing);
         }
     }
+
 
     private void setSelectIndex(){
         mList.setSelection(getPlayService().getPlayingPosition());
@@ -152,41 +155,6 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     }
 
     /**
-     * 初始化动画
-     */
-    private void initAnimate() {
-        if (coverAnimator == null) {
-            //初始动画
-            coverAnimator = ObjectAnimator.ofFloat(musicBarCover, "rotation", 0f, 359f);
-            LinearInterpolator interpolator = new LinearInterpolator(); //设置匀速旋转
-            coverAnimator.setDuration(6000);
-            coverAnimator.setInterpolator(interpolator);
-            coverAnimator.setRepeatCount(-1);
-            coverAnimator.setRepeatMode(ValueAnimator.RESTART);
-        }
-    }
-
-    /**
-     * 播放组合控件　专辑旋转
-     */
-    private void startMusicBarCoverAnimate() {
-        if (coverAnimator.isPaused()) {
-            coverAnimator.resume();
-        } else {
-            coverAnimator.start();
-        }
-
-    }
-
-    /**
-     * 停止旋转
-     */
-    private void stopMusicBarCoverAnimate() {
-        // musicBarCover.clearAnimation();
-        coverAnimator.pause();
-    }
-
-    /**
      * 播放结束，下一曲切换
      * 跟新播放进度条，更新listView　item选中
      *
@@ -199,21 +167,21 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
         setSelectIndex();
         mLocalMusicAdapter.updatePlayingPosition(getPlayService());
         updateItem(getPlayService().getPlayingPosition());
-        stopMusicBarCoverAnimate();
+        mCoverAnimate.stopMusicBarCoverAnimate();
     }
 
     @Override
     public void onPlayerStart() {
         LogUtils.i("");
         musicBarPlaying.setImageResource(R.drawable.selector_music_bar_pause);
-        startMusicBarCoverAnimate();
+        mCoverAnimate.startMusicBarCoverAnimate();
     }
 
     @Override
     public void onPlayerPause() {
         LogUtils.i("");
         musicBarPlaying.setImageResource(R.drawable.selector_music_bar_playing);
-        stopMusicBarCoverAnimate();
+        mCoverAnimate.stopMusicBarCoverAnimate();
 
     }
 
@@ -380,4 +348,8 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     }
 
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
 }

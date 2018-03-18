@@ -23,6 +23,7 @@ import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.fragment.LeaderboardsFragment;
 import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
+import com.android.blue.smarthomefunc.utils.ImageViewAnimator;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 import com.android.blue.smarthomefunc.view.CircleImageView;
 
@@ -61,7 +62,7 @@ public class OnlineSongListActivity extends BaseActivity implements ViewPager.On
     private List<Fragment> listFragments=new ArrayList<>();
     private List<String> mTabIndicators = new ArrayList<>();
 
-    private ObjectAnimator coverAnimator;
+    private ImageViewAnimator mCoverAnimate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +89,7 @@ public class OnlineSongListActivity extends BaseActivity implements ViewPager.On
 
         mTabLayout.getTabAt(1).select();
         mViewPager.setCurrentItem(1);
+        mCoverAnimate = new ImageViewAnimator();
     }
 
     @Override
@@ -96,11 +98,11 @@ public class OnlineSongListActivity extends BaseActivity implements ViewPager.On
         LogUtils.i("onResume");
         if (getPlayService().isPlaying()) {
             LogUtils.i(" start animate");
-            startMusicBarCoverAnimate();
+            mCoverAnimate.startMusicBarCoverAnimate();
             mMusicBarPlaying.setImageResource(R.drawable.selector_music_bar_pause);
         } else {
             LogUtils.i(" stop animate");
-            stopMusicBarCoverAnimate();
+            mCoverAnimate.stopMusicBarCoverAnimate();
             mMusicBarPlaying.setImageResource(R.drawable.selector_music_bar_playing);
         }
     }
@@ -111,41 +113,8 @@ public class OnlineSongListActivity extends BaseActivity implements ViewPager.On
         LogUtils.i("onStart");
         initPlayingMusicBar();
         setListener();
-        initAnimate();
+        mCoverAnimate.initAnimate(mMusicBarCover);
 
-    }
-    /**
-     * 初始化动画
-     */
-    private void initAnimate() {
-        if (coverAnimator == null) {
-            //初始动画
-            coverAnimator = ObjectAnimator.ofFloat(mMusicBarCover, "rotation", 0f, 359f);
-            LinearInterpolator interpolator = new LinearInterpolator(); //设置匀速旋转
-            coverAnimator.setDuration(6000);
-            coverAnimator.setInterpolator(interpolator);
-            coverAnimator.setRepeatCount(-1);
-            coverAnimator.setRepeatMode(ValueAnimator.RESTART);
-        }
-    }
-
-    /**
-     * 播放组合控件　专辑旋转
-     */
-    private void startMusicBarCoverAnimate() {
-        if (coverAnimator.isPaused()) {
-            coverAnimator.resume();
-        } else {
-            coverAnimator.start();
-        }
-
-    }
-
-    /**
-     * 停止旋转
-     */
-    private void stopMusicBarCoverAnimate() {
-        coverAnimator.pause();
     }
 
     private void setListener(){
@@ -200,21 +169,21 @@ public class OnlineSongListActivity extends BaseActivity implements ViewPager.On
     @Override
     public void onChange(Music music) {
         initPlayingMusicBar();
-        stopMusicBarCoverAnimate();
+        mCoverAnimate.stopMusicBarCoverAnimate();
     }
 
     @Override
     public void onPlayerStart() {
         LogUtils.i("");
         mMusicBarPlaying.setImageResource(R.drawable.selector_music_bar_pause);
-        startMusicBarCoverAnimate();
+        mCoverAnimate.startMusicBarCoverAnimate();
     }
 
     @Override
     public void onPlayerPause() {
         LogUtils.i("");
         mMusicBarPlaying.setImageResource(R.drawable.selector_music_bar_playing);
-        stopMusicBarCoverAnimate();
+        mCoverAnimate.stopMusicBarCoverAnimate();
     }
 
     @Override
@@ -264,6 +233,11 @@ public class OnlineSongListActivity extends BaseActivity implements ViewPager.On
                 //overridePendingTransition(R.anim.slide_in_from_left, R.anim.slide_out_from_left);
                 break;
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     /**

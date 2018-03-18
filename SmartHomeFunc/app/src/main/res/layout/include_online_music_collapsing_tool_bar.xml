@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:gravity="center|left">
+        <ImageView
+            android:id="@+id/choice_mode_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/play_main_shuffle_selector" />
+
+        <TextView
+            android:id="@+id/choice_mode_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:textColor="@color/selector_textview_oneline_music_mode"
+            android:text="@string/play_mode_random" />
+
+        <ImageView
+            android:id="@+id/choice_mode_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/online_music_play_mode_arrow_down" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/muilt_choice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/margin_30"
+        android:clickable="true"
+        android:textColor="@color/selector_textview_oneline_music_mode"
+        android:text="@string/online_multi_choice" />
+</LinearLayout>
