@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.utils.NetworkUtils;
 import com.android.blue.smarthomefunc.utils.Preferences;
@@ -59,6 +60,7 @@ public abstract class PlayMusic implements IExecutor<Music> {
 
     protected void checkCounter(){
         mCounter++;
+        LogUtils.i("checkCounter = "+mCounter);
         if (mCounter == mTotalStep){
             onExecuteSuccess(music);
         }

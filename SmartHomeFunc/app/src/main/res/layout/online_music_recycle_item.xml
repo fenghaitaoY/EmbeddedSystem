@@ -4,6 +4,7 @@
     android:id="@+id/recycle_item_music_layout"
     android:layout_width="match_parent"
     android:orientation="horizontal"
+    android:background="?android:attr/selectableItemBackground"
     android:layout_height="wrap_content">
     <View
         android:id="@+id/recycle_item_music_red_line"

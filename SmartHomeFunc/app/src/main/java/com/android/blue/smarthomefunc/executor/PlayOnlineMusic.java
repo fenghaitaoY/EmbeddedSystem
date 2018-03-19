@@ -35,6 +35,7 @@ public abstract class PlayOnlineMusic extends PlayMusic {
         music.setType(Music.Type.ONLINE);
         music.setTitle(title);
         music.setArtist(artist);
+        music.setId(Integer.valueOf(mOnlineMusic.getSong_id()));
         music.setAlbum(mOnlineMusic.getAlbum_title());
 
         //下载歌词
@@ -65,7 +66,7 @@ public abstract class PlayOnlineMusic extends PlayMusic {
         HttpClient.getMusicDownloadInfo(mOnlineMusic.getSong_id(), new HttpCallback<DownloadInfo>() {
             @Override
             public void onSuccess(DownloadInfo downloadInfo) {
-                if( downloadInfo != null || downloadInfo.getBitrate() == null){
+                if( downloadInfo == null || downloadInfo.getBitrate() == null){
                     onFail(null);
                     return;
                 }
@@ -73,11 +74,13 @@ public abstract class PlayOnlineMusic extends PlayMusic {
                 music.setPath(downloadInfo.getBitrate().getFile_link());
                 music.setDuration(downloadInfo.getBitrate().getFile_duration() * 1000);
                 LogUtils.i(" file link path = "+music.getPath()+", file duration = "+music.getDuration());
+                LogUtils.i("");
                 checkCounter();
             }
 
             @Override
             public void onFail(Exception e) {
+                LogUtils.i(" 111111111  ");
                 onExecuteFail(e);
             }
         });
@@ -97,6 +100,7 @@ public abstract class PlayOnlineMusic extends PlayMusic {
 
             @Override
             public void onFinish() {
+                LogUtils.i("222222");
                 checkCounter();
             }
         });
@@ -116,6 +120,7 @@ public abstract class PlayOnlineMusic extends PlayMusic {
 
             @Override
             public void onFinish() {
+                LogUtils.i("33333");
                 checkCounter();
             }
         });

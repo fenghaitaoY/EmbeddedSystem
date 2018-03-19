@@ -46,9 +46,10 @@ public class OnlineMusicRecycleAdapter extends RecyclerView.Adapter<OnlineMusicR
     public void onBindViewHolder(final MusicViewHolder holder, final int position) {
         holder.title.setText(mData.get(position).getTitle());
         holder.artist.setText(mData.get(position).getArtist_name());
-        LogUtils.i("position = "+position+", getPlayingPosition ="+AppCache.get().getPlayService().getPlayingPosition());
+        LogUtils.i("position = "+position+", getPlayingPosition ="+AppCache.get().getOnlineMusicList().get(position).getSong_id());
 
-        if (position == AppCache.get().getPlayService().getPlayingPosition()){
+        if (Integer.valueOf(AppCache.get().getOnlineMusicList().get(position).getSong_id()) ==
+                AppCache.get().getPlayService().getPlayingMusic().getId()){
             holder.redLineView.setVisibility(View.VISIBLE);
         }else{
             holder.redLineView.setVisibility(View.INVISIBLE);
