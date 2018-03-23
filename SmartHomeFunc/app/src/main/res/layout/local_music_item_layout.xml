@@ -13,8 +13,8 @@
 
         <ImageButton
             android:id="@+id/add_playing_local"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:layout_margin="@dimen/margin_20"
             android:background="@drawable/selector_music_add_icon"/>
 
@@ -46,12 +46,12 @@
 
         <ImageButton
             android:id="@+id/ellipsis_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/margin_20"
-            android:layout_marginTop="@dimen/margin_20"
-            android:background="@drawable/selsector_ellipsis_icon"/>
+            android:layout_centerInParent="true"
+            android:background="@color/white_8p"
+            android:src="@drawable/selsector_ellipsis_icon"/>
     </RelativeLayout>
 
     <!--选中状态布局-->
@@ -131,13 +131,11 @@
 
         <ImageButton
             android:id="@+id/ellipsis_child_detail"
-            android:layout_width="0dp"
+            android:layout_width="20dp"
             android:layout_weight="1"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="bottom"
             android:layout_marginStart="@dimen/margin_10"
-            android:layout_marginBottom="@dimen/margin_10"
-            android:layout_marginEnd="@dimen/margin_10"
             android:background="@color/white_8p"
             android:src="@drawable/selsector_ellipsis_icon"/>
     </LinearLayout>

@@ -35,7 +35,7 @@ public class FileUtils {
     }
 
     public static String getLrcDir(){
-        String dir = getAppDir()+"/Lyric";
+        String dir = getAppDir()+"/Lyric/";
         return mkdirs(dir);
     }
 
@@ -86,7 +86,7 @@ public class FileUtils {
             file.mkdirs();
         }
         LogUtils.i("FileUtils dir : "+dir+" , file.path: "+file.getPath());
-        return file.getPath();
+        return dir;
     }
 
     private static boolean exists(String path) {

@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/smart_login_suc_bg2"
         />
 
@@ -90,7 +90,6 @@
                android:src="@drawable/ic_play_main_line"/>
 
        </RelativeLayout>
-
 
 
         <me.wcy.lrcview.LrcView

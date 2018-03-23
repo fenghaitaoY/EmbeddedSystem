@@ -21,8 +21,8 @@
 
         <ImageButton
             android:id="@+id/recycle_item_music_add_playing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
             android:layout_margin="@dimen/margin_20"
             android:background="@drawable/selector_music_add_icon"/>
 
@@ -55,11 +55,11 @@
 
         <ImageButton
             android:id="@+id/recycle_item_music_ellipsis_detail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
             android:layout_alignParentEnd="true"
-            android:layout_marginEnd="@dimen/margin_20"
-            android:layout_marginTop="@dimen/margin_20"
-            android:background="@drawable/selsector_ellipsis_icon"/>
+            android:layout_centerInParent="true"
+            android:background="@color/white_8p"
+            android:src="@drawable/selsector_ellipsis_icon"/>
     </RelativeLayout>
 </LinearLayout>

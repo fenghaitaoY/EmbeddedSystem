@@ -24,7 +24,8 @@
             app:contentScrim="@color/colorPrimaryDark"
             app:expandedTitleMarginEnd="10dp"
             app:expandedTitleMarginStart="10dp"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:expandedTitleMarginBottom="50dp"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <ImageView
                 android:id="@+id/collapsing_image_view"
@@ -45,6 +46,12 @@
                 app:navigationIcon="@drawable/play_main_back_selector"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+            <include layout="@layout/include_online_songlist_update_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_20"
+                app:layout_collapseMode="parallax"
+                android:layout_gravity="bottom"/>
         </android.support.design.widget.CollapsingToolbarLayout>
 
         <include layout="@layout/include_online_music_collapsing_tool_bar" />

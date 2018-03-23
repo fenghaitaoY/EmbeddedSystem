@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="center"
+    android:layout_height="35dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <LinearLayout
+        android:id="@+id/choice_play_mode_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:clickable="true"
+        android:layout_gravity="center_vertical"
         android:gravity="center|left">
         <ImageView
             android:id="@+id/choice_mode_iv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/play_main_shuffle_selector" />
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="@dimen/margin_20"
+            android:src="@drawable/online_music_play_mode_queue" />
 
         <TextView
             android:id="@+id/choice_mode_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:textColor="@color/selector_textview_oneline_music_mode"
             android:text="@string/play_mode_random" />
 
@@ -38,6 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/margin_30"
         android:clickable="true"
+        android:layout_gravity="center_vertical"
         android:textColor="@color/selector_textview_oneline_music_mode"
         android:text="@string/online_multi_choice" />
 </LinearLayout>

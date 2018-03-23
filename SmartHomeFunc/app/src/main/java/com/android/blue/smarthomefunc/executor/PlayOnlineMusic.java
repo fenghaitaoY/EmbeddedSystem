@@ -51,6 +51,7 @@ public abstract class PlayOnlineMusic extends PlayMusic {
         String albumFileName = FileUtils.getAlbumFileName(artist, title);
         File albumFile = new File(FileUtils.getAlbumDir(), albumFileName);
         String picUrl = mOnlineMusic.getPic_big();
+        LogUtils.i("downloadAlbum url ="+picUrl);
         if (TextUtils.isEmpty(picUrl)){
             picUrl = mOnlineMusic.getPic_small();
         }
@@ -107,6 +108,7 @@ public abstract class PlayOnlineMusic extends PlayMusic {
     }
 
     private void downloadAlbum(String picUrl, String fileName){
+        LogUtils.i("downloadAlbum url ="+picUrl);
         HttpClient.downloadFile(picUrl, FileUtils.getAlbumDir(), fileName, new HttpCallback<File>() {
             @Override
             public void onSuccess(File file) {

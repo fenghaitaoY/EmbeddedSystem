@@ -204,7 +204,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         switch (mode){
             case SHUFFLE:
                 mPlayingPosition = new Random().nextInt(AppCache.get().getMusicList().size());
-                play(mPlayingPosition);;
+                play(mPlayingPosition);
                 break;
             case SINGLE:
                 play(mPlayingPosition);

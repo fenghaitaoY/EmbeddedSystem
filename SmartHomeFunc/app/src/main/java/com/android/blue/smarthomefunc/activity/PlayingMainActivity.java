@@ -1,5 +1,7 @@
 package com.android.blue.smarthomefunc.activity;
 
+import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -9,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.enums.PlayModeEnum;
 import com.android.blue.smarthomefunc.executor.SearchLrc;
 import com.android.blue.smarthomefunc.model.Music;
@@ -18,6 +21,7 @@ import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 import com.android.blue.smarthomefunc.utils.MusicUtils;
 import com.android.blue.smarthomefunc.utils.Preferences;
 import com.android.blue.smarthomefunc.utils.SystemUtils;
+import com.bumptech.glide.Glide;
 
 import java.io.File;
 
@@ -71,6 +75,11 @@ public class PlayingMainActivity extends BaseActivity implements SeekBar.OnSeekB
     protected void onResume() {
         super.onResume();
         mPlaySeekBar.setProgress((int) getPlayService().getCurrentPosition());
+
+        mPlayMainLrc.setCurrentColor(Color.YELLOW); //歌词当前行
+        mPlayMainLrc.setTimelineColor(Color.WHITE); //拖拽歌词线的颜色
+        mPlayMainLrc.setTimeTextColor(Color.WHITE);   //右侧时间颜色
+        mPlayMainLrc.setTimelineTextColor(Color.BLUE); //拖拽时间线出歌词的颜色
     }
 
     private void initListen(){
@@ -157,7 +166,9 @@ public class PlayingMainActivity extends BaseActivity implements SeekBar.OnSeekB
     public void onPublishProgress(int progress) {
         mPlaySeekBar.setProgress(progress);
         mPlayStartTime.setText(SystemUtils.formatTime(progress));
+        LogUtils.i("  hasLrc = "+mPlayMainLrc.hasLrc());
         if (mPlayMainLrc.hasLrc()){
+            LogUtils.i("  update Time");
             mPlayMainLrc.updateTime(progress);
         }
     }
@@ -203,6 +214,7 @@ public class PlayingMainActivity extends BaseActivity implements SeekBar.OnSeekB
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                LogUtils.i(" play lrc ");
                 setPlayBackground(music);
                 setPlayLrc(music);
             }
@@ -261,8 +273,10 @@ public class PlayingMainActivity extends BaseActivity implements SeekBar.OnSeekB
                   }
               }.execute();
 
-      }}else{
+            }
+      }else{
           String lrcPath = FileUtils.getLrcDir()+FileUtils.getLrcFileName(music.getArtist(), music.getTitle());
+          LogUtils.i("lrc Path:"+lrcPath);
           loadLrc(lrcPath);
       }
 

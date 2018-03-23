@@ -4,18 +4,17 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,6 +30,7 @@ import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.entity.MusicExtrasPara;
 import com.android.blue.smarthomefunc.enums.LoadStateEnum;
+import com.android.blue.smarthomefunc.enums.PlayModeEnum;
 import com.android.blue.smarthomefunc.executor.PlayOnlineMusic;
 import com.android.blue.smarthomefunc.http.HttpCallback;
 import com.android.blue.smarthomefunc.http.HttpClient;
@@ -41,7 +41,9 @@ import com.android.blue.smarthomefunc.model.SongListInfo;
 import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
 import com.android.blue.smarthomefunc.utils.ImageViewAnimator;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
+import com.android.blue.smarthomefunc.utils.Preferences;
 import com.android.blue.smarthomefunc.utils.ViewUtils;
+import com.android.blue.smarthomefunc.model.PlayModePopupWindow;
 import com.android.blue.smarthomefunc.view.CircleImageView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -55,7 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class OnlineMusicActivity extends BaseActivity implements OnItemClickListener,
-        OnMusicAdapterItemClickListener, OnPlayerEventListener, SeekBar.OnSeekBarChangeListener{
+        OnMusicAdapterItemClickListener, OnPlayerEventListener, SeekBar.OnSeekBarChangeListener, PlayModePopupWindow.OnClickChangePlayModeListener {
 
 
     @BindView(R.id.collapsing_image_view)
@@ -95,14 +97,21 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     LinearLayout lvLoading;
     @BindView(R.id.lv_load_fail)
     LinearLayout lvLoadFail;
+    @BindView(R.id.update_time_tv)
+    TextView updateTimeTv;
+    @BindView(R.id.detail_tv)
+    TextView detailTv;
+    @BindView(R.id.choice_play_mode_layout)
+    LinearLayout changePlayMode;
 
     private OnlineMusicRecycleAdapter recycleAdapter;
     private HeaderAndFooterWrapper mHeaderAndFooterWrapper;
     private List<OnlineMusic> mData;
     private SongListInfo mSongListInfo;
+    private OnlineMusicList mOnlineMusicList;
     private DividerItemDecoration mDivider;
     private int currentListCount = 20;
-    private int mOffset= 0;
+    private int mOffset = 0;
     private View footView;
     private ImageViewAnimator mCoverAnimate;
     private int playingPosition;
@@ -112,15 +121,17 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     private int recyclerHeight;
     private int viewHeight;
 
+    PlayModePopupWindow popupWindow ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_music);
+        ButterKnife.bind(this);
         mData = new ArrayList<>();
         mCoverAnimate = new ImageViewAnimator();
 
-        if (!checkServiceAlive()){
+        if (!checkServiceAlive()) {
             return;
         }
 
@@ -139,6 +150,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
         init();
         setListener();
         initPlayingMusicBar();
+        getMusic(mOffset);
         Glide.with(this)
                 .load(mSongListInfo.getCoverUrl())
                 .asBitmap()
@@ -157,7 +169,10 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     protected void onResume() {
         super.onResume();
         mCoverAnimate.initAnimate(musicBarCover);
-       getMusic(mOffset);
+
+        updateSongListTime();
+        updatePlayMode();
+
         if (getPlayService().isPlaying()) {
             mCoverAnimate.startMusicBarCoverAnimate();
             musicBarPlaying.setImageResource(R.drawable.selector_music_bar_pause);
@@ -178,7 +193,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     }
 
     @SuppressLint("InflateParams")
-    private void init(){
+    private void init() {
         recycleAdapter = new OnlineMusicRecycleAdapter(this, mData);
         mHeaderAndFooterWrapper = new HeaderAndFooterWrapper(recycleAdapter);
         mLayoutManager = new LinearLayoutManager(this);
@@ -202,8 +217,8 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                LogUtils.i("onScrollStateChanged newState"+newState);
-                if (newState == RecyclerView.SCROLL_STATE_IDLE && !recyclerView.canScrollVertically(1)){
+                LogUtils.i("onScrollStateChanged newState" + newState);
+                if (newState == RecyclerView.SCROLL_STATE_IDLE && !recyclerView.canScrollVertically(1)) {
 
                     getMusic(mOffset);
                 }
@@ -212,14 +227,14 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
 
-                LinearLayoutManager manager= (LinearLayoutManager) recyclerView.getLayoutManager();
-                LogUtils.i("dx="+dx+" , dy ="+dy+", visible="+manager.getChildCount()+" , total="+manager.getItemCount()
-                +", first="+manager.findFirstVisibleItemPosition()+". last="+manager.findLastVisibleItemPosition());
+                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                LogUtils.i("dx=" + dx + " , dy =" + dy + ", visible=" + manager.getChildCount() + " , total=" + manager.getItemCount()
+                        + ", first=" + manager.findFirstVisibleItemPosition() + ". last=" + manager.findLastVisibleItemPosition());
             }
         });
     }
 
-    private void setListener(){
+    private void setListener() {
         recycleAdapter.setOnItemClickListener(this);
         recycleAdapter.setOnMusicAdapterItemClickListener(this);
         getPlayService().setOnPlayerEventListener(this);
@@ -227,52 +242,85 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
 
     }
 
+    private void updateSongListTime(){
+        //更新时间
+        if (mOnlineMusicList == null){
+            updateTimeTv.setVisibility(View.GONE);
+        }else {
+            updateTimeTv.setVisibility(View.VISIBLE);
+            updateTimeTv.setText(getString(R.string.song_list_update_time, mOnlineMusicList.getBillboard().getUpdate_date()));
+        }
+    }
 
-    private void getMusic(final int offset){
+    private void updatePlayMode(){
+        int mode = Preferences.getPlayMode();
+        PlayModeEnum modeEnum = PlayModeEnum.valueOf(mode);
+        switch (modeEnum){
+            case LOOP: //顺序
+                    choiceModeIv.setImageResource(R.drawable.online_music_play_mode_queue);
+                    choiceModeTv.setText(R.string.play_mode_queue);
+                break;
+            case SHUFFLE: //随机
+                    choiceModeIv.setImageResource(R.drawable.online_music_play_mode_random);
+                    choiceModeTv.setText(R.string.play_mode_random);
+                break;
+            case SINGLE: //单曲
+                    choiceModeIv.setImageResource(R.drawable.online_music_play_mode_one);
+                    choiceModeTv.setText(R.string.play_mode_one_loop);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void getMusic(final int offset) {
         HttpClient.getSongListInfo(mSongListInfo.getType(), currentListCount, offset, new HttpCallback<OnlineMusicList>() {
             @Override
             public void onSuccess(OnlineMusicList onlineMusicList) {
-                if (offset == 0 && onlineMusicList == null){
-                    ViewUtils.changViewState(mRecyclerView,lvLoading,lvLoadFail, LoadStateEnum.LOAD_FAIL);
-                }else if (offset == 0){
+                if (offset == 0 && onlineMusicList == null) {
+                    ViewUtils.changViewState(mRecyclerView, lvLoading, lvLoadFail, LoadStateEnum.LOAD_FAIL);
+                } else if (offset == 0) {
                     ViewUtils.changViewState(mRecyclerView, lvLoading, lvLoadFail, LoadStateEnum.LOAD_SUCCESS);
                 }
 
                 if (onlineMusicList == null || onlineMusicList.getSong_list() == null
-                        || onlineMusicList.getSong_list().size() == 0){
+                        || onlineMusicList.getSong_list().size() == 0) {
                     return;
                 }
-                mOffset +=currentListCount;
+                mOnlineMusicList = onlineMusicList;
+                mOffset += currentListCount;
+
+                updateSongListTime();
 
                 mData.addAll(onlineMusicList.getSong_list());
                 //下一首播放列表
                 AppCache.get().getOnlineMusicList().clear();
                 AppCache.get().getOnlineMusicList().addAll(mData);
 
-                LogUtils.i("size ="+mData.size());
-                for (OnlineMusic music : mData){
-                    LogUtils.i("music"+ music.getTitle());
+                LogUtils.i("size =" + mData.size());
+                for (OnlineMusic music : mData) {
+                    LogUtils.i("music" + music.getTitle());
                 }
                 mRecyclerView.addItemDecoration(mDivider);
                 mHeaderAndFooterWrapper.notifyDataSetChanged();
 
-                LogUtils.i("item count ="+mHeaderAndFooterWrapper.getItemCount()+"  rece item count="+recycleAdapter.getItemCount());
+                LogUtils.i("item count =" + mHeaderAndFooterWrapper.getItemCount() + "  rece item count=" + recycleAdapter.getItemCount());
 
             }
 
             @Override
             public void onFail(Exception e) {
-                if (e instanceof RuntimeException){
+                if (e instanceof RuntimeException) {
 
                 }
-                if (offset == 0){
-                    ViewUtils.changViewState(mRecyclerView,lvLoading,lvLoadFail, LoadStateEnum.LOAD_FAIL);
+                if (offset == 0) {
+                    ViewUtils.changViewState(mRecyclerView, lvLoading, lvLoadFail, LoadStateEnum.LOAD_FAIL);
                 }
             }
         });
     }
 
-    @OnClick({R.id.music_bar_playing, R.id.music_bar_next, R.id.music_bar_list, R.id.music_bar})
+    @OnClick({R.id.music_bar_playing, R.id.music_bar_next, R.id.music_bar_list, R.id.music_bar,R.id.detail_tv,R.id.choice_play_mode_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.music_bar_playing:
@@ -288,17 +336,17 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
                 break;
             case R.id.music_bar_next:
                 playingPosition = 0;
-                for (OnlineMusic music: AppCache.get().getOnlineMusicList()){
-                    LogUtils.i("getId ="+getPlayService().getPlayingMusic().getId()+", song id="+music.getSong_id());
-                    if (getPlayService().getPlayingMusic().getId() == Integer.valueOf(music.getSong_id())){
+                for (OnlineMusic music : AppCache.get().getOnlineMusicList()) {
+                    LogUtils.i("getId =" + getPlayService().getPlayingMusic().getId() + ", song id=" + music.getSong_id());
+                    if (getPlayService().getPlayingMusic().getId() == Integer.valueOf(music.getSong_id())) {
                         break;
                     }
                     playingPosition++;
                 }
-                LogUtils.i("next position ="+playingPosition+", size = "+AppCache.get().getOnlineMusicList().size());
-                if (playingPosition < AppCache.get().getOnlineMusicList().size()-1){
-                    play(AppCache.get().getOnlineMusicList().get(playingPosition+1));
-                }else{
+                LogUtils.i("next position =" + playingPosition + ", size = " + AppCache.get().getOnlineMusicList().size());
+                if (playingPosition < AppCache.get().getOnlineMusicList().size() - 1) {
+                    play(AppCache.get().getOnlineMusicList().get(playingPosition + 1));
+                } else {
                     play(AppCache.get().getOnlineMusicList().get(0));
                 }
                 mRecyclerView.scrollToPosition(playingPosition);
@@ -313,12 +361,38 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
                 Intent intent = new Intent(this, PlayingMainActivity.class);
                 startActivity(intent);
                 break;
+
+            case R.id.choice_play_mode_layout:
+                LogUtils.i("play mode layout");
+
+                if (popupWindow == null){
+                    popupWindow =  new PlayModePopupWindow(this);
+                }
+                popupWindow.setContentView(LayoutInflater.from(this).inflate(R.layout.popup_window_play_mode,null));
+                popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+                popupWindow.setFocusable(true);
+                popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
+                popupWindow.setOutsideTouchable(true);
+                popupWindow.setOnClickChangePlayMode(this);
+                if (popupWindow.isShowing()){
+                    popupWindow.dismiss();
+
+                }else {
+                    choiceModeArrow.setImageResource(R.drawable.online_music_play_mode_arrow_up);
+                    popupWindow.showAsDropDown(view, 90, 40);
+
+                }
+                break;
+            case R.id.detail_tv:
+
+                break;
         }
     }
 
     @Override
     public void onItemClick(View view, final int position) {
-        LogUtils.i("position ="+position+", name="+mData.get(position).getTitle());
+        LogUtils.i("position =" + position + ", name=" + mData.get(position).getTitle());
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -329,17 +403,17 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
         viewHeight = view.getHeight();
         Rect rect = new Rect();
         mRecyclerView.getGlobalVisibleRect(rect);
-        recyclerHeight = rect.bottom-rect.top-viewHeight;
+        recyclerHeight = rect.bottom - rect.top - viewHeight;
 
     }
 
     /**
      * recyclerview　视图滚动到中间位置
      */
-    private void scrollToMiddle(){
+    private void scrollToMiddle() {
         int firstPosition = mLayoutManager.findFirstVisibleItemPosition();
-        LogUtils.i("firstPosition ="+firstPosition+" playingPosition="+playingPosition);
-        mLayoutManager.scrollToPositionWithOffset(playingPosition,200);
+        LogUtils.i("firstPosition =" + firstPosition + " playingPosition=" + playingPosition);
+        mLayoutManager.scrollToPositionWithOffset(playingPosition, 200);
     }
 
     @Override
@@ -347,8 +421,8 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
 
     }
 
-    private void play(OnlineMusic onlineMusic){
-        new PlayOnlineMusic(this, onlineMusic){
+    private void play(OnlineMusic onlineMusic) {
+        new PlayOnlineMusic(this, onlineMusic) {
 
             @Override
             public void onPrepare() {
@@ -369,10 +443,9 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
         }.execute();
     }
 
-    private void artistInfo(OnlineMusic music){
+    private void artistInfo(OnlineMusic music) {
 
     }
-
 
 
     @Override
@@ -415,7 +488,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
 
     @Override
     public void onChange(Music music) {
-        LogUtils.i("music  title="+music.getTitle());
+        LogUtils.i("music  title=" + music.getTitle());
         initPlayingMusicBar();
         mCoverAnimate.stopMusicBarCoverAnimate();
         mHeaderAndFooterWrapper.notifyDataSetChanged();
@@ -435,7 +508,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
 
     @Override
     public void onPublishProgress(int progress) {
-        LogUtils.i("progress = "+progress);
+        LogUtils.i("progress = " + progress);
         musicBarSeekBar.setProgress(progress);
     }
 
@@ -452,5 +525,22 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     @Override
     public void onMusicListUpdate() {
 
+    }
+
+    /**
+     * PopupWindow listener
+     * @param value
+     */
+    @Override
+    public void OnChangePlayMode(int value) {
+        updatePlayMode();
+    }
+
+    /**
+     * PopupWindow listener
+     */
+    @Override
+    public void OnViewDismiss() {
+        choiceModeArrow.setImageResource(R.drawable.online_music_play_mode_arrow_down);
     }
 }

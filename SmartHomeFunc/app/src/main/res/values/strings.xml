@@ -1,5 +1,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="app_name">智能家居</string>
+    <string name="app_name">小新</string>
 
     <string name="_00_00_00">00:00:00</string>
 
@@ -84,4 +84,6 @@
     <string name="play_mode_random">随机播放</string>
     <string name="play_mode_one_loop">单曲循环</string>
     <string name="online_multi_choice">多选</string>
+    <string name="song_list_update_time"><xliff:g id="time">%1$s</xliff:g> 更新</string>
+    <string name="song_list_detail">详情</string>
 </resources>
