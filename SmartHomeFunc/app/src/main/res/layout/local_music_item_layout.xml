@@ -139,4 +139,8 @@
             android:background="@color/white_8p"
             android:src="@drawable/selsector_ellipsis_icon"/>
     </LinearLayout>
+    <include layout="@layout/include_music_recycle_item_detail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/item_music_select_layout"/>
 </RelativeLayout>

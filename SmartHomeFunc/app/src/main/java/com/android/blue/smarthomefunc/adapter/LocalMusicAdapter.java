@@ -5,7 +5,9 @@ import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -20,6 +22,8 @@ import com.android.blue.smarthomefunc.service.PlayService;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 
 /**
+ * ListView 更换为RecyclerView
+ *
  * LocalMusic
  * Created by root on 2/6/18.
  */
@@ -27,6 +31,17 @@ import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 public class LocalMusicAdapter extends BaseAdapter {
     private int mPlayingPosition;
     private OnMusicAdapterItemClickListener mListener;
+
+    private OnMoreItemListener mOnMoreItemListener; //more click
+    private OnlineMoreGridAdapter adapter;
+    private int needShowSecFuncPosition;
+    private boolean show = false;
+    private Context mContext;
+
+    public LocalMusicAdapter(Context context){
+        mContext = context;
+        adapter = new OnlineMoreGridAdapter(context, OnlineMoreGridAdapter.LOCAL_TYPE);
+    }
 
     @Override
     public int getCount() {
@@ -46,7 +61,7 @@ public class LocalMusicAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View view, final ViewGroup viewGroup) {
         LogUtils.i("LocalmusicAdapter getView position = "+position+" , mPlayingPosition="+mPlayingPosition);
-        ViewHolder holder;
+        final ViewHolder holder;
         View convertView = view;
         if (convertView == null){
             convertView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.local_music_item_layout, viewGroup, false);
@@ -55,6 +70,7 @@ public class LocalMusicAdapter extends BaseAdapter {
             holder.title = convertView.findViewById(R.id.local_item_title);
             holder.artist = convertView.findViewById(R.id.local_item_artist);
             holder.ellipsis_detial = convertView.findViewById(R.id.ellipsis_detail);
+            holder.ellipsis_child_detial = convertView.findViewById(R.id.ellipsis_child_detail);
             holder.mDefault = convertView.findViewById(R.id.item_music_empty_layout);
             holder.mSelect = convertView.findViewById(R.id.item_music_select_layout);
 
@@ -63,11 +79,15 @@ public class LocalMusicAdapter extends BaseAdapter {
             holder.heart = convertView.findViewById(R.id.local_item_heart);
             holder.share = convertView.findViewById(R.id.local_item_share);
             holder.download = convertView.findViewById(R.id.local_item_down);
+            holder.gridView = convertView.findViewById(R.id.online_grid_detail);
 
             convertView.setTag(holder);
         }else {
             holder = (ViewHolder)convertView.getTag();
         }
+
+        holder.gridView.setAdapter(adapter);
+
         if (position == mPlayingPosition){
             //当前正在播放
             holder.mSelect.setVisibility(View.VISIBLE);
@@ -89,7 +109,29 @@ public class LocalMusicAdapter extends BaseAdapter {
         holder.ellipsis_detial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mListener.onMoreClick(position);
+                LogUtils.i(" onmore click");
+                needShowSecFuncPosition = position;
+                if (holder.gridView.getVisibility() == View.GONE){
+                    show = true;
+                }else{
+                    show = false;
+                }
+
+                mListener.onMoreClick(view, position);
+            }
+        });
+        holder.ellipsis_child_detial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LogUtils.i(" child onmore click");
+                needShowSecFuncPosition = position;
+                if (holder.gridView.getVisibility() == View.GONE){
+                    show = true;
+                }else{
+                    show = false;
+                }
+
+                mListener.onMoreClick(view, position);
             }
         });
 
@@ -115,21 +157,55 @@ public class LocalMusicAdapter extends BaseAdapter {
             }
         });
 
+        holder.gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                TextView tv = view.findViewById(R.id.grid_item_tv);
+                LogUtils.i(" gridview on click"+needShowSecFuncPosition+", tv = "+tv.getText());
+                if (mOnMoreItemListener != null) {
+
+                    if (tv.getText().equals(mContext.getString(R.string.music_more_download))) {
+                        //下载
+                        mOnMoreItemListener.onDownloadOnlineMusic(needShowSecFuncPosition);
+
+                    } else if (tv.getText().equals(mContext.getString(R.string.music_more_share))) {
+                        //分享
+                        mOnMoreItemListener.onSharedMusicFromMore(needShowSecFuncPosition);
+
+                    } else if (tv.getText().equals(mContext.getString(R.string.music_more_add))) {
+                        //添加
+                        mOnMoreItemListener.onAddMusicToPlayListFromMore(needShowSecFuncPosition);
+
+                    } else if (tv.getText().equals(mContext.getString(R.string.music_more_info))) {
+                        //歌曲信息
+                        mOnMoreItemListener.onMusicInfoFromMore(needShowSecFuncPosition);
+
+                    } else if (tv.getText().equals(mContext.getString(R.string.music_more_ring))) {
+                        //设为铃声
+                        mOnMoreItemListener.onSetMusicToRingFromMore(needShowSecFuncPosition);
+
+                    } else if (tv.getText().equals(mContext.getString(R.string.music_more_delete))) {
+                        //删除
+                        mOnMoreItemListener.onDeleteMusicFromMore(needShowSecFuncPosition);
+                        show = false; //解决删除歌曲，　more 菜单仍显示问题
+                    }
+                }
+            }
+        });
+
         Music music = AppCache.get().getMusicList().get(position);
         holder.title.setText(music.getTitle());
         holder.artist.setText(music.getArtist());
 
-        holder.mSelect.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int i) {
-                LogUtils.i("onSystemuiView  i="+i);
-            }
-        });
-        if (holder.mSelect.isFocused()){
-            LogUtils.i("width="+holder.cover.getWidth());
-        }
-        if (holder.mSelect.getVisibility() == View.VISIBLE){
-            LogUtils.i(" 2 width="+holder.cover.getWidth());
+        // 子布局的显示，隐藏　在adapter中刷新不能全部刷新，会导致有些条目不该显示，实际显示，　用onMoreClick
+        //　回调　notifyDataSetChanged　更新列表, 用全局变量存储需要显示的item，在更新后显示,解决上述问题
+        LogUtils.i(" show = "+show+"position ="+needShowSecFuncPosition+" getview position ="+position);
+        if (show && position == needShowSecFuncPosition){
+            LogUtils.i("显示");
+            holder.gridView.setVisibility(View.VISIBLE);
+        }else {
+            LogUtils.i("隐藏");
+            holder.gridView.setVisibility(View.GONE);
         }
 
 
@@ -138,6 +214,10 @@ public class LocalMusicAdapter extends BaseAdapter {
 
     public void setOnMusicAdapterItemClickListener(OnMusicAdapterItemClickListener listener){
         mListener = listener;
+    }
+
+    public void setOnMoreItemClickListener(OnMoreItemListener listener){
+        mOnMoreItemListener = listener;
     }
 
     public void updatePlayingPosition(PlayService playService){
@@ -153,11 +233,13 @@ public class LocalMusicAdapter extends BaseAdapter {
         private TextView title;
         private TextView artist;
         private ImageButton ellipsis_detial;
+        private ImageButton ellipsis_child_detial;
         private ImageView cover;
         private TextView childTitle;
         private ImageView heart;
         private ImageView share;
         private ImageView download;
+        private GridView gridView;
 
         RelativeLayout mDefault;
         LinearLayout mSelect;

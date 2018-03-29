@@ -77,6 +77,11 @@
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".receiver.DownloadReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DOWNLOAD_COMPLETE" />
+            </intent-filter>
+        </receiver>
 
         <activity android:name=".activity.SplashActivity">
             <intent-filter>
@@ -93,7 +98,16 @@
         <activity
             android:name=".activity.OnlineSongListActivity"
             android:label="" />
-        <activity android:name=".activity.OnlineMusicActivity"></activity>
+        <activity android:name=".activity.OnlineMusicActivity" />
+
+        <receiver
+            android:name=".receiver.StatusBarReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.android.blue.STATUS_BAR_ACTIONS"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

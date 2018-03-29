@@ -1,28 +1,22 @@
 package com.android.blue.smarthomefunc.activity;
 
-import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.adapter.LocalMusicAdapter;
+import com.android.blue.smarthomefunc.adapter.OnMoreItemListener;
 import com.android.blue.smarthomefunc.adapter.OnMusicAdapterItemClickListener;
 import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
@@ -44,7 +38,8 @@ import butterknife.OnClick;
  * ListView中Item添加具有点击事件的控件时,ListView中item的点击事件失效，原因：焦点被子控件抢占，item失去焦点所以点击失效
  */
 public class LocalMusicActivity extends BaseActivity implements AdapterView.OnItemClickListener,
-        OnMusicAdapterItemClickListener, OnPlayerEventListener, SeekBar.OnSeekBarChangeListener {
+        OnMusicAdapterItemClickListener, OnPlayerEventListener, SeekBar.OnSeekBarChangeListener,
+        OnMoreItemListener{
 
     @BindView(R.id.list_local)
     ListView mList;
@@ -85,7 +80,7 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
 
         toolbar.setBackgroundResource(R.color.colorPrimaryDark);
 
-        mLocalMusicAdapter = new LocalMusicAdapter();
+        mLocalMusicAdapter = new LocalMusicAdapter(this);
         mList.setAdapter(mLocalMusicAdapter);
 
         //添加显示歌曲数量
@@ -136,6 +131,7 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
         //list　item点击监听
         mList.setOnItemClickListener(this);
         mLocalMusicAdapter.setOnMusicAdapterItemClickListener(this);
+        mLocalMusicAdapter.setOnMoreItemClickListener(this);
         getPlayService().setOnPlayerEventListener(this);
         musicBarSeekBar.setOnSeekBarChangeListener(this);
     }
@@ -254,8 +250,10 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
      * @param position
      */
     @Override
-    public void onMoreClick(int position) {
-        LogUtils.i("");
+    public void onMoreClick(View view, int position) {
+        LogUtils.i("    -----fht-----");
+        //配合OnlineMusicRecycleAdapter 更新显示更多
+        mLocalMusicAdapter.notifyDataSetChanged();
     }
 
     /**
@@ -352,4 +350,72 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
     protected void onStop() {
         super.onStop();
     }
+
+
+    /**
+     * 更多　事件回调监听　开始
+     * @param position
+     */
+    @Override
+    public void onDownloadOnlineMusic(int position) {
+
+    }
+
+    @Override
+    public void onSharedMusicFromMore(int position) {
+        MusicUtils.sharedMusic(this, AppCache.get().getMusicList().get(position));
+    }
+
+    @Override
+    public void onAddMusicToPlayListFromMore(int position) {
+
+    }
+
+    @Override
+    public void onMusicInfoFromMore(int position) {
+
+    }
+
+    @Override
+    public void onSetMusicToRingFromMore(int position) {
+
+    }
+
+    @Override
+    public void onDeleteMusicFromMore(int position) {
+        LogUtils.i("delete music ="+position);
+        deleteMusic(AppCache.get().getMusicList().get(position));
+    }
+
+    private void deleteMusic(final Music music){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        String title = music.getTitle();
+        String msg = getString(R.string.delete_music, title);
+        builder.setTitle(getString(R.string.delete_dialog_title));
+        builder.setMessage(msg);
+        builder.setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int which) {
+                File file = new File(music.getPath());
+                if (file.delete()){
+                    boolean playing = (music == getPlayService().getPlayingMusic());
+                    AppCache.get().getMusicList().remove(music);
+                    if (playing){
+                        getPlayService().stop();
+                        getPlayService().playPause();
+                    }else{
+                        getPlayService().updatePlayingPosition();
+                    }
+                    updateView();
+
+                    //刷新媒体库
+                    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://".concat(music.getPath())));
+                    getApplicationContext().sendBroadcast(intent);
+                }
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, null);
+        builder.create().show();
+    }
+    // 更多事件回调监听结束
 }

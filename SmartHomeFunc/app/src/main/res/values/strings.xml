@@ -69,7 +69,8 @@
     <string name="cancel">取消</string>
     <string name="sure">确定</string>
     <string name="delete">删除</string>
-    <string name="delete_music">删除<xliff:g id="name">%1$s</xliff:g>?</string>
+    <string name="delete_dialog_title">删除歌曲</string>
+    <string name="delete_music">确定删除 \"<xliff:g id="name">%1$s</xliff:g>\" ?</string>
     <string name="play_tips">当前处于移动网络，确定打开移动网络播放开关吗？</string>
     <string name="play_tips_sure">立即打开</string>
     <string name="downloading">正在下载．．．</string>
@@ -86,4 +87,11 @@
     <string name="online_multi_choice">多选</string>
     <string name="song_list_update_time"><xliff:g id="time">%1$s</xliff:g> 更新</string>
     <string name="song_list_detail">详情</string>
+
+    <string name="music_more_download">下载</string>
+    <string name="music_more_share">分享</string>
+    <string name="music_more_add">添加</string>
+    <string name="music_more_info">歌曲信息</string>
+    <string name="music_more_ring">设为铃声</string>
+    <string name="music_more_delete">删除</string>
 </resources>

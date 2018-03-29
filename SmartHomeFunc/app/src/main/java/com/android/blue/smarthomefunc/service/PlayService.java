@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 
 import com.android.blue.smarthomefunc.application.AppCache;
+import com.android.blue.smarthomefunc.application.Notifier;
 import com.android.blue.smarthomefunc.entity.Actions;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.enums.PlayModeEnum;
@@ -58,7 +59,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         mMediaSessionManager = new MediaSessionManager(this);
         //设置播放完成监听
         mPlayer.setOnCompletionListener(this);
-
+        Notifier.init(this);
 
     }
 
@@ -124,7 +125,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 AppCache.get().getMusicList().addAll(musics);
 
                 if (!AppCache.get().getMusicList().isEmpty()){
-                    updatePalyingPosition();
+                    updatePlayingPosition();
                     mPlayingMusic = AppCache.get().getMusicList().get(mPlayingPosition);
                 }
                 if (mListener != null){
@@ -185,6 +186,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 mListener.onChange(music);
             }
             //通知
+            Notifier.showPlay(music);
             mMediaSessionManager.updateMetaData(mPlayingMusic);
             mMediaSessionManager.updatePlaybackState();
         }catch (IOException e){
@@ -267,6 +269,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
             mPlayer.start();
             mPlayState = STATE_PLAYING;
             mHandler.post(mPublishRunnable);
+            Notifier.showPlay(mPlayingMusic);
             mMediaSessionManager.updatePlaybackState();
             registerReceiver(mNoisyReceiver, mNoisyFilter);
 
@@ -323,6 +326,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         mPlayer.pause();
         mPlayState = STATE_PAUSE;
         mHandler.removeCallbacks(mPublishRunnable);
+        Notifier.showPause(mPlayingMusic);
         mMediaSessionManager.updatePlaybackState();
         unregisterReceiver(mNoisyReceiver);
 
@@ -354,7 +358,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
     /**
      * 删除或下载后，刷新正在播放的本地歌曲的序号
      */
-    public void updatePalyingPosition(){
+    public void updatePlayingPosition(){
         int position = 0;
         long id = Preferences.getCurrentSongId();
         for (int i =0; i< AppCache.get().getMusicList().size();i++){
@@ -398,6 +402,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         mPlayer = null;
         mAudioFocusManager.abandonAudioFocus();
         mMediaSessionManager.release();
+        Notifier.cancelAll();
         AppCache.get().setPlayService(null);
         LogUtils.i("PlayService onDestroy");
     }

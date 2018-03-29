@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
@@ -20,10 +22,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.adapter.HeaderAndFooterWrapper;
 import com.android.blue.smarthomefunc.adapter.OnItemClickListener;
+import com.android.blue.smarthomefunc.adapter.OnMoreItemListener;
 import com.android.blue.smarthomefunc.adapter.OnMusicAdapterItemClickListener;
 import com.android.blue.smarthomefunc.adapter.OnlineMusicRecycleAdapter;
 import com.android.blue.smarthomefunc.application.AppCache;
@@ -31,7 +35,10 @@ import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.entity.MusicExtrasPara;
 import com.android.blue.smarthomefunc.enums.LoadStateEnum;
 import com.android.blue.smarthomefunc.enums.PlayModeEnum;
+import com.android.blue.smarthomefunc.executor.DownloadMusic;
+import com.android.blue.smarthomefunc.executor.DownloadOnlineMusic;
 import com.android.blue.smarthomefunc.executor.PlayOnlineMusic;
+import com.android.blue.smarthomefunc.executor.ShareOnlineMusic;
 import com.android.blue.smarthomefunc.http.HttpCallback;
 import com.android.blue.smarthomefunc.http.HttpClient;
 import com.android.blue.smarthomefunc.model.Music;
@@ -39,6 +46,7 @@ import com.android.blue.smarthomefunc.model.OnlineMusic;
 import com.android.blue.smarthomefunc.model.OnlineMusicList;
 import com.android.blue.smarthomefunc.model.SongListInfo;
 import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
+import com.android.blue.smarthomefunc.service.PlayService;
 import com.android.blue.smarthomefunc.utils.ImageViewAnimator;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 import com.android.blue.smarthomefunc.utils.Preferences;
@@ -57,7 +65,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class OnlineMusicActivity extends BaseActivity implements OnItemClickListener,
-        OnMusicAdapterItemClickListener, OnPlayerEventListener, SeekBar.OnSeekBarChangeListener, PlayModePopupWindow.OnClickChangePlayModeListener {
+        OnMusicAdapterItemClickListener, OnPlayerEventListener, SeekBar.OnSeekBarChangeListener,
+        PlayModePopupWindow.OnClickChangePlayModeListener, OnMoreItemListener {
 
 
     @BindView(R.id.collapsing_image_view)
@@ -116,6 +125,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     private ImageViewAnimator mCoverAnimate;
     private int playingPosition;
     private LinearLayoutManager mLayoutManager;
+    private Handler mHandler = new Handler(Looper.getMainLooper());
 
     //recyclerview 视图中间
     private int recyclerHeight;
@@ -237,6 +247,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     private void setListener() {
         recycleAdapter.setOnItemClickListener(this);
         recycleAdapter.setOnMusicAdapterItemClickListener(this);
+        recycleAdapter.setOnMoreItemClickListener(this);
         getPlayService().setOnPlayerEventListener(this);
         musicBarSeekBar.setOnSeekBarChangeListener(this);
 
@@ -443,11 +454,6 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
         }.execute();
     }
 
-    private void artistInfo(OnlineMusic music) {
-
-    }
-
-
     @Override
     public void onProgressChanged(SeekBar seekBar, int position, boolean press) {
         if (press) {
@@ -467,8 +473,10 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     }
 
     @Override
-    public void onMoreClick(int position) {
-
+    public void onMoreClick(View view, int position) {
+        LogUtils.i("online onMore click");
+        //配合OnlineMusicRecycleAdapter 更新显示更多
+        mHeaderAndFooterWrapper.notifyDataSetChanged();
     }
 
     @Override
@@ -537,10 +545,96 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     }
 
     /**
-     * PopupWindow listener
+     * PopupWindow Arrow listener
      */
     @Override
     public void OnViewDismiss() {
         choiceModeArrow.setImageResource(R.drawable.online_music_play_mode_arrow_down);
     }
+
+
+    /**
+     * 更多　事件回调监听　开始
+     * @param position
+     */
+    @Override
+    public void onDownloadOnlineMusic(int position) {
+        LogUtils.i(" down load music title = "+mData.get(position).getTitle());
+        download(mData.get(position));
+    }
+
+    private void download(OnlineMusic music){
+        new DownloadOnlineMusic(this, music){
+
+
+            @Override
+            public void onPrepare() {
+                LogUtils.i("");
+                Toast.makeText(getApplicationContext(), "准备下载．．．", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onExecuteSuccess(Void aVoid) {
+                LogUtils.i("");
+            }
+
+            @Override
+            public void onExecuteFail(Exception e) {
+                LogUtils.i("");
+                Toast.makeText(getApplicationContext(), "下载失败", Toast.LENGTH_SHORT).show();
+            }
+        }.execute();
+    }
+
+    private void scanMusic(){
+        PlayService service = AppCache.get().getPlayService();
+        if (service != null){
+            service.updateMusicList(null);
+        }
+    }
+    @Override
+    public void onSharedMusicFromMore(int position) {
+        share(mData.get(position));
+    }
+
+    private void share( OnlineMusic onlineMusic){
+        new ShareOnlineMusic(this, onlineMusic.getTitle(), onlineMusic.getSong_id()){
+            @Override
+            public void onPrepare() {
+
+            }
+
+            @Override
+            public void onExecuteSuccess(Void aVoid) {
+
+            }
+
+            @Override
+            public void onExecuteFail(Exception e) {
+
+            }
+        }.execute();
+    }
+
+    @Override
+    public void onAddMusicToPlayListFromMore(int position) {
+
+    }
+
+    @Override
+    public void onMusicInfoFromMore(int position) {
+
+    }
+
+    @Override
+    public void onSetMusicToRingFromMore(int position) {
+
+    }
+
+    @Override
+    public void onDeleteMusicFromMore(int position) {
+
+    }
+    // 更多事件回调监听结束
 }

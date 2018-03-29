@@ -37,6 +37,6 @@
     <color name="summary_gray_trans">#8cd0d0d0</color>
     <color name="red">#F44336</color>
     <color name="red_30p">#4CF44336</color>
-
+    <color name="grid_back">#451945</color>
 
 </resources>

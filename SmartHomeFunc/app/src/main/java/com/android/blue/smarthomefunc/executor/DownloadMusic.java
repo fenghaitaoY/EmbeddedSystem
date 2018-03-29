@@ -61,7 +61,7 @@ public abstract class DownloadMusic implements IExecutor<Void> {
     protected void downloadMusic(String url, String artist, String title, String coverPath){
         try {
             String fileName = FileUtils.getMp3FileName(artist, title);
-            Uri uri = Uri.parse(fileName);
+            Uri uri = Uri.parse(url);
             DownloadManager.Request request = new DownloadManager.Request(uri);
             request.setTitle(FileUtils.getFileName(artist, title));
             request.setDescription(mActivity.getString(R.string.downloading));

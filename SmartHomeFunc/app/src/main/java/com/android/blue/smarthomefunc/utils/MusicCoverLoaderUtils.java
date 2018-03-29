@@ -91,20 +91,34 @@ public class MusicCoverLoaderUtils {
     }
 
     private Bitmap loadCover(Music music, Type type) {
+        if (music != null)
+            LogUtils.i("music = "+music.getTitle()+" , type = "+type.value+" , path ="+music.getCoverPath());
         Bitmap bitmap;
         String key = getKey(music, type);
-        LogUtils.i("loadCover key :" + key);
+        LogUtils.i(" fht loadCover key :" + key);
         if (TextUtils.isEmpty(key)) {
             bitmap = mMusicCoverCache.get(MUSIC_KEY_NULL.concat(type.value));
+            LogUtils.i(" ---key is empty 11 ");
             if (bitmap != null) {
                 return bitmap;
             }
+            LogUtils.i(" ---key is empty 22");
             bitmap = getDefaultCover(type);
+            LogUtils.i("put lrucache default");
             mMusicCoverCache.put(MUSIC_KEY_NULL.concat(type.value), bitmap);
             return bitmap;
         }
+
+        bitmap = mMusicCoverCache.get(key);
+        LogUtils.i("key = "+key+" ,bitmap = "+bitmap);
+        if (bitmap != null){
+            return bitmap;
+        }
+
         bitmap = loadCoverByType(music, type);
+        LogUtils.i(" loadCoverByType "+bitmap);
         if (bitmap != null) {
+            LogUtils.i("put lrucache loadcoverbytype key ="+key);
             mMusicCoverCache.put(key, bitmap);
             return bitmap;
         }
@@ -113,6 +127,7 @@ public class MusicCoverLoaderUtils {
 
     private Bitmap loadCoverByType(Music music, Type type) {
         Bitmap bitmap;
+        LogUtils.i("music type ="+music.getType()+" cover path ="+music.getCoverPath());
         if (music.getType() == Music.Type.LOCAL) {
             bitmap = loadCoverFromMediaStore(music.getAlbumId());
         } else {

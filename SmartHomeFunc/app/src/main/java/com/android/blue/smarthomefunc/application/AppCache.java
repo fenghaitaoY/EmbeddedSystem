@@ -32,6 +32,7 @@ public class AppCache {
     // 歌单列表
     private final List<SongListInfo> mSongListInfos = new ArrayList<>();
     private final LongSparseArray<DownloadMusicInfo> mDownloadList = new LongSparseArray<>();
+    private Application mApplication;
 
     private AppCache() {
     }
@@ -47,6 +48,7 @@ public class AppCache {
     public void init(Application application) {
         mContext = application.getApplicationContext();
         Preferences.init(mContext);
+        mApplication = application;
 
         //CrashHandler.getInstance().init();
         MusicCoverLoaderUtils.getInstance().init(mContext);
@@ -79,4 +81,5 @@ public class AppCache {
         return mDownloadList;
     }
 
+    public Application getApplication(){return mApplication;}
 }

@@ -56,7 +56,7 @@ public abstract class PlayOnlineMusic extends PlayMusic {
             picUrl = mOnlineMusic.getPic_small();
         }
 
-        if (!albumFile.exists() && !TextUtils.isEmpty(picUrl)){
+        if (!TextUtils.isEmpty(picUrl)){
             downloadAlbum(picUrl, albumFileName);
         }else{
             mCounter++;
