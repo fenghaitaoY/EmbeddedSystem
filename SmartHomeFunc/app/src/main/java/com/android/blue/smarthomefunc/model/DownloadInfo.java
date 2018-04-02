@@ -10,10 +10,14 @@ import com.google.gson.annotations.SerializedName;
 public class DownloadInfo {
     @SerializedName("bitrate")
     private Bitrate bitrate;
+    @SerializedName("songinfo")
+    private Songinfo songinfo;
 
     public Bitrate getBitrate() {
         return bitrate;
     }
+
+    public Songinfo getSonginfo(){return songinfo;}
 
     public void setBitrate(Bitrate bitrate) {
         this.bitrate = bitrate;
@@ -39,6 +43,44 @@ public class DownloadInfo {
 
         public void setFile_link(String file_link) {
             this.file_link = file_link;
+        }
+    }
+
+
+    public static class Songinfo{
+        @SerializedName("title")
+        private String title;
+
+        @SerializedName("lrclink")
+        private String lrc;
+
+        @SerializedName("author")
+        private String album;
+
+        @SerializedName("pic_big")
+        private String pic_big;
+
+        @SerializedName("pic_small")
+        private String pic_small;
+
+        public String getTitle() {
+            return title;
+        }
+
+        public String getLrc() {
+            return lrc;
+        }
+
+        public String getAlbum() {
+            return album;
+        }
+
+        public String getPic_big() {
+            return pic_big;
+        }
+
+        public String getPic_small() {
+            return pic_small;
         }
     }
 }

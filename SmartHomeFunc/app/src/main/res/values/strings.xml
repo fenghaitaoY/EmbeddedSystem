@@ -94,4 +94,7 @@
     <string name="music_more_info">歌曲信息</string>
     <string name="music_more_ring">设为铃声</string>
     <string name="music_more_delete">删除</string>
+    <string name="search_music">搜索</string>
+    <string name="search_et_music_name">歌曲名\/歌手名</string>
+    <string name="search_none">未搜索到</string>
 </resources>

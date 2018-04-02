@@ -15,6 +15,7 @@ import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.OnlineMusic;
+import com.android.blue.smarthomefunc.model.SearchMusic;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
  * Created by fht on 3/15/18.
  */
 
-public class OnlineMusicRecycleAdapter extends RecyclerView.Adapter<OnlineMusicRecycleAdapter.MusicViewHolder>{
+public class SearchMusicRecycleAdapter extends RecyclerView.Adapter<SearchMusicRecycleAdapter.MusicViewHolder>{
 
     private OnItemClickListener mOnItemClickListener; //歌曲item点击监听
     private OnMusicAdapterItemClickListener mMusicItemClickListener; // 歌曲item 内　add　detail点击回调监听
@@ -34,12 +35,11 @@ public class OnlineMusicRecycleAdapter extends RecyclerView.Adapter<OnlineMusicR
     private boolean show = false;
     private OnlineMoreGridAdapter adapter;
 
-    private List<OnlineMusic> mData;
+    private List<SearchMusic.Song> mSongData;
 
-
-
-    public OnlineMusicRecycleAdapter(Context context, List<OnlineMusic> data){
-        mData = data;
+    public SearchMusicRecycleAdapter(Context context, List<SearchMusic.Song> data){
+        mSongData = data;
+        LogUtils.i("lllllllll");
         init(context);
     }
 
@@ -58,16 +58,14 @@ public class OnlineMusicRecycleAdapter extends RecyclerView.Adapter<OnlineMusicR
 
     @Override
     public void onBindViewHolder(final MusicViewHolder holder, final int position) {
-        LogUtils.i("start postion="+position);
+        LogUtils.i("start position="+position);
 
-        holder.title.setText(mData.get(position).getTitle());
-        holder.artist.setText(mData.get(position).getArtist_name());
-
+        holder.title.setText(mSongData.get(position).getTitle());
+        holder.artist.setText(mSongData.get(position).getArtist_name());
 
         holder.gridView.setAdapter(adapter);
-        LogUtils.i("position = "+position+", getPlayingPosition ="+AppCache.get().getOnlineMusicList().get(position).getSong_id());
 
-        if (Integer.valueOf(AppCache.get().getOnlineMusicList().get(position).getSong_id()) ==
+        if (Integer.valueOf(AppCache.get().getSearchMusicList().get(position).getSongid()) ==
                 AppCache.get().getPlayService().getPlayingMusic().getId()){
             holder.redLineView.setVisibility(View.VISIBLE);
         }else{
@@ -158,7 +156,7 @@ public class OnlineMusicRecycleAdapter extends RecyclerView.Adapter<OnlineMusicR
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return mSongData.size();
     }
 
     public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {

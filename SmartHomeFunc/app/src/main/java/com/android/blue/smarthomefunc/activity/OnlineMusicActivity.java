@@ -301,6 +301,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
                 mOnlineMusicList = onlineMusicList;
                 mOffset += currentListCount;
 
+                //歌单更新时间
                 updateSongListTime();
 
                 mData.addAll(onlineMusicList.getSong_list());

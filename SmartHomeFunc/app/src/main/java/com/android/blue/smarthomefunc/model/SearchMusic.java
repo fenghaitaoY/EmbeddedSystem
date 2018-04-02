@@ -28,7 +28,7 @@ public class SearchMusic {
         @SerializedName("songid")
         private String songid;
 
-        public String getSongname() {
+        public String getTitle() {
             return songname;
         }
 
@@ -36,7 +36,7 @@ public class SearchMusic {
             this.songname = songname;
         }
 
-        public String getArtistname() {
+        public String getArtist_name() {
             return artistname;
         }
 

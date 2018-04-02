@@ -33,8 +33,12 @@ public class Music implements Serializable {
 
     public enum Type{
         LOCAL,
-        ONLINE
+        ONLINE,
+
+        SEARCHM,
+        ONLINEM
     }
+
 
     public Type getType() {
         return type;

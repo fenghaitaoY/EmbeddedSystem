@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.android.blue.smarthomefunc.activity.SearchMusicActivity">
+
+    <include
+        layout="@layout/include_app_bar"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/padding_top"
+        android:paddingBottom="@dimen/margin_10"
+        android:background="@color/colorPrimary">
+
+        <ImageButton
+            android:id="@+id/search_back"
+            android:layout_width="0dp"
+            android:layout_height="18dp"
+            android:layout_weight="0.6"
+            android:background="@color/colorPrimary"
+            android:focusable="true"
+            android:src="@drawable/play_main_back_selector"/>
+
+        <com.android.blue.smarthomefunc.view.EditTextDelete
+            android:id="@+id/search_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:hint="@string/search_et_music_name"
+            android:textColor="@color/white"
+            android:textColorHint="@color/gray"
+            android:textSize="15sp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:background="@drawable/edit_search_music"
+            />
+
+        <TextView
+            android:id="@+id/search_tv"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/search_music"
+            android:textColor="@color/selector_textview_oneline_music_detail"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:textSize="15sp" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/music_bar">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/search_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <include
+                layout="@layout/include_loading"
+                android:visibility="gone" />
+
+            <include
+                layout="@layout/include_load_fail"
+                android:visibility="gone" />
+
+        </FrameLayout>
+        <include
+            layout="@layout/include_music_play_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
+    </FrameLayout>
+</LinearLayout>

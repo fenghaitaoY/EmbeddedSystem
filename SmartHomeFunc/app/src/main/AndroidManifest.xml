@@ -42,14 +42,17 @@
         <activity android:name=".activity.BaseActivity" />
         <activity
             android:name=".activity.LoginActivity"
-            android:theme="@style/Translucent" />
+            android:theme="@style/Translucent"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.RegisterActivity"
-            android:theme="@style/Translucent" />
+            android:theme="@style/Translucent"
+            android:screenOrientation="portrait" />
         <!-- 输入法将ottomNavigationView 顶上去设置　inputmode -->
         <activity
             android:name=".activity.LoginSuccessActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="portrait"/>
 
         <provider
             android:name=".database.BluetoothDeviceContentProvider"
@@ -83,7 +86,8 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.SplashActivity">
+        <activity android:name=".activity.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -93,21 +97,30 @@
         <activity
             android:name=".activity.LocalMusicActivity"
             android:label="@string/title_activity_local_music"
-            android:theme="@style/AppTheme" />
-        <activity android:name=".activity.PlayingMainActivity" />
+            android:theme="@style/AppTheme"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.PlayingMainActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activity.OnlineSongListActivity"
-            android:label="" />
-        <activity android:name=".activity.OnlineMusicActivity" />
+            android:label=""
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activity.OnlineMusicActivity"
+            android:screenOrientation="portrait"/>
 
         <receiver
             android:name=".receiver.StatusBarReceiver"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.android.blue.STATUS_BAR_ACTIONS"/>
+                <action android:name="com.android.blue.STATUS_BAR_ACTIONS" />
             </intent-filter>
         </receiver>
+
+        <!--解决editText 进入界面自动获取焦点　 android:windowSoftInputMode="adjustUnspecified|stateHidden"-->
+        <activity android:name=".activity.SearchMusicActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

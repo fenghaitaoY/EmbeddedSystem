@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.activity.LocalMusicActivity;
 import com.android.blue.smarthomefunc.activity.OnlineSongListActivity;
+import com.android.blue.smarthomefunc.activity.SearchMusicActivity;
 import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.Music;
@@ -201,6 +202,9 @@ public class MusicFragment extends Fragment implements OnPlayerEventListener, Se
         switch (view.getId()) {
             case R.id.music_toolbar_search:
                 LogUtils.i("toolbar search");
+                Intent search = new Intent(getActivity(), SearchMusicActivity.class);
+                search.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                startActivity(search);
                 break;
             case R.id.music_bar_local:
                 LogUtils.i(" local music");
