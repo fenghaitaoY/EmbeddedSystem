@@ -1,0 +1,125 @@
+Gson　
+
+fromJson() :实现反序列化
+toJson() : 实现序列化
+
+基本数据类型生成
+Gson　gson = new Gson();
+String jsonNumber = gson.toJson(100);
+String jsonBoolean = gson.toJson(false);
+String jsonString = gson.toJson("String");
+
+对于普通Ｊａｖａ类
+public class User{
+	public String name;
+	public int age;
+}
+
+生成JSON
+Gson gson = new Gson();
+User user = new User("Sunny", 24);
+String jsonObject = gson.toJson(user); //{"name":"Sunny", "age":24}
+
+解析JSON
+Gson gson = new Gson();
+String jsonString = "{\"name\":\"Sunny\", \"age\":24}";
+User user = gson.fromJson(jsonString, User.class);
+//解析对象　参数对应解析类
+
+泛型
+数组
+String[] strings = gson.fromJson(jsonArray, String[].class);
+
+List
+Gson 提供TypeToken来实现对泛型的支持，　TypeToken帮助我们捕获像List这样的泛型信息，
+Java编译器会把捕获到的泛型信息编译到这个匿名内部类里，　然后运行时就可以被getType（）方法用反射API提取到, 也就是转成.class
+List<String> stringList = gson.fromJson(jsonArray, new TypeToken<List<String>>(){}.getType())
+
+注解
+
+@Expose　注解：　区分实体中不想被序列化的属性
+@SerializeName　注解：定义属性序列化后的名称
+
+
+Gson解析复杂JSON数据
+1,JsonParse 解析类  getAsJsonObject 和getAsJsonArray
+2,JsonElement 抽象类，代表JSON串中的某一个元素
+
+
+泛型类
+	List Set Map
+
+public class Gengeric<T>{ //T E K V 表示泛型
+	private T key; //类型由T决定
+
+}
+
+
+注解
+
+自定义注解
+元注解
+@Target({ElementType.METHOD,ElementType.TYPE})　
+//注解作用域，　
+//METHOD-方法声明, CONSTRUCTOR-构造方法声明, FIELD-字段声明, LOCAL_VARIABLE-局部变量声明, PACKAGE－包声明，　PARAMETER-参数声明, TYPE-类接口
+
+@Retention(RetentionPolicy.RUNTIME)
+//生命周期
+//RUNTIME－运行时存在，　可以通过反射读取，　SOURCE- 源码显示，编译时丢失，　CLASS-编译记录到class中，　运行时忽略
+
+@Inherited　
+//标识性的元注解，　允许子注解继承它
+
+@Documented　
+//生成javadoc时包含注解
+
+public @interface Description {
+    String desc(); //非方法　只是一个成员变量
+    String author();
+    int age() default 18; //成员变量可以用default指定默认值
+}
+
+１，成员类型受限制，　合法的类型包括基本数据类型，String Class　Annotation Enumeration
+２，如果注解只有一个成员，　则成员取名为value()，　使用时可以忽略成员名和赋值号
+３，注解类可以没有成员，没有成员的注解称为标识注解
+
+使用自定义注解：
+@<注解名>(<成员名１>＝<成员值１>，　<成员名２>＝<成员值２>,...)
+
+@Description(desc="fht", author="hhh", age=11)
+public String color(){
+	return "red";
+}
+
+
+解析注解：
+通过反射获取类，函数或成员上的运行时注解信息，从而实现动态控制程序运行时的逻辑
+
+类解析：
+Class class = Class.forName("com.test.child");
+boolean isExist = class.isAnnotationPresent(Description.class);
+if(isExist){
+	Description d = class.getAnnotation(Description.class);
+	System.out.println(d.value());
+}
+
+方法解析
+Method[] ms = class.getMethods();
+for(Method m: ms){
+	boolean isExist = m.isAnnotation(Description.class);
+	if(isExist){
+		Description d = m.getAnnotation(Description.class);
+		System.out.println(d.value());
+	}
+}
+
+
+
+@Override 覆盖
+@Deprecated 弃用
+
+按照运行时划分：
+源码注解－＞编译时注解－＞运行时注解
+源码注解：　只在源码中存在，　编译成.class文件不存在
+编译时注解：在源码和.class文件中存在，　像@Override/@Deprecated/@SuppressWarnings
+运行时注解：在运行时还起作用，甚至影响运行逻辑的注解　@Autowired
