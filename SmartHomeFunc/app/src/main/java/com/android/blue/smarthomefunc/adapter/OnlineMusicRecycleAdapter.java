@@ -14,9 +14,13 @@ import android.widget.TextView;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
+import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.model.OnlineMusic;
 
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * 排行榜榜单
@@ -36,7 +40,7 @@ public class OnlineMusicRecycleAdapter extends RecyclerView.Adapter<OnlineMusicR
 
     private List<OnlineMusic> mData;
 
-
+    private boolean isExist= false;
 
     public OnlineMusicRecycleAdapter(Context context, List<OnlineMusic> data){
         mData = data;
@@ -62,6 +66,8 @@ public class OnlineMusicRecycleAdapter extends RecyclerView.Adapter<OnlineMusicR
 
         holder.title.setText(mData.get(position).getTitle());
         holder.artist.setText(mData.get(position).getArtist_name());
+
+
 
 
         holder.gridView.setAdapter(adapter);
@@ -143,8 +149,21 @@ public class OnlineMusicRecycleAdapter extends RecyclerView.Adapter<OnlineMusicR
 
         // 子布局的显示，隐藏　在adapter中刷新不能全部刷新，会导致有些条目不该显示，实际显示，　用onMoreClick
         //　回调　notifyDataSetChanged　更新列表, 用全局变量存储需要显示的item，在更新后显示,解决上述问题
+        //判断当前要显示小菜单的歌曲是否本地已经下载
+        for (Music localMusic : AppCache.get().getMusicList()){
+            if (mData.get(needShowSecFuncPosition).getTitle().equals(localMusic.getTitle()) &&
+                    mData.get(needShowSecFuncPosition).getArtist_name().equals(localMusic.getArtist())){
+                isExist = true;
+                break;
+            }else{
+                isExist = false;
+            }
+        }
+
+
         if (show && position == needShowSecFuncPosition){
             holder.gridView.setVisibility(View.VISIBLE);
+            adapter.updateDownloadSatus(isExist);
         }else {
             holder.gridView.setVisibility(View.GONE);
         }
@@ -174,23 +193,24 @@ public class OnlineMusicRecycleAdapter extends RecyclerView.Adapter<OnlineMusicR
     }
 
     class MusicViewHolder extends RecyclerView.ViewHolder{
-        private View redLineView;
-        private ImageButton addMusic;
-        private TextView title;
-        private TextView artist;
-        private ImageButton detail;
-        private LinearLayout item;
-        private GridView gridView;
+        @BindView(R.id.recycle_item_music_red_line)
+        View redLineView;
+        @BindView(R.id.recycle_item_music_add_playing)
+        ImageButton addMusic;
+        @BindView(R.id.recycle_item_music_title)
+        TextView title;
+        @BindView(R.id.recycle_item_music_artist)
+        TextView artist;
+        @BindView(R.id.recycle_item_music_ellipsis_detail)
+        ImageButton detail;
+        @BindView(R.id.recycle_item_music_layout)
+        LinearLayout item;
+        @BindView(R.id.online_grid_detail)
+        GridView gridView;
 
         public MusicViewHolder(View view){
             super(view);
-            redLineView = view.findViewById(R.id.recycle_item_music_red_line);
-            addMusic = view.findViewById(R.id.recycle_item_music_add_playing);
-            title = view.findViewById(R.id.recycle_item_music_title);
-            artist = view.findViewById(R.id.recycle_item_music_artist);
-            detail = view.findViewById(R.id.recycle_item_music_ellipsis_detail);
-            item = view.findViewById(R.id.recycle_item_music_layout);
-            gridView = view.findViewById(R.id.online_grid_detail);
+            ButterKnife.bind(this, view);
         }
     }
 }

@@ -15,6 +15,9 @@ import com.android.blue.smarthomefunc.view.AlwaysMarqueeTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by root on 1/4/18.
  */
@@ -47,13 +50,8 @@ public class GrideAdapter extends BaseAdapter {
     public View getView(int position, View view, ViewGroup viewGroup) {
         ViewHolder holder;
         if (view == null){
-            holder = new ViewHolder();
             view = LayoutInflater.from(mContext).inflate(R.layout.gridview_item, null);
-            holder.mModeName = view.findViewById(R.id.grid_mode_name);
-            holder.mDeviceName = view.findViewById(R.id.grid_device_name);
-            holder.mDeviceAddress = view.findViewById(R.id.grid_device_address);
-            holder.mDeviceSwitch = view.findViewById(R.id.grid_switch);
-            holder.mDeviceRssi = view.findViewById(R.id.grid_device_rssi);
+            holder = new ViewHolder(view);
             view.setTag(holder);
         }else{
             holder = (ViewHolder) view.getTag();
@@ -76,11 +74,20 @@ public class GrideAdapter extends BaseAdapter {
 
 
     class ViewHolder {
+        @BindView(R.id.grid_mode_name)
         AlwaysMarqueeTextView mModeName;
+        @BindView(R.id.grid_device_name)
         TextView mDeviceName;
+        @BindView(R.id.grid_device_address)
         TextView mDeviceAddress;
+        @BindView(R.id.grid_device_rssi)
         TextView mDeviceRssi;
+        @BindView(R.id.grid_switch)
         SwitchCompat mDeviceSwitch;
+
+        public ViewHolder(View view){
+            ButterKnife.bind(this, view);
+        }
     }
 
 }

@@ -131,7 +131,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
     private int recyclerHeight;
     private int viewHeight;
 
-    PlayModePopupWindow popupWindow ;
+    PlayModePopupWindow popupWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -253,31 +253,31 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
 
     }
 
-    private void updateSongListTime(){
+    private void updateSongListTime() {
         //更新时间
-        if (mOnlineMusicList == null){
+        if (mOnlineMusicList == null) {
             updateTimeTv.setVisibility(View.GONE);
-        }else {
+        } else {
             updateTimeTv.setVisibility(View.VISIBLE);
             updateTimeTv.setText(getString(R.string.song_list_update_time, mOnlineMusicList.getBillboard().getUpdate_date()));
         }
     }
 
-    private void updatePlayMode(){
+    private void updatePlayMode() {
         int mode = Preferences.getPlayMode();
         PlayModeEnum modeEnum = PlayModeEnum.valueOf(mode);
-        switch (modeEnum){
+        switch (modeEnum) {
             case LOOP: //顺序
-                    choiceModeIv.setImageResource(R.drawable.online_music_play_mode_queue);
-                    choiceModeTv.setText(R.string.play_mode_queue);
+                choiceModeIv.setImageResource(R.drawable.online_music_play_mode_queue);
+                choiceModeTv.setText(R.string.play_mode_queue);
                 break;
             case SHUFFLE: //随机
-                    choiceModeIv.setImageResource(R.drawable.online_music_play_mode_random);
-                    choiceModeTv.setText(R.string.play_mode_random);
+                choiceModeIv.setImageResource(R.drawable.online_music_play_mode_random);
+                choiceModeTv.setText(R.string.play_mode_random);
                 break;
             case SINGLE: //单曲
-                    choiceModeIv.setImageResource(R.drawable.online_music_play_mode_one);
-                    choiceModeTv.setText(R.string.play_mode_one_loop);
+                choiceModeIv.setImageResource(R.drawable.online_music_play_mode_one);
+                choiceModeTv.setText(R.string.play_mode_one_loop);
                 break;
             default:
                 break;
@@ -332,7 +332,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
         });
     }
 
-    @OnClick({R.id.music_bar_playing, R.id.music_bar_next, R.id.music_bar_list, R.id.music_bar,R.id.detail_tv,R.id.choice_play_mode_layout})
+    @OnClick({R.id.music_bar_playing, R.id.music_bar_next, R.id.music_bar_list, R.id.music_bar, R.id.detail_tv, R.id.choice_play_mode_layout})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.music_bar_playing:
@@ -377,20 +377,20 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
             case R.id.choice_play_mode_layout:
                 LogUtils.i("play mode layout");
 
-                if (popupWindow == null){
-                    popupWindow =  new PlayModePopupWindow(this);
+                if (popupWindow == null) {
+                    popupWindow = new PlayModePopupWindow(this);
                 }
-                popupWindow.setContentView(LayoutInflater.from(this).inflate(R.layout.popup_window_play_mode,null));
+                popupWindow.setContentView(LayoutInflater.from(this).inflate(R.layout.popup_window_play_mode, null));
                 popupWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
                 popupWindow.setFocusable(true);
                 popupWindow.setBackgroundDrawable(new ColorDrawable(0x00000000));
                 popupWindow.setOutsideTouchable(true);
                 popupWindow.setOnClickChangePlayMode(this);
-                if (popupWindow.isShowing()){
+                if (popupWindow.isShowing()) {
                     popupWindow.dismiss();
 
-                }else {
+                } else {
                     choiceModeArrow.setImageResource(R.drawable.online_music_play_mode_arrow_up);
                     popupWindow.showAsDropDown(view, 90, 40);
 
@@ -538,6 +538,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
 
     /**
      * PopupWindow listener
+     *
      * @param value
      */
     @Override
@@ -556,23 +557,23 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
 
     /**
      * 更多　事件回调监听　开始
+     *
      * @param position
      */
     @Override
     public void onDownloadOnlineMusic(int position) {
-        LogUtils.i(" down load music title = "+mData.get(position).getTitle());
+        LogUtils.i(" down load music title = " + mData.get(position).getTitle());
         download(mData.get(position));
     }
 
-    private void download(OnlineMusic music){
-        new DownloadOnlineMusic(this, music){
+    private void download(final OnlineMusic music) {
+        new DownloadOnlineMusic(this, music) {
 
 
             @Override
             public void onPrepare() {
                 LogUtils.i("");
                 Toast.makeText(getApplicationContext(), "准备下载．．．", Toast.LENGTH_SHORT).show();
-
             }
 
             @Override
@@ -588,19 +589,20 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
         }.execute();
     }
 
-    private void scanMusic(){
+    private void scanMusic() {
         PlayService service = AppCache.get().getPlayService();
-        if (service != null){
+        if (service != null) {
             service.updateMusicList(null);
         }
     }
+
     @Override
     public void onSharedMusicFromMore(int position) {
         share(mData.get(position));
     }
 
-    private void share( OnlineMusic onlineMusic){
-        new ShareOnlineMusic(this, onlineMusic.getTitle(), onlineMusic.getSong_id()){
+    private void share(OnlineMusic onlineMusic) {
+        new ShareOnlineMusic(this, onlineMusic.getTitle(), onlineMusic.getSong_id()) {
             @Override
             public void onPrepare() {
 

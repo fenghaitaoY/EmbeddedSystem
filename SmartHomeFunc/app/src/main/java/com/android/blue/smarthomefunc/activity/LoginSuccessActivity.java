@@ -1,5 +1,6 @@
 package com.android.blue.smarthomefunc.activity;
 
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -72,6 +73,7 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_success);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC); //设置基于BASE的activity 音量键是设置音乐音量
 
         bottomNavi.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         //去除BottomNavigationView count>3时，切换viewpage滑动效果

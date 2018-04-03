@@ -21,6 +21,9 @@ import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.service.PlayService;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * ListView 更换为RecyclerView
  *
@@ -65,22 +68,7 @@ public class LocalMusicAdapter extends BaseAdapter {
         View convertView = view;
         if (convertView == null){
             convertView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.local_music_item_layout, viewGroup, false);
-            holder = new ViewHolder();
-            holder.add_bt = convertView.findViewById(R.id.add_playing_local);
-            holder.title = convertView.findViewById(R.id.local_item_title);
-            holder.artist = convertView.findViewById(R.id.local_item_artist);
-            holder.ellipsis_detial = convertView.findViewById(R.id.ellipsis_detail);
-            holder.ellipsis_child_detial = convertView.findViewById(R.id.ellipsis_child_detail);
-            holder.mDefault = convertView.findViewById(R.id.item_music_empty_layout);
-            holder.mSelect = convertView.findViewById(R.id.item_music_select_layout);
-
-            holder.cover = convertView.findViewById(R.id.local_item_cover);
-            holder.childTitle = convertView.findViewById(R.id.local_item_child_title);
-            holder.heart = convertView.findViewById(R.id.local_item_heart);
-            holder.share = convertView.findViewById(R.id.local_item_share);
-            holder.download = convertView.findViewById(R.id.local_item_down);
-            holder.gridView = convertView.findViewById(R.id.online_grid_detail);
-
+            holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }else {
             holder = (ViewHolder)convertView.getTag();
@@ -228,20 +216,36 @@ public class LocalMusicAdapter extends BaseAdapter {
         }
     }
 
-    private static class ViewHolder {
-        private ImageButton add_bt;
-        private TextView title;
-        private TextView artist;
-        private ImageButton ellipsis_detial;
-        private ImageButton ellipsis_child_detial;
-        private ImageView cover;
-        private TextView childTitle;
-        private ImageView heart;
-        private ImageView share;
-        private ImageView download;
-        private GridView gridView;
-
+    class ViewHolder {
+        @BindView(R.id.add_playing_local)
+        ImageButton add_bt;
+        @BindView(R.id.local_item_title)
+        TextView title;
+        @BindView(R.id.local_item_artist)
+        TextView artist;
+        @BindView(R.id.ellipsis_detail)
+        ImageButton ellipsis_detial;
+        @BindView(R.id.ellipsis_child_detail)
+        ImageButton ellipsis_child_detial;
+        @BindView(R.id.local_item_cover)
+        ImageView cover;
+        @BindView(R.id.local_item_child_title)
+        TextView childTitle;
+        @BindView(R.id.local_item_heart)
+        ImageView heart;
+        @BindView(R.id.local_item_share)
+        ImageView share;
+        @BindView(R.id.local_item_down)
+        ImageView download;
+        @BindView(R.id.online_grid_detail)
+        GridView gridView;
+        @BindView(R.id.item_music_empty_layout)
         RelativeLayout mDefault;
+        @BindView(R.id.item_music_select_layout)
         LinearLayout mSelect;
+
+        public ViewHolder(View view){
+            ButterKnife.bind(this, view);
+        }
     }
 }

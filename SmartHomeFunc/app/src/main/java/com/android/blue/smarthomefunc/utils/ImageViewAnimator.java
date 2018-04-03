@@ -19,7 +19,7 @@ public class ImageViewAnimator {
             //初始动画
             coverAnimator = ObjectAnimator.ofFloat(iv, "rotation", 0f, 359f);
             LinearInterpolator interpolator = new LinearInterpolator(); //设置匀速旋转
-            coverAnimator.setDuration(6000);
+            coverAnimator.setDuration(8000);
             coverAnimator.setInterpolator(interpolator);
             coverAnimator.setRepeatCount(-1);
             coverAnimator.setRepeatMode(ValueAnimator.RESTART);

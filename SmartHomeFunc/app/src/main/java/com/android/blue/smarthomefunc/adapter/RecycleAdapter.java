@@ -13,6 +13,9 @@ import com.android.blue.smarthomefunc.entity.BleDeviceEntity;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by root on 1/9/18.
  */
@@ -73,16 +76,18 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHo
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.recycle_item_name)
         TextView name;
+        @BindView(R.id.recycle_item_address)
         TextView address;
+        @BindView(R.id.recycle_item_rssi)
         TextView rssi;
+        @BindView(R.id.recycle_item_layout)
         LinearLayout itemView;
+
         public MyViewHolder(View view) {
             super(view);
-            name = view.findViewById(R.id.recycle_item_name);
-            address = view.findViewById(R.id.recycle_item_address);
-            rssi = view.findViewById(R.id.recycle_item_rssi);
-            itemView = view.findViewById(R.id.recycle_item_layout);
+            ButterKnife.bind(this, view);
         }
     }
 }

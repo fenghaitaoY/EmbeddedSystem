@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -161,6 +163,7 @@ public class SearchMusicActivity extends BaseActivity implements OnItemClickList
     private void initPlayingMusicBar() {
         if (getPlayService().getPlayingMusic() != null) {
             musicBarSeekBar.setMax((int) getPlayService().getPlayingMusic().getDuration());
+            musicBarSeekBar.setProgress((int) getPlayService().getCurrentPosition());
             musicTitle.setText(getPlayService().getPlayingMusic().getTitle());
             musicArtist.setText(getPlayService().getPlayingMusic().getArtist());
             musicBarCover.setImageBitmap(MusicCoverLoaderUtils.getInstance().loadThumbnail(getPlayService().getPlayingMusic()));
@@ -171,7 +174,7 @@ public class SearchMusicActivity extends BaseActivity implements OnItemClickList
     private void searchMusic(String songName) {
         HttpClient.searchMusic(songName, new HttpCallback<SearchMusic>() {
             @Override
-            public void onSuccess(SearchMusic searchMusic) {
+            public void onSuccess(final SearchMusic searchMusic) {
                 if (searchMusic == null || searchMusic.getSong() == null) {
                     searchFailTv.setText(R.string.search_none);
                     ViewUtils.changViewState(searchRecyclerView, lvLoading, lvLoadFail, LoadStateEnum.LOAD_FAIL);
@@ -184,9 +187,10 @@ public class SearchMusicActivity extends BaseActivity implements OnItemClickList
                     return;
                 }
 
-                ViewUtils.changViewState(searchRecyclerView, lvLoading, lvLoadFail, LoadStateEnum.LOAD_SUCCESS);
                 mSongData.clear();
                 mSongData.addAll(searchMusic.getSong());
+                ViewUtils.changViewState(searchRecyclerView, lvLoading, lvLoadFail, LoadStateEnum.LOAD_SUCCESS);
+
 
                 AppCache.get().getSearchMusicList().clear();
                 AppCache.get().getSearchMusicList().addAll(searchMusic.getSong());
@@ -251,6 +255,7 @@ public class SearchMusicActivity extends BaseActivity implements OnItemClickList
                 //点击搜索
                 if (!TextUtils.isEmpty(searchEt.getText())) {
                     hideKeyboard();
+                    ViewUtils.changViewState(searchRecyclerView, lvLoading, lvLoadFail, LoadStateEnum.LOADING);
                     searchMusic(searchEt.getText().toString());
                 }
                 break;

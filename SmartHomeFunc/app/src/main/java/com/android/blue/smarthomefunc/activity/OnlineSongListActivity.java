@@ -126,6 +126,7 @@ public class OnlineSongListActivity extends BaseActivity implements ViewPager.On
     private void initPlayingMusicBar() {
         if (getPlayService().getPlayingMusic() != null) {
             mSeekBar.setMax((int) getPlayService().getPlayingMusic().getDuration());
+            mSeekBar.setProgress((int) getPlayService().getCurrentPosition());
             mTitle.setText(getPlayService().getPlayingMusic().getTitle());
             mArtist.setText(getPlayService().getPlayingMusic().getArtist());
             mMusicBarCover.setImageBitmap(MusicCoverLoaderUtils.getInstance().loadThumbnail(getPlayService().getPlayingMusic()));

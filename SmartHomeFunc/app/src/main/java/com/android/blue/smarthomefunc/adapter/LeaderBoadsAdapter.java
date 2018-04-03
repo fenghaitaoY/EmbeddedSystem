@@ -19,6 +19,9 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by fht on 3/13/18.
  */
@@ -51,23 +54,13 @@ public class LeaderBoadsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup viewGroup) {
+    public View getView(int position, View convertView, ViewGroup viewGroup) {
         LogUtils.i("-----fht getView---position="+position+" type="+mSongLists.get(position).getType());
         LeaderboadsHolder mHolder;
         mContext = viewGroup.getContext();
-        View convertView = view;
         if (convertView == null) {
             convertView = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.online_songlist_item_layout, viewGroup, false);
-            mHolder = new LeaderboadsHolder();
-            mHolder.mSonglistCover = convertView.findViewById(R.id.song_list_item_cover);
-            mHolder.mSonglistMusic1 = convertView.findViewById(R.id.song_list_item_music1);
-            mHolder.mSonglistMusic2 = convertView.findViewById(R.id.song_list_item_music2);
-            mHolder.mSonglistMusic3 = convertView.findViewById(R.id.song_list_item_music3);
-
-            mHolder.mMusicCount1 = convertView.findViewById(R.id.song_list_item_music1_count);
-            mHolder.mMusicCount2 = convertView.findViewById(R.id.song_list_item_music2_count);
-            mHolder.mMusicCount3 = convertView.findViewById(R.id.song_list_item_music3_count);
-            mHolder.mBillboardName = convertView.findViewById(R.id.song_list_item_billboard_name);
+            mHolder = new LeaderboadsHolder(convertView);
 
             convertView.setTag(mHolder);
 
@@ -172,15 +165,26 @@ public class LeaderBoadsAdapter extends BaseAdapter {
     }
 
 
-    private static class LeaderboadsHolder {
-        private ImageView mSonglistCover;
-        private TextView mSonglistMusic1;
-        private TextView mSonglistMusic2;
-        private TextView mSonglistMusic3;
-        private TextView mMusicCount1;
-        private TextView mMusicCount2;
-        private TextView mMusicCount3;
-        private TextView mBillboardName;
+    class LeaderboadsHolder {
+        @BindView(R.id.song_list_item_cover)
+        ImageView mSonglistCover;
+        @BindView(R.id.song_list_item_music1)
+        TextView mSonglistMusic1;
+        @BindView(R.id.song_list_item_music2)
+        TextView mSonglistMusic2;
+        @BindView(R.id.song_list_item_music3)
+        TextView mSonglistMusic3;
+        @BindView(R.id.song_list_item_music1_count)
+        TextView mMusicCount1;
+        @BindView(R.id.song_list_item_music2_count)
+        TextView mMusicCount2;
+        @BindView(R.id.song_list_item_music3_count)
+        TextView mMusicCount3;
+        @BindView(R.id.song_list_item_billboard_name)
+        TextView mBillboardName;
 
+        public LeaderboadsHolder(View view){
+            ButterKnife.bind(this, view);
+        }
     }
 }

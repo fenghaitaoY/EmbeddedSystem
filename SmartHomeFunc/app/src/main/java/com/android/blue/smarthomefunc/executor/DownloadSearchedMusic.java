@@ -3,6 +3,7 @@ package com.android.blue.smarthomefunc.executor;
 import android.app.Activity;
 import android.text.TextUtils;
 
+import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.http.HttpCallback;
 import com.android.blue.smarthomefunc.http.HttpClient;
 import com.android.blue.smarthomefunc.model.DownloadInfo;
@@ -29,7 +30,18 @@ public abstract class DownloadSearchedMusic extends DownloadMusic {
     protected void download() {
         final String title = mSong.getTitle();
         final String artist = mSong.getArtist_name();
+        //下载歌词
+        String lrcFileName = FileUtils.getLrcFileName(artist, title);
+        File lrcFile = new File(FileUtils.getLrcDir()+lrcFileName);
+        if (!lrcFile.exists()){
+            downloadLrc(mSong.getSongid(), lrcFileName);
+        }
 
+        //下载封面
+        final String albumFileName = FileUtils.getAlbumFileName(artist, title);
+        final File albumFile = new File(FileUtils.getAlbumDir(), albumFileName);
+
+        //获取歌曲链接
         HttpClient.getMusicDownloadInfo(mSong.getSongid(), new HttpCallback<DownloadInfo>() {
             @Override
             public void onSuccess(DownloadInfo downloadInfo) {
@@ -37,8 +49,9 @@ public abstract class DownloadSearchedMusic extends DownloadMusic {
                     onFail(null);
                     return;
                 }
-
-                downloadMusic(downloadInfo.getBitrate().getFile_link(), artist, title, null);
+                LogUtils.i("onSuccess ");
+                downloadAlbum(downloadInfo, albumFileName);
+                downloadMusic(downloadInfo.getBitrate().getFile_link(), artist, title, albumFile.getPath());
                 onExecuteSuccess(null);
             }
 
@@ -48,10 +61,19 @@ public abstract class DownloadSearchedMusic extends DownloadMusic {
             }
         });
 
-        String lrcFileName = FileUtils.getLrcFileName(artist, title);
-        File lrcFile = new File(FileUtils.getLrcDir()+lrcFileName);
-        if (!lrcFile.exists()){
-            downloadLrc(mSong.getSongid(), lrcFileName);
+    }
+
+    private void downloadAlbum(DownloadInfo downloadInfo, String albumFileName){
+        if (downloadInfo != null) {
+            String imageUrl = downloadInfo.getSonginfo().getPic_big();
+            if (TextUtils.isEmpty(imageUrl)) {
+                imageUrl = downloadInfo.getSonginfo().getPic_small();
+            }
+            LogUtils.i( " imageUrl " + imageUrl);
+            if (!TextUtils.isEmpty(imageUrl)) {
+                LogUtils.i("down load album");
+                HttpClient.downloadFile(imageUrl, FileUtils.getAlbumDir(), albumFileName, null);
+            }
         }
     }
 
