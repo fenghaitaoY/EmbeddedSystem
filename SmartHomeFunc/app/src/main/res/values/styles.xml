@@ -32,7 +32,7 @@
 
 
     <style name="MyToolbar.Title" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
-        <item name="textSize">20sp</item>
+        <item name="textSize">12sp</item>
         <item name="textColor">@color/white</item>
     </style>
     <attr name="playBarBackground" format="reference"/>

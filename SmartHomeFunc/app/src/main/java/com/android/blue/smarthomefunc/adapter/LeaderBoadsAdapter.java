@@ -83,8 +83,10 @@ public class LeaderBoadsAdapter extends BaseAdapter {
             HttpClient.getSongListInfo(info.getType(), 3, 0, new HttpCallback<OnlineMusicList>() {
                 @Override
                 public void onSuccess(OnlineMusicList onlineMusicList) {
-                    parse(onlineMusicList, info);
-                    setData(info,holder);
+                    if (onlineMusicList != null) {
+                        parse(onlineMusicList, info);
+                        setData(info, holder);
+                    }
                 }
 
                 @Override
@@ -99,16 +101,6 @@ public class LeaderBoadsAdapter extends BaseAdapter {
     }
 
     private void parse(OnlineMusicList onlineMusicList, SongListInfo songListInfo){
-        LogUtils.i("url "+onlineMusicList.getBillboard().getPic_s260()+
-                " music1 title:"+ onlineMusicList.getSong_list().get(0).getTitle()+
-                " ,album :"+onlineMusicList.getSong_list().get(0).getAlbum_title()+
-                ", artist:"+onlineMusicList.getSong_list().get(0).getArtist_name()+
-                ", lrclink:"+onlineMusicList.getSong_list().get(0).getLrclink()+
-                ", pic big:"+onlineMusicList.getSong_list().get(0).getPic_big()+
-                ", pic small:"+onlineMusicList.getSong_list().get(0).getPic_small()+
-                ", song id:"+onlineMusicList.getSong_list().get(0).getSong_id()+
-                ", ting uid:"+onlineMusicList.getSong_list().get(0).getTing_uid()+
-                ", billboard name :"+ onlineMusicList.getBillboard().getName());
 
         List<OnlineMusic> musics = onlineMusicList.getSong_list();
         songListInfo.setCoverUrl(onlineMusicList.getBillboard().getPic_s640());

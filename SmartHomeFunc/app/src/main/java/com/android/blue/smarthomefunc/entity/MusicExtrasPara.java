@@ -6,6 +6,7 @@ package com.android.blue.smarthomefunc.entity;
 
 public class MusicExtrasPara {
     public static String MUSIC_LIST_TYPE = "music_list_type";
+    public static String SINGER ="singer";
     public static String TING_UID = "ting_uid";
     public static String MUSIC = "music";
 }

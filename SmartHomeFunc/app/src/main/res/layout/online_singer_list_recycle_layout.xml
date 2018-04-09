@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:id="@+id/singer_relative"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?android:attr/selectableItemBackground"
+        >
+
+    <com.android.blue.smarthomefunc.view.CircleImageView
+        android:id="@+id/singer_recycler_cover"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="@dimen/margin_20"
+        android:layout_centerVertical="true"
+        android:src="@drawable/default_cover"
+        />
+
+    <TextView
+        android:id="@+id/singer_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/singer_recycler_cover"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_5"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:text="@string/null_music"/>
+
+    <TextView
+        android:id="@+id/singer_other"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/singer_recycler_cover"
+        android:layout_below="@id/singer_name"
+        android:layout_marginStart="@dimen/margin_10"
+        android:layout_marginTop="@dimen/margin_5"
+        android:textSize="13sp"
+        android:text="@string/null_artist"
+        />
+    </RelativeLayout>
+</FrameLayout>

@@ -1,0 +1,28 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.android.blue.smarthomefunc.fragment.SingersFragment">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/singers_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+        <include
+            layout="@layout/include_loading"
+            android:visibility="gone" />
+
+        <include
+            layout="@layout/include_load_fail"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+
+</FrameLayout>

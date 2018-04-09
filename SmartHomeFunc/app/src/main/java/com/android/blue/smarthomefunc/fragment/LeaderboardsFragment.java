@@ -125,6 +125,9 @@ public class LeaderboardsFragment extends Fragment implements AdapterView.OnItem
         LeaderBoadsAdapter adapter = new LeaderBoadsAdapter(mSongLists);
         mSongListView.setAdapter(adapter);
         mSongListView.setOnItemClickListener(this);
+        //listview 隐藏滚动条
+        mSongListView.setVerticalScrollBarEnabled(false);
+        mSongListView.setFastScrollEnabled(false);
 
     }
 

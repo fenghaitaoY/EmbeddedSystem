@@ -11,6 +11,7 @@ import com.android.blue.smarthomefunc.executor.DownloadMusicInfo;
 import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.model.OnlineMusic;
 import com.android.blue.smarthomefunc.model.SearchMusic;
+import com.android.blue.smarthomefunc.model.SingerArtistMusic;
 import com.android.blue.smarthomefunc.model.SongListInfo;
 import com.android.blue.smarthomefunc.service.PlayService;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
@@ -34,6 +35,8 @@ public class AppCache {
     private final List<SongListInfo> mSongListInfos = new ArrayList<>();
     //　搜索列表
     private final List<SearchMusic.Song> mSearchList = new ArrayList<>();
+    //歌手歌曲列表
+    private final List<SingerArtistMusic> mSingerArtistMusic = new ArrayList<>();
 
     private final LongSparseArray<DownloadMusicInfo> mDownloadList = new LongSparseArray<>();
     private Application mApplication;
@@ -85,6 +88,8 @@ public class AppCache {
     public LongSparseArray<DownloadMusicInfo> getDownloadList() {
         return mDownloadList;
     }
+
+    public List<SingerArtistMusic> getSingerArtistMusicList(){return mSingerArtistMusic; }
 
     public Application getApplication(){return mApplication;}
 }

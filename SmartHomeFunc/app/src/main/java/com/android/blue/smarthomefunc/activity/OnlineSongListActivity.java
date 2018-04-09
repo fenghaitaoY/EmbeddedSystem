@@ -21,6 +21,7 @@ import android.support.v7.widget.Toolbar;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.fragment.LeaderboardsFragment;
+import com.android.blue.smarthomefunc.fragment.SingersFragment;
 import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
 import com.android.blue.smarthomefunc.utils.ImageViewAnimator;
@@ -79,16 +80,14 @@ public class OnlineSongListActivity extends BaseActivity implements ViewPager.On
         }
 
         listFragments.add(LeaderboardsFragment.newInstance("songlist","online"));
-        listFragments.add(LeaderboardsFragment.newInstance("recommend","online"));
-        listFragments.add(LeaderboardsFragment.newInstance("singer","online"));
-        listFragments.add(LeaderboardsFragment.newInstance("sort","online"));
+        listFragments.add(SingersFragment.newInstance("singer","online"));
         mAdapter = new OnlineSongListPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mAdapter);
         //将viewpager　和TabLayout 绑定起来
         mTabLayout.setupWithViewPager(mViewPager);
 
-        mTabLayout.getTabAt(1).select();
-        mViewPager.setCurrentItem(1);
+        mTabLayout.getTabAt(0).select();
+        mViewPager.setCurrentItem(0);
         mCoverAnimate = new ImageViewAnimator();
     }
 

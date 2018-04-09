@@ -40,8 +40,9 @@
                 android:id="@+id/toolbar"
                 style="@style/NoSpaceActionBarTheme"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:contentInsetLeft="3dp"
+                android:layout_height="?android:actionBarSize"
+                android:minWidth="5dp"
+                app:contentInsetLeft="1dp"
                 app:layout_collapseMode="pin"
                 app:navigationIcon="@drawable/play_main_back_selector"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
