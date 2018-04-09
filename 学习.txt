@@ -123,3 +123,54 @@ for(Method m: ms){
 源码注解：　只在源码中存在，　编译成.class文件不存在
 编译时注解：在源码和.class文件中存在，　像@Override/@Deprecated/@SuppressWarnings
 运行时注解：在运行时还起作用，甚至影响运行逻辑的注解　@Autowired
+
+
+OkHttp 
+在OKHttp，每次网络请求就是一个Request，我们在Request里填写我们需要的url，header等其他参数，
+再通过Request构造出Call，Call内部去请求服务器，得到回复，并将结果告诉调用者。同时okhttp提供了同步和异步两种方式进行网络操作
+
+Get 请求
+OkHttpClient client = new OkHttpClient();
+//创建Request
+Request request = new Request.Builder()
+					.get()
+					.url(url)
+					.build();
+
+通过client发起请求
+client.newCall(request).enqueue(new Callback(){
+	@Override
+	public void onFailure(Call call , IOException e){
+
+	}
+
+	@Override
+	public void onResponse(Call call, Response response) throws IOException{
+		if(response.isSuccessful()){
+			//String str = response.body().string();
+		}
+	}
+})
+
+
+Post
+From　表单形式
+	OkHttpClient client = new OkHttpClient();
+	RequestBody body = new FormBody.Builder().add("usename", "xiaoyi").build();
+	Request request = new Request.Builder()
+						.post(body)
+						.url(url)
+						.build();
+	client.newCall(request).enqueue(new Callback() { });
+
+JSON 参数形式
+	OkHttpClient client = new OkHttpClient();
+	RequestBody body = RequestBody.create(MediaType.parse("application/json; charset=utf-8"), json);
+	Request request = new Request.Builder()
+						.post(body)
+						.url(url)
+						.build();
+	client.newCall(request).enqueue(new Callback(){ });
+
+
+executor －－－－－添加歌手列表播放执行 PlaySingerMusic
