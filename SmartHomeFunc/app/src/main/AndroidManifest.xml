@@ -43,7 +43,9 @@
         <activity
             android:name=".activity.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/Translucent" />
+            android:theme="@style/Translucent" >
+
+        </activity>
         <activity
             android:name=".activity.RegisterActivity"
             android:screenOrientation="portrait"

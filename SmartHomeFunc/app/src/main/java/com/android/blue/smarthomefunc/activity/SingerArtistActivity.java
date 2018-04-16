@@ -447,7 +447,7 @@ public class SingerArtistActivity extends BaseActivity implements OnItemClickLis
 
             @Override
             public void onPrepare() {
-                
+
             }
 
             @Override

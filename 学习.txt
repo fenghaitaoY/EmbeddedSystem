@@ -173,4 +173,58 @@ JSON 参数形式
 	client.newCall(request).enqueue(new Callback(){ });
 
 
-executor －－－－－添加歌手列表播放执行 PlaySingerMusic
+
+BLE 
+
+profile框架
+每个attribute属性被UUID唯一标识，　UUID是标准128-bit格式的ID用来唯一标识信息，　
+特征Characteristics　一个characteristics包含一个单独的value　和 多个用来描述characteristic值的descriptors，　一个characteristics可以被认为是一种类型，类似一个类
+
+描述符descriptor　用来描述一个characteristic的值
+服务service　是characteristic的集合
+
+
+
+			|------>Name Title
+			|
+			|			
+Profile------------>Service
+			|
+			|					|-------->Characteristic         |---->value[]
+			|					|								 |
+			|----->Service--------------->Characteristic ------------->Descriptor
+								|								 |
+								|-------->Characteristic         |---->Descriptor
+
+
+通用属性规范GATT GATTProfile是一个 通用规范 用于在BLE链路 发送和接收 被称为属性attributes的数据片
+蓝牙SIG定义了许多profile用于低功耗设备，　Profile是一个规范，　规范了设备如何工作在一个特定的应用场景；
+
+
+主从通信透传模块
+BLE 主透传协议模块,简称MTTM ,可以工作在透传模式TTM或者指令模式CM
+
+MTTM上电后，　处于待机模式SBM,此时处于空闲状态, 无睡眠, 需要用户通过ＡＴ指令控制模块连接从设备, 在成功与从设备建立链接后，　MTTM会自动查找从设备的透传通道，
+如果从设备属于ble从透传协议模块(简称STTM), MTTM默认进入透传模式, 否则默认进入指令模式
+
+透传模式下，　用户ＣＰＵ可以通过模块的通用串口与ＳＴＴＭ进行双向通讯，　从MTTM串口输入的数据转发到STTM，　并从STTM的串口输出; 从　从透传协议模块输入的数据将转发到
+主透传协议模块，　并从主透传协议模块串口输出，从而实现透明传输功能
+
+
+MCU <--tx rx-> MTTM      <----->  STTM <--tx rx--> MCU
+
+透传中的数据格式也是profile　结构：
+１，　profile　
+	一个标准的通信协议，　存在从机中，　蓝牙组织规定了一些标准的profile，　列如　HID OVER GATT，　防丢器　,心率计等，　每个profile中包含多个ｓｅｒｖｉｃｅ，
+	每个ｓｅｒｖｉｃｅ代表从机的一种能力
+２，service
+	可以理解为一个服务，　在ble从机中，　通过有多个服务，　例如电量信息服务，　系统信息服务等，　每个ｓｅｒｖｉｃｅ中包含多个characteristic特征值, 
+	每个characteristic特征值才是ble通信的主题，　比如当前电量是80%, 所以会通过电量的charactic特征值存在从机的profile里，　这样主机就可以通过
+	characteristic来读取这个数据
+３，characteristic
+	ble主从机的通信均是通过characteristic来实现, 可以理解为一个标签, 通过这个标签可以获取或者写入想要的内容
+4, UUID
+	统一识别码，　上面提到的service和characteristic，　都需要一个唯一的uuid来标识
+
+每个从机都会有一个叫做profile的东西存在，不管是simpleprofile，还是标准的防丢器profile，　他们都是由一系列service组成，　然后每个service包含了多个characteristic, 主机和从机之间的通信，　均是通过characteristic实现
+

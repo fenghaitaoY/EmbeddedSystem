@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/title_send_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_margin="@dimen/margin_10"
+        android:textSize="18sp"
+        android:textColor="@color/blue"
+        android:text="@string/null_music"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray"/>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_10"
+        android:textColorHint="#c5c5c5">
+
+        <EditText
+            android:id="@+id/et_send_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="15sp"
+            android:hint="@string/ble_connect_send_msg"
+            android:inputType="textPersonName"
+            android:background="@drawable/selector_bg_edit"
+            android:textCursorDrawable="@drawable/bg_input_cursor"
+            android:paddingTop="@dimen/margin_10"
+            android:paddingBottom="2dp"
+            />
+    </android.support.design.widget.TextInputLayout>
+
+
+</LinearLayout>

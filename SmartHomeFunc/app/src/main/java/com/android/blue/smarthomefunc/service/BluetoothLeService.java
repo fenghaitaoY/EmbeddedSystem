@@ -358,4 +358,13 @@ public class BluetoothLeService extends Service {
         return mBluetoothGatt.getServices();
     }
 
+    /**
+     * 获取已连接蓝牙列表
+     * @return
+     */
+    public List<BluetoothDevice> getConnectedDevices(){
+        if (mBluetoothManager == null) return null;
+        return mBluetoothManager.getConnectedDevices(BluetoothProfile.GATT_SERVER);
+    }
+
 }

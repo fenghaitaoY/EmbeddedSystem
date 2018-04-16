@@ -31,8 +31,11 @@
     <string name="device_add_dialog">添加</string>
     <string name="device_cancel_dialog">取消</string>
     <string name="toast_already_register_device">该设备已经添加，请选择其他设备</string>
+    <string name="unknown_service">无服务</string>
+    <string name="unknown_characteristic">无特征值</string>
+    <string name="ble_connect_loading">正在连接蓝牙设备　<xliff:g id="device">%1$s</xliff:g></string>
+    <string name="ble_connect_send_msg">请输入指令</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">
         Hello
         blank

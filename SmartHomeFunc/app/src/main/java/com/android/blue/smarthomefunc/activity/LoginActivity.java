@@ -32,7 +32,6 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);//注解
 
@@ -44,9 +43,7 @@ public class LoginActivity extends BaseActivity {
         switch (view.getId()) {
             case R.id.bt_go:
                 LogUtils.i("登录");
-
-                Intent loginIntent = new Intent(this, LoginSuccessActivity.class);
-                startActivity(loginIntent);
+                finish();
                 break;
             case R.id.fab:
                 LogUtils.i("注册");

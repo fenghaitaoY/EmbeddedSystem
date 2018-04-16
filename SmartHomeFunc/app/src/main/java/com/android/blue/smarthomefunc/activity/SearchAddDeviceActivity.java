@@ -26,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.blue.smarthomefunc.adapter.OnItemClickListener;
+import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.adapter.RecycleAdapter;
@@ -86,8 +87,23 @@ public class SearchAddDeviceActivity extends BaseActivity {
             @Override
             public void onItemClick(View view, int position) {
                 LogUtils.i("recycadapter item click position=" + position + ", address=" + mListEntitys.get(position).getDeviceAddress());
-                mAddDeviceDialog.show();
-                mSelectPosition = position;
+                boolean isexist = false;
+                if (AppCache.get().getBleDeviceList().size() > 0) {
+                    for (BleDeviceEntity entity : AppCache.get().getBleDeviceList()) {
+                        if (entity.getDeviceAddress().equals(mListEntitys.get(position).getDeviceAddress())) {
+                            isexist = true;
+                            break;
+                        } else {
+                            isexist = false;
+                        }
+                    }
+                }
+                if (isexist){
+                    Toast.makeText(getApplicationContext(), "已经存在", Toast.LENGTH_SHORT).show();
+                }else{
+                    mAddDeviceDialog.show();
+                    mSelectPosition = position;
+                }
             }
 
             @Override

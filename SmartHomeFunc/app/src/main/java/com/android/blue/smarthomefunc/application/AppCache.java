@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.LongSparseArray;
 
+import com.android.blue.smarthomefunc.entity.BleDeviceEntity;
 import com.android.blue.smarthomefunc.executor.DownloadMusicInfo;
 import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.model.OnlineMusic;
@@ -39,6 +40,10 @@ public class AppCache {
     private final List<SingerArtistMusic> mSingerArtistMusic = new ArrayList<>();
 
     private final LongSparseArray<DownloadMusicInfo> mDownloadList = new LongSparseArray<>();
+
+    //蓝牙列表
+    private List<BleDeviceEntity> mBleRegistDeviceList = new ArrayList<>();
+
     private Application mApplication;
 
     private AppCache() {
@@ -90,6 +95,10 @@ public class AppCache {
     }
 
     public List<SingerArtistMusic> getSingerArtistMusicList(){return mSingerArtistMusic; }
+
+    public List<BleDeviceEntity> getBleDeviceList(){
+        return mBleRegistDeviceList;
+    }
 
     public Application getApplication(){return mApplication;}
 }

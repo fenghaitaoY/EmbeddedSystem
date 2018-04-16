@@ -109,7 +109,7 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
 
             }
         });
-        fragments.add(DeviceControlFragment.newInstance("device", "control"));
+        fragments.add(DeviceControlFragment.newInstance());
         fragments.add(MusicFragment.newInstance("music", "show"));
         fragments.add(VideoFragment.newInstance("video", "play"));
         fragments.add(PeopleSetitingFragment.newInstance("people", "setting"));

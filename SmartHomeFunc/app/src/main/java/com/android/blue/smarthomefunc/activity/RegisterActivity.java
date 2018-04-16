@@ -36,17 +36,26 @@ public class RegisterActivity extends BaseActivity {
     CardView cvAdd;
     @BindView(R.id.fab)
     FloatingActionButton mFab;
-
+    Transition transition;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            ShowEnterAnimation();
-        }
 
+        transition= TransitionInflater.from(this).inflateTransition(R.transition.fabtransition);
+        getWindow().setSharedElementEnterTransition(transition); //进入效果
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ShowEnterAnimation();
+                }
+            });
+
+        }
+        LogUtils.i("");
     }
 
     @Override
@@ -58,8 +67,7 @@ public class RegisterActivity extends BaseActivity {
      * 进入显示动画效果
      */
     private void ShowEnterAnimation() {
-        Transition transition = TransitionInflater.from(this).inflateTransition(R.transition.fabtransition);
-        getWindow().setSharedElementEnterTransition(transition); //进入效果
+
 
         transition.addListener(new Transition.TransitionListener() {
             @Override
@@ -95,7 +103,7 @@ public class RegisterActivity extends BaseActivity {
 
     public void animateRevealShow(){
         Animator mAnimator = ViewAnimationUtils.createCircularReveal(cvAdd,cvAdd.getWidth()/2,0,mFab.getWidth()/2,cvAdd.getHeight());
-        mAnimator.setDuration(500);
+        mAnimator.setDuration(200);
         mAnimator.setInterpolator(new AccelerateInterpolator());//设置动画播放速度, 加速度
         mAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
@@ -105,25 +113,26 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void onAnimationStart(Animator animation) {
-                super.onAnimationStart(animation);
                 cvAdd.setVisibility(View.VISIBLE);
+                super.onAnimationStart(animation);
             }
         });
+        LogUtils.i("----------");
         mAnimator.start();
 
     }
 
     public void animateRevealClose(){
         Animator mAnimator = ViewAnimationUtils.createCircularReveal(cvAdd, cvAdd.getWidth()/2,0,cvAdd.getHeight(),mFab.getWidth()/2);
-        mAnimator.setDuration(500);
+        mAnimator.setDuration(200);
         mAnimator.setInterpolator(new AccelerateInterpolator());
         mAnimator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
                 cvAdd.setVisibility(View.INVISIBLE);
+                super.onAnimationEnd(animation);
                 mFab.setImageResource(R.drawable.plus);
-                onBackPressed();
+                RegisterActivity.super.onBackPressed();
             }
 
             @Override
@@ -131,12 +140,12 @@ public class RegisterActivity extends BaseActivity {
                 super.onAnimationStart(animation);
             }
         });
+        LogUtils.i("----------");
         mAnimator.start();
     }
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
         animateRevealClose();
     }
 

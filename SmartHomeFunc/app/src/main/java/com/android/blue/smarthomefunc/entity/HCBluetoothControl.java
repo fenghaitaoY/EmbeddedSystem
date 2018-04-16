@@ -15,15 +15,18 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 
+import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.service.BluetoothLeService;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static android.content.Context.BIND_AUTO_CREATE;
 
 /**
+ * 蓝牙控制类
  * Created by root on 1/9/18.
  */
 
@@ -188,9 +191,6 @@ public class HCBluetoothControl {
      */
     public boolean connectDevice(final String address) {
         final boolean[] result = {false};
-        if (blueAddress.isEmpty()) {
-            return result[0];
-        }
 
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -220,10 +220,24 @@ public class HCBluetoothControl {
     }
 
     /**
+     * 获取蓝牙连接列表
+     * @return
+     */
+    public List<BluetoothDevice> getConnectDevice(){
+        return  mBluetoothLeService.getConnectedDevices();
+    }
+
+    /**
      *
      * @return
      */
-    public boolean isBluetoothConnect(){
+    public boolean isBluetoothConnect(String address){
+        List<BluetoothDevice> devices = getConnectDevice();
+        for (BluetoothDevice device :devices){
+            if (address.equals(device.getAddress())){
+                return true;
+            }
+        }
         return false;
     }
 

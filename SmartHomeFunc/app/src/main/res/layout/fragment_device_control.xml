@@ -1,72 +1,39 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@drawable/smart_login_suc_bg2"
-              android:orientation="vertical"
-              tools:context="com.android.blue.smarthomefunc.fragment.DeviceControlFragment">
-
-    <Button
-        android:id="@+id/add_device_tv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/add_device"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:textSize="15sp"
-        android:background="@drawable/round_image_background"
-        />
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/smart_login_suc_bg2"
+    tools:context="com.android.blue.smarthomefunc.fragment.DeviceControlFragment">
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="50dp">
-        <android.support.design.widget.TextInputLayout
-            android:theme="@style/Text_lab"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <EditText
-                android:textSize="15sp"
-                android:hint="@string/et_cmd"
-                android:id="@+id/cmd_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:background="@drawable/selector_bg_edit"
-                android:textCursorDrawable="@drawable/bg_input_cursor"
-                android:paddingBottom="2dp"
-                android:imeOptions="actionUnspecified"
-                />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:id="@+id/add_device_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/round_image_background"
+            android:gravity="center"
+            android:text="@string/add_device"
+            android:textColor="@color/white"
+            android:textSize="15sp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/device_recycle"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="60dp"
+            android:layout_marginTop="50dp"
+            android:layout_weight="1" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/device_control_bt"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginRight="10dp"
-        android:text="@string/bt_send"
-        />
 
-    <GridView
-        android:id="@+id/gridView_layout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:layout_marginBottom="60dp"
-        android:horizontalSpacing="10dp"
-        android:numColumns="2"
-        android:verticalSpacing="10dp"
-        >
-    </GridView>
-
-
-
-</LinearLayout>
+</FrameLayout>

@@ -68,14 +68,14 @@ public class SearchMusicRecycleAdapter extends RecyclerView.Adapter<SearchMusicR
         holder.artist.setText(mSongData.get(position).getArtist_name());
 
         holder.gridView.setAdapter(adapter);
-
-        if (Integer.valueOf(AppCache.get().getSearchMusicList().get(position).getSongid()) ==
-                AppCache.get().getPlayService().getPlayingMusic().getId()){
-            holder.redLineView.setVisibility(View.VISIBLE);
-        }else{
-            holder.redLineView.setVisibility(View.INVISIBLE);
+        if (AppCache.get().getPlayService().getPlayingMusic() != null) {
+            if (Integer.valueOf(AppCache.get().getSearchMusicList().get(position).getSongid()) ==
+                    AppCache.get().getPlayService().getPlayingMusic().getId()) {
+                holder.redLineView.setVisibility(View.VISIBLE);
+            } else {
+                holder.redLineView.setVisibility(View.INVISIBLE);
+            }
         }
-
         if (mOnItemClickListener != null){
             holder.item.setOnClickListener(new View.OnClickListener() {
                 @Override

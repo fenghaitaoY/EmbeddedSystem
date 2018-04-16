@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <LinearLayout
+        android:id="@+id/device_connect_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <com.wang.avi.AVLoadingIndicatorView
+            android:id="@+id/av_loading_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_20"
+            android:layout_gravity="center"
+            android:visibility="visible"
+            style="@style/AVLoadingIndicatorView.Large"
+            app:indicatorColor="@color/blue"
+            app:indicatorName="BallScaleRippleMultipleIndicator"
+
+            />
+
+        <TextView
+            android:id="@+id/loading_tv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/margin_10"
+            android:layout_marginBottom="@dimen/margin_30"
+            android:text="@string/ble_connect_loading" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

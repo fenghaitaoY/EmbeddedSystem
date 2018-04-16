@@ -45,7 +45,7 @@ public class BleDeviceEntity {
         this.mDeviceAddress = mDeviceAddress;
     }
 
-    public boolean isDeviceSwitch() {
+    public boolean getDeviceSwitch() {
         return mDeviceSwitch;
     }
 

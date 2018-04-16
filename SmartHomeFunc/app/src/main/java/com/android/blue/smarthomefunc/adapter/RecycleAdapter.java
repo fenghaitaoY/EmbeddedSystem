@@ -5,10 +5,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.BleDeviceEntity;
 
 import java.util.List;
@@ -25,6 +27,7 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHo
     private Context mContext;
     private List<BleDeviceEntity> list;
     private OnItemClickListener mOnItemClickListener;
+    private boolean mHave = false;
 
     public RecycleAdapter(Context context, List<BleDeviceEntity> list){
         mContext = context;
@@ -42,6 +45,24 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHo
         holder.name.setText(list.get(position).getDeviceName());
         holder.address.setText(list.get(position).getDeviceAddress());
         holder.rssi.setText(list.get(position).getStatusRssi());
+
+        //已经添加过的显示已经添加符号
+        if (AppCache.get().getBleDeviceList().size() > 0) {
+            for (BleDeviceEntity entity : AppCache.get().getBleDeviceList()) {
+                if (entity.getDeviceAddress().equals(list.get(position).getDeviceAddress())) {
+                    mHave = true;
+                    break;
+                } else {
+                    mHave = false;
+                }
+            }
+        }
+        if (mHave){
+            holder.alreadyAdd.setVisibility(View.VISIBLE);
+        }else {
+            holder.alreadyAdd.setVisibility(View.INVISIBLE);
+        }
+
         if (mOnItemClickListener != null){
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -82,6 +103,8 @@ public class RecycleAdapter extends RecyclerView.Adapter<RecycleAdapter.MyViewHo
         TextView address;
         @BindView(R.id.recycle_item_rssi)
         TextView rssi;
+        @BindView(R.id.recycle_item_already_add)
+        ImageView alreadyAdd;
         @BindView(R.id.recycle_item_layout)
         LinearLayout itemView;
 

@@ -35,7 +35,7 @@ public class SingerArtistMusicRecycleAdapter extends RecyclerView.Adapter<Singer
     private OnMoreItemListener mOnMoreItemListener; //more click
 
     private Context mContext;
-    private int needShowSecFuncPosition;
+    private int needShowSecFuncPosition = 0;
     private boolean show = false;
     private OnlineMoreGridAdapter adapter;
 
@@ -69,11 +69,13 @@ public class SingerArtistMusicRecycleAdapter extends RecyclerView.Adapter<Singer
 
         holder.gridView.setAdapter(adapter);
 
-        if (Integer.valueOf(AppCache.get().getSingerArtistMusicList().get(position).getSong_id()) ==
-                AppCache.get().getPlayService().getPlayingMusic().getId()){
-            holder.redLineView.setVisibility(View.VISIBLE);
-        }else{
-            holder.redLineView.setVisibility(View.INVISIBLE);
+        if (AppCache.get().getPlayService().getPlayingMusic() != null) {
+            if (Integer.valueOf(AppCache.get().getSingerArtistMusicList().get(position).getSong_id()) ==
+                    AppCache.get().getPlayService().getPlayingMusic().getId()) {
+                holder.redLineView.setVisibility(View.VISIBLE);
+            } else {
+                holder.redLineView.setVisibility(View.INVISIBLE);
+            }
         }
 
         if (mOnItemClickListener != null){

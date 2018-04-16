@@ -72,12 +72,13 @@ public class OnlineMusicRecycleAdapter extends RecyclerView.Adapter<OnlineMusicR
 
         holder.gridView.setAdapter(adapter);
         LogUtils.i("position = "+position+", getPlayingPosition ="+AppCache.get().getOnlineMusicList().get(position).getSong_id());
-
-        if (Integer.valueOf(AppCache.get().getOnlineMusicList().get(position).getSong_id()) ==
-                AppCache.get().getPlayService().getPlayingMusic().getId()){
-            holder.redLineView.setVisibility(View.VISIBLE);
-        }else{
-            holder.redLineView.setVisibility(View.INVISIBLE);
+        if (AppCache.get().getPlayService().getPlayingMusic() != null) {
+            if (Integer.valueOf(AppCache.get().getOnlineMusicList().get(position).getSong_id()) ==
+                    AppCache.get().getPlayService().getPlayingMusic().getId()) {
+                holder.redLineView.setVisibility(View.VISIBLE);
+            } else {
+                holder.redLineView.setVisibility(View.INVISIBLE);
+            }
         }
 
         if (mOnItemClickListener != null){

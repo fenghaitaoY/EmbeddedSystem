@@ -1,4 +1,4 @@
-package com.android.blue.smarthomefunc;
+package com.android.blue.smarthomefunc.utils;
 
 import android.util.Log;
 
