@@ -73,7 +73,7 @@ import static android.app.Activity.RESULT_OK;
  * Use the {@link DeviceControlFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeviceControlFragment extends Fragment implements OnItemClickListener{
+public class DeviceControlFragment extends Fragment implements OnItemClickListener, OnCheckChangeListener{
 
     private static final String CONTENT_PROVIDER_URI = "content://com.android.blue.smarthomeprovider/device";
     @BindView(R.id.device_recycle)
@@ -185,7 +185,10 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
         mRecycleView.setLayoutManager(gridLayoutManager);
         mRecycleView.setItemAnimator(new DefaultItemAnimator());
         mRecycleView.setAdapter(mAdapter);
+
         mAdapter.setOnItemClickListener(this);
+        mAdapter.setOnCheckChangeListener(this);
+
         mBroadcastReceiver = new BleConnectBroadcastReceiver();
         mBleConnectDialog = createBleConnectLoadingDialog();
         mSendMsgDialog = createBleSendMessageDialog();
@@ -293,6 +296,8 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
         getActivity().registerReceiver(mBroadcastReceiver, filter);
     }
 
+
+
     /**
      * 蓝牙连接广播
      */
@@ -304,10 +309,12 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
             LogUtils.i("action = "+action);
             if (action.equals(BluetoothLeService.ACTION_GATT_CONNECTED)){
                 AppCache.get().getBleDeviceList().get(clickItemPosition).setDeviceSwitch(true);
+                updateDevice(AppCache.get().getBleDeviceList().get(clickItemPosition));
                 mAdapter.notifyDataSetChanged();
                 hideLoadingView();
             }else if (action.equals(BluetoothLeService.ACTION_GATT_DISCONNECTED)){
                 AppCache.get().getBleDeviceList().get(clickItemPosition).setDeviceSwitch(false);
+                updateDevice(AppCache.get().getBleDeviceList().get(clickItemPosition));
                 mAdapter.notifyDataSetChanged();
                 hideLoadingView();
                 Toast.makeText(context, "连接失败", Toast.LENGTH_SHORT).show();
@@ -430,6 +437,27 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
     }
 
     @Override
+    public void onCheckChange(int position, boolean checked) {
+        LogUtils.i(" position = " + position + " , checked = " + checked);
+        //已经连接，按钮关闭
+        //未连接，　按钮打开
+        if (mHCBleControl.isBluetoothConnect(AppCache.get().getBleDeviceList().get(position).getDeviceAddress()) && !checked) {
+            LogUtils.i("已经连接, 关闭连接");
+            if (!checked){
+            mHCBleControl.disconnectBle();
+            mHCBleControl.closeBleGAT();
+            AppCache.get().getBleDeviceList().get(position).setDeviceSwitch(false);
+            updateDevice(AppCache.get().getBleDeviceList().get(position));
+            mAdapter.notifyDataSetChanged();
+            }
+        }else if (!mHCBleControl.isBluetoothConnect(AppCache.get().getBleDeviceList().get(position).getDeviceAddress()) && checked){
+            connectDevice(position);
+        }
+
+
+    }
+
+    @Override
     public void onItemClick(View view, final int position) {
         LogUtils.i(" position = "+AppCache.get().getBleDeviceList().get(position).getDeviceName()
                 +" switch = "+AppCache.get().getBleDeviceList().get(position).getDeviceSwitch());
@@ -437,6 +465,15 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
         clickItemPosition = position;
         modeName = AppCache.get().getBleDeviceList().get(position).getModeName();
 
+        connectDevice(position);
+
+    }
+
+    /**
+     * 蓝牙连接
+     * @param position
+     */
+    private void connectDevice(final int position){
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -459,7 +496,6 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
                 showLoadingView();
             }
         });
-
     }
 
     @Override

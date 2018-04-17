@@ -35,6 +35,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="4">
 
+                    <ImageView
+                        android:id="@+id/grid_device_bluetooth_status"
+                        android:layout_width="0dp"
+                        android:layout_height="15dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:src="@drawable/bluetooth_disconnect"/>
+
                     <com.android.blue.smarthomefunc.view.AlwaysMarqueeTextView
                         android:id="@+id/grid_mode_name"
                         android:layout_width="0dp"
@@ -49,13 +57,15 @@
                         android:singleLine="true"
                         android:text="设备名称"
                         />
-                    <ImageView
-                        android:id="@+id/grid_device_bluetooth_status"
+
+                    <Switch
+                        android:id="@+id/grid_ble_switch"
                         android:layout_width="0dp"
-                        android:layout_height="15dp"
-                        android:layout_weight="1"
-                        android:layout_gravity="center"
-                        android:src="@drawable/bluetooth_disconnect"/>
+                        android:layout_weight="2"
+                        android:layout_height="10dp"
+                        />
+
+
                 </LinearLayout>
 
             </LinearLayout>

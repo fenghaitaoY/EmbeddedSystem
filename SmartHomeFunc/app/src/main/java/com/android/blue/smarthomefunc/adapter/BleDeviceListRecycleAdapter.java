@@ -6,8 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
@@ -28,6 +30,7 @@ public class BleDeviceListRecycleAdapter extends RecyclerView.Adapter<BleDeviceL
 
     private List<BleDeviceEntity> mDevices = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
+    private OnCheckChangeListener onCheckChangeListener;
 
 
     public BleDeviceListRecycleAdapter(List<BleDeviceEntity> data){
@@ -55,8 +58,10 @@ public class BleDeviceListRecycleAdapter extends RecyclerView.Adapter<BleDeviceL
 
         if (mDevice.getDeviceSwitch()){
             holder.statusImage.setImageResource(R.drawable.bluetooth_connect);
+            holder.mBleSwitch.setChecked(true);
         }else{
             holder.statusImage.setImageResource(R.drawable.bluetooth_disconnect);
+            holder.mBleSwitch.setChecked(false);
         }
 
         holder.view.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +81,15 @@ public class BleDeviceListRecycleAdapter extends RecyclerView.Adapter<BleDeviceL
                 return true;
             }
         });
+
+
+        holder.mBleSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (onCheckChangeListener != null)
+                    onCheckChangeListener.onCheckChange(position, checked);
+            }
+        });
     }
 
     @Override
@@ -93,6 +107,10 @@ public class BleDeviceListRecycleAdapter extends RecyclerView.Adapter<BleDeviceL
         this.onItemClickListener = listener;
     }
 
+    public void setOnCheckChangeListener(OnCheckChangeListener listener){
+        onCheckChangeListener = listener;
+    }
+
     class BleDeviceHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.grid_mode_name)
         AlwaysMarqueeTextView mModeName;
@@ -106,6 +124,8 @@ public class BleDeviceListRecycleAdapter extends RecyclerView.Adapter<BleDeviceL
         CardView view;
         @BindView(R.id.grid_device_bluetooth_status)
         ImageView statusImage;
+        @BindView(R.id.grid_ble_switch)
+        Switch mBleSwitch;
 
         public BleDeviceHolder(View itemView) {
             super(itemView);
