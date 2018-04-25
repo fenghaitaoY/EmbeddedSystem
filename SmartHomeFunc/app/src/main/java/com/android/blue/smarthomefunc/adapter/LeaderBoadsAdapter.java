@@ -15,6 +15,7 @@ import com.android.blue.smarthomefunc.http.HttpClient;
 import com.android.blue.smarthomefunc.model.OnlineMusic;
 import com.android.blue.smarthomefunc.model.OnlineMusicList;
 import com.android.blue.smarthomefunc.model.SongListInfo;
+import com.android.blue.smarthomefunc.utils.SystemUtils;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
@@ -83,7 +84,8 @@ public class LeaderBoadsAdapter extends BaseAdapter {
             HttpClient.getSongListInfo(info.getType(), 3, 0, new HttpCallback<OnlineMusicList>() {
                 @Override
                 public void onSuccess(OnlineMusicList onlineMusicList) {
-                    if (onlineMusicList != null) {
+                    LogUtils.i("  isForeground = "+SystemUtils.isForeground(mContext, "OnlineSongListActivity"));
+                    if (onlineMusicList != null && SystemUtils.isForeground(mContext, "OnlineSongListActivity")) {
                         parse(onlineMusicList, info);
                         setData(info, holder);
                     }

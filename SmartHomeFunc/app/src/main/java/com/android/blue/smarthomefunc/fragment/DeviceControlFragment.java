@@ -552,7 +552,12 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
                 }
 
                 //蓝牙连接
-                mHCBleControl.connectDevice(AppCache.get().getBleDeviceList().get(position).getDeviceAddress());
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mHCBleControl.connectDevice(AppCache.get().getBleDeviceList().get(position).getDeviceAddress());
+                    }
+                }, 500);
                 showLoadingView();
                 postDelayDisconnect();
             }

@@ -2,8 +2,13 @@ package com.android.blue.smarthomefunc.utils;
 
 import android.app.ActivityManager;
 import android.app.Service;
+import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
+import android.text.TextUtils;
 import android.text.format.DateUtils;
+
+import com.android.blue.smarthomefunc.entity.LogUtils;
 
 import java.lang.reflect.Method;
 import java.util.List;
@@ -14,6 +19,30 @@ import java.util.Locale;
  */
 
 public class SystemUtils {
+
+    /**
+     * 判断activity是否在前台
+     * @param context
+     * @param className
+     * @return
+     */
+    public static boolean isForeground(Context context, String className){
+        if (context == null || TextUtils.isEmpty(className)){
+            return false;
+        }
+        ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> mRunningTaskInfos = manager.getRunningTasks(1);
+        if (mRunningTaskInfos != null && mRunningTaskInfos.size() > 0){
+            ComponentName name = mRunningTaskInfos.get(0).topActivity;
+            LogUtils.i(" name ="+name.getClassName()+", shortclassname ="+name.getShortClassName());
+            if (name.getClassName().contains(className)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     /**
      * 判断是否有Activity在运行
