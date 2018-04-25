@@ -228,3 +228,6 @@ MCU <--tx rx-> MTTM      <----->  STTM <--tx rx--> MCU
 
 每个从机都会有一个叫做profile的东西存在，不管是simpleprofile，还是标准的防丢器profile，　他们都是由一系列service组成，　然后每个service包含了多个characteristic, 主机和从机之间的通信，　均是通过characteristic实现
 
+
+AES加密
+aes为分组密码，　也就是把明文分为一组一组的，　每组长度相等，每次加密一组数据，　直到加密完整个明文．在aes标准规范中，　分组长度只能是128位，　每个分组１６个字节，　每个字节８位，　密钥长度使用１２８位，　１９２位或２５６位．

@@ -30,6 +30,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,6 +100,8 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
     private GridLayoutManager gridLayoutManager;
 
     private Handler mHandler = new Handler();
+    private DelayRunnable mDelayRunnable = new DelayRunnable();
+
     private BleConnectBroadcastReceiver mBroadcastReceiver;
     private Dialog mBleConnectDialog;
     private Dialog mSendMsgDialog;
@@ -186,8 +189,7 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
         mRecycleView.setItemAnimator(new DefaultItemAnimator());
         mRecycleView.setAdapter(mAdapter);
 
-        mAdapter.setOnItemClickListener(this);
-        mAdapter.setOnCheckChangeListener(this);
+
 
         mBroadcastReceiver = new BleConnectBroadcastReceiver();
         mBleConnectDialog = createBleConnectLoadingDialog();
@@ -213,9 +215,48 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
         super.onResume();
         LogUtils.i("Device control onResume");
         initBluetooth(); //初始化蓝牙
+        initListener();
 
         checkAlreadyRegistDevice();
+
+        for (final BleDeviceEntity entity : AppCache.get().getBleDeviceList()){
+            if (entity.getDeviceSwitch()){
+                LogUtils.i("  modename :"+entity.getModeName());
+                modeName = entity.getModeName();
+
+                if (!mHCBleControl.isBluetoothConnect(entity.getDeviceAddress())) {
+                    showLoadingView();
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mHCBleControl.connectDevice(entity.getDeviceAddress());
+                            postDelayDisconnect();
+                        }
+                    }, 500);
+                }
+                break;
+            }
+            clickItemPosition++;
+        }
     }
+
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            if (mBleConnectDialog.isShowing()) {
+                hideLoadingView();
+                mHCBleControl.disconnectBle();
+                mHCBleControl.closeBleGAT();
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private void initListener(){
+        mAdapter.setOnItemClickListener(this);
+        mAdapter.setOnCheckChangeListener(this);
+    }
+
 
     /**
      * 创建蓝牙连接弹窗
@@ -229,8 +270,10 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(view);
-        builder.setCancelable(false);
-        return builder.create();
+        AlertDialog dialog = builder.create();
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setCancelable(false);
+        return dialog;
     }
 
     /**
@@ -307,6 +350,7 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             LogUtils.i("action = "+action);
+            cancelPostDelay();
             if (action.equals(BluetoothLeService.ACTION_GATT_CONNECTED)){
                 AppCache.get().getBleDeviceList().get(clickItemPosition).setDeviceSwitch(true);
                 updateDevice(AppCache.get().getBleDeviceList().get(clickItemPosition));
@@ -317,6 +361,7 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
                 updateDevice(AppCache.get().getBleDeviceList().get(clickItemPosition));
                 mAdapter.notifyDataSetChanged();
                 hideLoadingView();
+                LogUtils.i("-------------------------------------connect fail---");
                 Toast.makeText(context, "连接失败", Toast.LENGTH_SHORT).show();
             }
         }
@@ -401,6 +446,7 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
         //蓝牙关闭
         mHCBleControl.disconnectBle();
         mHCBleControl.closeBleGAT();
+
         getActivity().unregisterReceiver(mBroadcastReceiver);
     }
 
@@ -436,6 +482,7 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
 
     }
 
+
     @Override
     public void onCheckChange(int position, boolean checked) {
         LogUtils.i(" position = " + position + " , checked = " + checked);
@@ -448,7 +495,13 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
             mHCBleControl.closeBleGAT();
             AppCache.get().getBleDeviceList().get(position).setDeviceSwitch(false);
             updateDevice(AppCache.get().getBleDeviceList().get(position));
-            mAdapter.notifyDataSetChanged();
+            mHandler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.notifyDataSetChanged();
+                }
+            },500);
+
             }
         }else if (!mHCBleControl.isBluetoothConnect(AppCache.get().getBleDeviceList().get(position).getDeviceAddress()) && checked){
             connectDevice(position);
@@ -462,9 +515,6 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
         LogUtils.i(" position = "+AppCache.get().getBleDeviceList().get(position).getDeviceName()
                 +" switch = "+AppCache.get().getBleDeviceList().get(position).getDeviceSwitch());
 
-        clickItemPosition = position;
-        modeName = AppCache.get().getBleDeviceList().get(position).getModeName();
-
         connectDevice(position);
 
     }
@@ -474,28 +524,64 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
      * @param position
      */
     private void connectDevice(final int position){
+        clickItemPosition = position;
+        modeName = AppCache.get().getBleDeviceList().get(position).getModeName();
+
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (mHCBleControl.isBluetoothConnect(AppCache.get().getBleDeviceList().get(position).getDeviceAddress())){
                     LogUtils.i("已经连接");
-                    Toast.makeText(getActivity().getApplicationContext(), "已经连接", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity().getApplicationContext(), "已经连接", Toast.LENGTH_SHORT).show();
                     titleTV.setText(modeName);
                     mSendMsgDialog.show();
                     return;
                 }
+
                 //如果已经有连接，　先关闭之前的，　再连接现在的
                 if (mHCBleControl.getConnectDevice().size() > 0){
                     mHCBleControl.disconnectBle();
                     mHCBleControl.closeBleGAT();
+                    //更新ui
+                    for (BleDeviceEntity entity : AppCache.get().getBleDeviceList()) {
+                        if (entity.getDeviceSwitch()) {
+                            entity.setDeviceSwitch(false);
+                            updateDevice(entity);
+                        }
+                    }
                 }
 
                 //蓝牙连接
                 mHCBleControl.connectDevice(AppCache.get().getBleDeviceList().get(position).getDeviceAddress());
-
                 showLoadingView();
+                postDelayDisconnect();
             }
         });
+    }
+
+    /**
+     * 延迟关闭正在连接蓝牙弹框
+     */
+    private void postDelayDisconnect(){
+        mHandler.postDelayed(mDelayRunnable, 1000*60);
+    }
+
+    /**
+     * 取消延迟回调
+     */
+    private void cancelPostDelay(){
+        mHandler.removeCallbacks(mDelayRunnable);
+    }
+
+    class DelayRunnable implements Runnable{
+
+        @Override
+        public void run() {
+            LogUtils.i(" post delay ------");
+            mHCBleControl.disconnectBle();
+            mHCBleControl.closeBleGAT();
+            hideLoadingView();
+        }
     }
 
     @Override
@@ -515,16 +601,24 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
                 .setPositiveButton(R.string.delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        //如果已经有连接，　先关闭
+                        if (mHCBleControl.getConnectDevice().size() > 0 &&
+                                mHCBleControl.isBluetoothConnect(AppCache.get().getBleDeviceList().get(position).getDeviceAddress())){
+                            mHCBleControl.disconnectBle();
+                            mHCBleControl.closeBleGAT();
+                        }
+
                         //数据库中删除
                         deleteDevice(AppCache.get().getBleDeviceList().get(position));
                         //内存中删除
                         AppCache.get().getBleDeviceList().remove(AppCache.get().getBleDeviceList().get(position));
+
                         mHandler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 mAdapter.notifyDataSetChanged();
                             }
-                        }, 1000);
+                        }, 500);
 
                     }
                 });

@@ -42,6 +42,8 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
     private long time;
 
     List<Fragment> fragments = new ArrayList<>();
+    Fragment currentFragment;
+    MyViewPagerAdapter viewPagerAdapter;
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -91,8 +93,8 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
         }
-
-        viewpager.setAdapter(new MyViewPagerAdapter(getSupportFragmentManager()));
+        viewPagerAdapter = new MyViewPagerAdapter(getSupportFragmentManager());
+        viewpager.setAdapter(viewPagerAdapter);
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -150,7 +152,13 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        currentFragment = viewPagerAdapter.getItem(viewpager.getCurrentItem());
+        if (currentFragment instanceof DeviceControlFragment){
+            ((DeviceControlFragment) currentFragment).onKeyDown(keyCode, event);
+        }
+
         if (keyCode == event.KEYCODE_BACK){
+            LogUtils.i("-------keycode back------");
             if (System.currentTimeMillis() - time  > 2000){
                 time = System.currentTimeMillis();
                 Toast.makeText(getApplicationContext(), "再点击一次退出应用程序",Toast.LENGTH_SHORT).show();
