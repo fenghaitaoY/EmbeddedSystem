@@ -23,10 +23,10 @@
 - [MaterialLogin] (https://github.com/Allenhan123/MaterialLogin)
 
 ## 图片展示
-<center class="half">
+<div align=center>
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-110836.png" width="384" height="700" >
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-110846.png" width="384" height="700" >
-</center>
+</div>
 <center class="half">
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111306.png" width="384" height="700" >
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111129.png" width="384" height="700" >
