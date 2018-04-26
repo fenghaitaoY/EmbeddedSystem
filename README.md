@@ -23,23 +23,23 @@
 - [MaterialLogin] (https://github.com/Allenhan123/MaterialLogin)
 
 ## 图片展示
-<figure class="half">
+<center class="half">
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-110836.png" width="200" height="300" />
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-110846.png" width="200" height="300" />
-</figure>
-<figure class="half">
+</center>
+<center class="half">
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111306.png" width="200" height="300" />
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111129.png" width="200" height="300" />
-</figure>
-<figure class="half">
+</center>
+<center class="half">
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111137.png" width="200" height="300" />
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111149.png" width="200" height="300" />
-</figure>
-<figure class="third">
+</center>
+<center class="third">
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111209.png" width="200" height="300" />
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111245.png" width="200" height="300" />
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111252.png" width="200" height="300" />
-</figure>
+</center>
 ## License
 
     Copyright 2016 fenghaitaoY
