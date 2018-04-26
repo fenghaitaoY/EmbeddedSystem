@@ -36,9 +36,9 @@
 	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111149.png" width="300" height="500" >
 </div>
 <div align=center>
-	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111209.png" width="200" height="500" >
-	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111245.png" width="200" height="500" >
-	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111252.png" width="200" height="500" >
+	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111209.png" width="200" height="400" >
+	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111245.png" width="200" height="400" >
+	<img src="https://raw.githubusercontent.com/fenghaitaoY/EmbeddedSystem/master/screenshots/Screenshot_20180426-111252.png" width="200" height="400" >
 </div>
 ## License
 
