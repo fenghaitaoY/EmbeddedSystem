@@ -23,6 +23,7 @@ import com.android.blue.smarthomefunc.fragment.DeviceControlFragment;
 import com.android.blue.smarthomefunc.fragment.MusicFragment;
 import com.android.blue.smarthomefunc.fragment.PeopleSetitingFragment;
 import com.android.blue.smarthomefunc.fragment.VideoFragment;
+import com.android.blue.smarthomefunc.jninative.SmartHomeNativeUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

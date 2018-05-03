@@ -17,6 +17,8 @@ public class Preferences {
     private static final String PLAY_MODE = "play_mode";
     private static final String SPLASH_URL = "splash_url";
     private static final String NIGHT_MODE = "night_mode";
+    private static final String LOGIN_USER = "login";
+    private static final String LOGIN_USER_NAME = "login_name";
 
     private static Context mContext;
 
@@ -47,6 +49,14 @@ public class Preferences {
     public static void saveSplashUrl(String url){
         saveString(SPLASH_URL, url);
     }
+
+    public static void saveLoginStatus(boolean login){saveBoolean(LOGIN_USER, login);}
+
+    public static boolean getLoginStatus(){return getBoolean(LOGIN_USER, false);}
+
+    public static void saveLoginName(String name){saveString(LOGIN_USER_NAME, name);}
+
+    public static String getLoginName(){return getString(LOGIN_USER_NAME, "");}
 
     public static boolean enableMobileNetworkPlay(){
         return getBoolean(mContext.getString(R.string.setting_key_mobile_network_play), false);
@@ -119,4 +129,7 @@ public class Preferences {
     private static SharedPreferences getPreferences(){
         return PreferenceManager.getDefaultSharedPreferences(mContext);
     }
+
+
+
 }

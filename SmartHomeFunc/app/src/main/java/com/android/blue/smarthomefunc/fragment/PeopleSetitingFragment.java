@@ -1,7 +1,10 @@
 package com.android.blue.smarthomefunc.fragment;
 
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,6 +15,8 @@ import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.activity.LoginActivity;
+import com.android.blue.smarthomefunc.entity.Actions;
+import com.android.blue.smarthomefunc.utils.Preferences;
 import com.android.blue.smarthomefunc.view.CircleImageView;
 
 import butterknife.BindView;
@@ -50,6 +55,7 @@ public class PeopleSetitingFragment extends Fragment {
 
     private View mView;
     private Unbinder mUnbinder;
+    private LoginBroadcast mLoginBroadcast;
 
 
     public PeopleSetitingFragment() {
@@ -87,6 +93,18 @@ public class PeopleSetitingFragment extends Fragment {
         mView = inflater.inflate(R.layout.fragment_people_setiting, container, false);
         mUnbinder = ButterKnife.bind(this, mView);
 
+        if (Preferences.getLoginStatus()){
+            mSettingsLoginTv.setText(getString(R.string.setting_exit));
+            mSettingsUserName.setText(Preferences.getLoginName());
+        }else {
+            mSettingsLoginTv.setText(getString(R.string.setting_login));
+            mSettingsUserName.setText(getString(R.string.setting_user_name));
+        }
+
+
+        IntentFilter filter = new IntentFilter(Actions.USER_LOGIN_ACTION);
+        mLoginBroadcast = new LoginBroadcast();
+        getActivity().registerReceiver(mLoginBroadcast, filter);
         return mView;
     }
 
@@ -113,11 +131,31 @@ public class PeopleSetitingFragment extends Fragment {
             case R.id.settings_about:
                 break;
             case R.id.settings_login:
-                Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-                loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(loginIntent);
-
+                if (Preferences.getLoginStatus()){ //退出登录
+                    mSettingsLoginTv.setText(getString(R.string.setting_login));
+                    mSettingsUserName.setText(getString(R.string.setting_user_name));
+                    Preferences.saveLoginStatus(false);
+                }else { //登录
+                    Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                    loginIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(loginIntent);
+                }
                 break;
+        }
+    }
+
+    class LoginBroadcast extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mSettingsLoginTv.setText(getString(R.string.setting_exit));
+            //记录登录成功
+            Preferences.saveLoginStatus(true);
+
+            String name = intent.getStringExtra("name");
+
+            mSettingsUserName.setText(name);
+            Preferences.saveLoginName(name);
         }
     }
 }

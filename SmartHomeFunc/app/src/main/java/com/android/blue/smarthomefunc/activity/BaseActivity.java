@@ -43,6 +43,8 @@ public class BaseActivity extends AppCompatActivity {
 
         mContext = this;
 
+
+
     }
 
     public void setActivityFullScreen(boolean flag){

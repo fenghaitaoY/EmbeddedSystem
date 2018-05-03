@@ -9,4 +9,5 @@ public interface Actions {
     String ACTION_MEDIA_NEXT = "com.android.blue.ACTION_MEDIA_NEXT";
     String ACTION_MEDIA_PREVIOUS = "com.android.blue.ACTION_MEDIA_PREVIOUS";
     String VOLUME_CHANGED_ACTION = "com.android.blue.VOLUME_CHANGED_ACTION";
+    String USER_LOGIN_ACTION = "com.android.blue.USER_LOGIN";
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import com.android.blue.smarthomefunc.entity.HCBluetoothControl;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.http.HttpInterceptor;
+import com.android.blue.smarthomefunc.jninative.SmartHomeNativeUtils;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -34,6 +35,7 @@ public class SmartHomeApplication extends Application implements Application.Act
         initOkHttpUtils();
 
         HCBluetoothControl.getInstance(getApplicationContext());//初始蓝牙管理
+        SmartHomeNativeUtils.initPath(getCacheDir().getPath()+"/login.txt");
     }
 
     private void initOkHttpUtils(){

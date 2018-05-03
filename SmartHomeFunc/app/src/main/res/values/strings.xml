@@ -24,6 +24,7 @@
     <string name="setting_set">设置</string>
     <string name="setting_about">关于</string>
     <string name="setting_exit">退出登录</string>
+    <string name="setting_login">登录</string>
     <string name="setting_user_name">未设置</string>
     <string name="device_name">设备名称:</string>
     <string name="device_address">地址:</string>
@@ -36,6 +37,9 @@
     <string name="ble_connect_loading">正在连接蓝牙设备　<xliff:g id="device">%1$s</xliff:g></string>
     <string name="ble_connect_send_msg">请输入指令</string>
 
+    <string name="login_name_error">用户名不能为空</string>
+    <string name="login_password_error">密码不能为空</string>
+    <string name="login_name_password_verify_error">用户名或密码错误,验证失败</string>
     <string name="hello_blank_fragment">
         Hello
         blank
