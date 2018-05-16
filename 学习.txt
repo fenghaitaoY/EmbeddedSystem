@@ -228,10 +228,16 @@ MCU <--tx rx-> MTTM      <----->  STTM <--tx rx--> MCU
 
 每个从机都会有一个叫做profile的东西存在，不管是simpleprofile，还是标准的防丢器profile，　他们都是由一系列service组成，　然后每个service包含了多个characteristic, 主机和从机之间的通信，　均是通过characteristic实现
 
+对称加密:指加密和解密使用相同的密钥的加密算法
 
-AES加密
+AES加密 
 aes为分组密码，　也就是把明文分为一组一组的，　每组长度相等，每次加密一组数据，　直到加密完整个明文．在aes标准规范中，　分组长度只能是128位，　每个分组１６个字节，　每个字节８位，　密钥长度使用１２８位，　１９２位或２５６位．
 
+
+
+Hash算法:单向算法,用户可以通过hash算法对目标信息生成一段特定长度的唯一的hash值,却不能通过hash值重新获得目标信息
+
+MD5算法 将任意长度的"字节串"变换成一个128bit的大整数,并且它是一个不可逆的字符串变换算法,也可以作为数字签名应用,广泛用于各种软件的密码认证和钥匙识别
 
 
 
@@ -977,4 +983,188 @@ synchronized (obj) {
  }
 
 需要特别理解的一点是，与sleep方法不同的是wait方法调用完成后，线程将被暂停，但wait方法将会释放当前持有的监视器锁(monitor)，直到有线程调用notify/notifyAll方法后方能继续执行，而sleep方法只让线程休眠并不释放锁。同时notify/notifyAll方法调用后，并不会马上释放监视器锁，而是在相应的synchronized(){}/synchronized方法执行结束后才自动释放锁。
- 
+
+SQLite 事物
+事物是一个对数据库执行工作单元.事务是以逻辑顺序完成的工作单位或序列,可以由用户手动操作完成,也可以是由某种数据库程序自动完成
+事务的属性:原子性,一致性,隔离性,持久性
+
+
+
+自定义View
+大部分需要重写onMeasure(), onDraw();
+onMeasure 负责对当前View的尺寸进行测量
+onDraw 负责把当前这个view绘制出来
+
+
+package com.example.fht.webviewtest;
+
+import android.content.Context;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.support.annotation.Nullable;
+import android.util.AttributeSet;
+import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+
+/**
+ * Created by fht on 5/16/18.
+ */
+
+public class CircleView extends View {
+    String TAG = "yjj";
+    Paint mPaint;
+    int mColor;
+
+    public CircleView(Context context) {
+        super(context);
+        init();
+    }
+
+    public CircleView(Context context, @Nullable AttributeSet attrs) {
+        this(context, attrs, 0);
+        init();
+    }
+
+    public CircleView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        
+        //读取自定义属性
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CircleView);
+        mColor = a.getColor(R.styleable.CircleView_circle_color, Color.RED);
+        a.recycle();
+
+        init();
+    }
+
+
+    private void init(){
+        mPaint = new Paint();
+        mPaint.setColor(mColor);
+        mPaint.setStrokeWidth(10f);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setAlpha(235);
+    }
+
+
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        Log.i(TAG, "onMeasure");
+
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+
+        int defaultHight = 400;
+        int defaultWidth = 400;
+
+        if (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT &&
+                getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT){
+            setMeasuredDimension(defaultWidth, defaultHight);
+        }else if (getLayoutParams().width == ViewGroup.LayoutParams.WRAP_CONTENT){
+            setMeasuredDimension(defaultWidth, heightSize);
+        }else if (getLayoutParams().height == ViewGroup.LayoutParams.WRAP_CONTENT){
+            setMeasuredDimension(widthSize, defaultHight);
+        }
+
+
+    }
+
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        Log.i(TAG, "onDraw");
+        int paddingLeft = getPaddingLeft();
+        int paddingRight = getPaddingRight();
+        int paddingTop = getPaddingTop();
+        int paddingBottom = getPaddingBottom();
+
+
+        int width = getWidth()-paddingLeft-paddingRight;
+        int height = getHeight()-paddingTop-paddingBottom;
+
+        int r = Math.min(width,height)/2;
+
+        canvas.drawCircle(paddingLeft+width/2, paddingTop+height/2, r, mPaint);
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        Log.i(TAG, "onTouchEvent ");
+        return super.onTouchEvent(event);
+    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        Log.i(TAG, "event = "+event.getAction());
+        return super.dispatchTouchEvent(event);
+    }
+
+}
+
+自定义属性
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CircleView">
+        <attr name="circle_color" format="color"/>
+    </declare-styleable>
+</resources>
+
+
+
+
+事件分发机制
+
+对于viewGroup类型的控件有如下三种
+
+事件分发 dispatchTouchEvent
+事件拦截 onInterceptTouchEvent
+事件响应 onTouchEvent
+
+,对于单个view控件只有dispatchTouchEvent和onTouchEvent
+
+
+viewgroup A    	dispatchTouchEvent
+						|
+				onInterceptTouchEvent
+						|
+					  返回值 ----true-> onTouchEvent
+					  	|					|
+					  	|					|
+					  false					|
+					  	|					|
+					  	|					|
+					  					  false	
+viewgroup B 	dispatchTouchEvent			|
+						|					|
+				onInterceptTouchEvent		|
+						|					|
+						|					|
+					  返回值 ----true-->onTouchEvent ---true-> 代表事件消费了,事件结束
+					    |
+					    |
+					  false
+					    |
+					    |
+View 			dispatchTouchEvent
+						|
+					onTouchEvent
+
+
+事件冲突典型案例 viewpager 和scrollview ,需要在viewpager中的onInterceptTouchEvent 判断左右滑动, 还是上下滑动, 如果是左右滑动,返回 return true将事件拦截下来, 如果是上下滑动,返回return false,将事件传递给scrollview.
+
+
+
+
+
+
