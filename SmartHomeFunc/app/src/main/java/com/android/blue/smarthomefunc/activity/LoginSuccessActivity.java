@@ -153,9 +153,17 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        boolean exitVideo = false;
         currentFragment = viewPagerAdapter.getItem(viewpager.getCurrentItem());
         if (currentFragment instanceof DeviceControlFragment){
             ((DeviceControlFragment) currentFragment).onKeyDown(keyCode, event);
+        }else if (currentFragment instanceof VideoFragment){
+            LogUtils.i("-----back----video-----");
+            exitVideo = ((VideoFragment) currentFragment).onKeyDown(keyCode,event);
+            //如果还有可以返回的网页, 不做退出应用提示
+            if (exitVideo){
+                return true;
+            }
         }
 
         if (keyCode == event.KEYCODE_BACK){

@@ -1,20 +1,12 @@
-package com.android.blue.smarthomefunc.fragment;
+package com.android.blue.smarthomefunc.activity;
 
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -26,99 +18,37 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.android.blue.smarthomefunc.R;
-import com.android.blue.smarthomefunc.activity.WebViewVideoActivity;
 import com.android.blue.smarthomefunc.entity.LogUtils;
-
-import java.io.IOException;
-import java.io.InputStream;
+import com.android.blue.smarthomefunc.http.JsonCallback;
+import com.android.blue.smarthomefunc.model.Splash;
+import com.zhy.http.okhttp.OkHttpUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
+import okhttp3.Call;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link VideoFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class VideoFragment extends Fragment {
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class WebViewVideoActivity extends BaseActivity {
 
-    private String mParam1;
-    private String mParam2;
-
-    @BindView(R.id.music_toolbar_search)
-    ImageView musicToolbarSearch;
-    @BindView(R.id.music_toolbar)
-    LinearLayout musicToolbar;
-    @BindView(R.id.webView_loading_bar)
-    ProgressBar webViewLoadingBar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.webView_activity_loading_bar)
+    ProgressBar webViewActivityLoadingBar;
     @BindView(R.id.webView)
     WebView webView;
 
-
-    private static final String IQIYI_URL = "http://m.iqiyi.com/";
-
-    private View mVideoFragmentView;
-    private Context mContext;
-    private Unbinder butterknife;
-    private WebSettings mWebSettings;
-    private View myView;
-
-
-    public VideoFragment() {
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment VideoFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static VideoFragment newInstance(String param1, String param2) {
-        VideoFragment fragment = new VideoFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
+    WebSettings mWebSettings;
+    View myView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+        setContentView(R.layout.activity_web_view_video);
+        ButterKnife.bind(this);
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        mVideoFragmentView = inflater.inflate(R.layout.fragment_video, container, false);
-        mContext = getActivity();
-        butterknife = ButterKnife.bind(this, mVideoFragmentView);
-
-        webViewLoadingBar.setVisibility(View.GONE);
-
-        return mVideoFragmentView;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+        String urlStr = getIntent().getStringExtra("url");
 
         mWebSettings = webView.getSettings();
 
@@ -141,9 +71,22 @@ public class VideoFragment extends Fragment {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mWebSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
-        webView.loadUrl(IQIYI_URL);
+        webView.loadUrl(urlStr);
 
+        OkHttpUtils.get().url("http://www.iqiyi.com/v_19rrdkbu90/").build().execute(new JsonCallback<Splash>(Splash.class) {
+            @Override
+            public void onError(Call call, Exception e, int id) {
 
+            }
+
+            @Override
+            public void onResponse(Splash response, int id) {
+            }
+
+            @Override
+            public void onAfter(int id) {
+            }
+        });
 
         //由于设置了弹窗检验调用结果, 所以需要支持js对话框, webview只是载体, 内容的渲染需要使用webviewchromeClient类去实现
         //通过设置webchromeclient对象处理js的对话框, 设置响应js的alert函数
@@ -176,17 +119,17 @@ public class VideoFragment extends Fragment {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 LogUtils.i("webview title ="+title);
-
+                toolbar.setTitle(title);
             }
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 LogUtils.i("progress change  , new progress = "+newProgress);
-                if (webViewLoadingBar != null) {
+                if (webViewActivityLoadingBar != null) {
                     if (newProgress < 100) {
-                        webViewLoadingBar.setProgress(newProgress);
+                        webViewActivityLoadingBar.setProgress(newProgress);
                     } else {
-                        webViewLoadingBar.setProgress(100);
+                        webViewActivityLoadingBar.setProgress(100);
                     }
                 }
             }
@@ -234,32 +177,25 @@ public class VideoFragment extends Fragment {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 LogUtils.i("Url loading = "+url);
-                //此处为了解决进入界面自己会启动activity的bug
-                if (url.equals(IQIYI_URL)){
-                    return false;
+                if (url.startsWith("intent") || url.startsWith("youku") || url.startsWith("iqiyi") || url.startsWith("qiyi")){
+                    return true;
+                }else {
+                    return super.shouldOverrideUrlLoading(view, url);
                 }
-
-                //点击界面内容链接, 跳转到新的activity
-                webView.onPause();
-
-                Intent intent = new Intent(getActivity(), WebViewVideoActivity.class);
-                intent.putExtra("url", url);
-                getActivity().startActivity(intent);
-                return true;
             }
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 LogUtils.i("开始加载");
-                if (webViewLoadingBar!= null)
-                    webViewLoadingBar.setVisibility(View.VISIBLE);
+                if (webViewActivityLoadingBar!= null)
+                    webViewActivityLoadingBar.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onPageFinished(WebView view, String url) {
                 LogUtils.i("加载结束");
-                if (webViewLoadingBar!= null)
-                    webViewLoadingBar.setVisibility(View.GONE);
+                if (webViewActivityLoadingBar!= null)
+                    webViewActivityLoadingBar.setVisibility(View.GONE);
 
             }
 
@@ -268,53 +204,30 @@ public class VideoFragment extends Fragment {
                 handler.proceed();
             }
         });
-        
-        
+
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        webView.onResume();
-    }
-
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        LogUtils.i("canGoBack ="+webView.canGoBack());
-        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
-            webView.goBack();
-            return true;
-        }
-        return false;
-    }
 
 
     private void setFullScreen(){
-        getActivity().getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        toolbar.setVisibility(View.GONE);
+        webView.setRotation(90);
     }
 
     private void quitFullScreen(){
-        WindowManager.LayoutParams attrs = getActivity().getWindow().getAttributes();
+        WindowManager.LayoutParams attrs = getWindow().getAttributes();
         attrs.flags &= (~WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        getActivity().getWindow().setAttributes(attrs);
-        getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
+        getWindow().setAttributes(attrs);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        toolbar.setVisibility(View.VISIBLE);
+        webView.setRotation(-90);
     }
 
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        butterknife.unbind();
+    protected void onDestroy() {
+        super.onDestroy();
         if (webView != null){
             webView.loadDataWithBaseURL(null,"", "text/html", "utf-8", null);
             webView.clearHistory();

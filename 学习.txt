@@ -954,7 +954,7 @@ synchronize字节码代码:
 //省略其他.......
 21: monitorexit //退出同步方法
 
-从字节码可知同步语句块的实现使用的是monitorenter和monitoreexit指令,monitorenter指令指向同步代码块的开始位置,monitorexit指令则指明结束位置
+从字节码可知同步语句块的实现使用的是monitorenter和monitorexit指令,monitorenter指令指向同步代码块的开始位置,monitorexit指令则指明结束位置
 
 
 synchronized 可重入性

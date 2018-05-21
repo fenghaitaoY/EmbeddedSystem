@@ -10,15 +10,15 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        ndk{
+        ndk {
             moduleName "smarthome"
             ldLibs "log"
         }
 
     }
     //使用自定义的mk文件
-    externalNativeBuild{
-        ndkBuild{
+    externalNativeBuild {
+        ndkBuild {
             path file("src/main/jni/Android.mk")
         }
     }
