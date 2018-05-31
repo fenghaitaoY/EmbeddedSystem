@@ -8,7 +8,37 @@
     tools:context="com.android.blue.smarthomefunc.activity.WebViewVideoActivity">
 
     <include layout="@layout/include_app_bar"
-        android:visibility="visible"/>
+        android:visibility="gone"/>
+  <LinearLayout
+      android:id="@+id/video_toolbar"
+      android:layout_width="match_parent"
+      android:layout_height="60dp"
+      android:orientation="horizontal"
+      android:gravity="center_vertical"
+      android:paddingTop="@dimen/padding_top"
+      android:paddingBottom="@dimen/margin_10"
+      android:background="@color/colorPrimaryDark"
+      >
+
+      <ImageView
+          android:id="@+id/video_back"
+          android:layout_width="25dp"
+          android:layout_height="18dp"
+          android:layout_marginStart="@dimen/margin_10"
+          android:layout_gravity="center"
+          android:src="@drawable/play_main_back_selector"
+          />
+      <TextView
+          android:id="@+id/video_title"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="@dimen/margin_5"
+          android:textSize="15sp"
+          android:textColor="@color/white_96p"
+          />
+
+
+  </LinearLayout>
 
     <ProgressBar
         android:id="@+id/webView_activity_loading_bar"

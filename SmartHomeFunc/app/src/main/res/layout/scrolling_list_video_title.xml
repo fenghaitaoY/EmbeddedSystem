@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="30dp"
+    android:gravity="center"
+    android:layout_marginTop="@dimen/margin_5">
+
+    <ImageView
+        android:id="@+id/homepage_title_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="26dp"
+        android:src="@drawable/homepage_list_title"
+        />
+
+    <TextView
+        android:id="@+id/homepage_title_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/homepage_title_icon"
+        android:layout_marginLeft="@dimen/margin_5"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:text="恐怖"/>
+
+    <TextView
+        android:id="@+id/homepage_title_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:paddingEnd="@dimen/margin_10"
+        android:paddingStart="@dimen/margin_10"
+        android:layout_marginEnd="@dimen/margin_10"
+        android:layout_centerInParent="true"
+        android:text="更多"
+        />
+
+
+
+</RelativeLayout>

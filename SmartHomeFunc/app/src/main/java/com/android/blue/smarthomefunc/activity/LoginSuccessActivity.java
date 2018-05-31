@@ -19,6 +19,7 @@ import com.android.blue.smarthomefunc.application.SmartHomeApplication;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.entity.HCBluetoothControl;
+import com.android.blue.smarthomefunc.fragment.CustomVideoFragment;
 import com.android.blue.smarthomefunc.fragment.DeviceControlFragment;
 import com.android.blue.smarthomefunc.fragment.MusicFragment;
 import com.android.blue.smarthomefunc.fragment.PeopleSetitingFragment;
@@ -114,7 +115,7 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
         });
         fragments.add(DeviceControlFragment.newInstance());
         fragments.add(MusicFragment.newInstance("music", "show"));
-        fragments.add(VideoFragment.newInstance("video", "play"));
+        fragments.add(CustomVideoFragment.newInstance("video", "play"));
         fragments.add(PeopleSetitingFragment.newInstance("people", "setting"));
     }
 

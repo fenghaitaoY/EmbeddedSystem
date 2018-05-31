@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/video_list_iv"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/default_video"
+        />
+
+    <TextView
+        android:id="@+id/video_list_introduce_tv"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignBottom="@id/video_list_iv"
+        android:gravity="center"
+        android:background="@color/black_trans"
+        android:textColor="@color/white"
+        android:text="高清"
+        />
+
+    <TextView
+        android:id="@+id/video_list_item_name"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/video_list_iv"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="有你"
+        />
+</RelativeLayout>

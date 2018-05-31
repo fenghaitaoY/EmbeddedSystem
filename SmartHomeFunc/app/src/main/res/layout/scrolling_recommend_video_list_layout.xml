@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/scrolling_recommend_iv"
+        android:layout_width="0dp"
+        android:layout_weight="3"
+        android:layout_height="150dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/default_video"/>
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="150dp"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/scrolling_tv_one"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:paddingStart="@dimen/margin_10"
+            android:background="@color/white_96p"
+            android:textColor="@color/red"
+            android:textSize="14sp"
+            />
+
+        <TextView
+            android:id="@+id/scrolling_tv_two"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:paddingStart="@dimen/margin_10"
+            />
+
+        <TextView
+            android:id="@+id/scrolling_tv_three"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:textSize="14sp"
+            android:textColor="@color/black"
+            android:paddingStart="@dimen/margin_10"
+            />
+
+
+    </LinearLayout>
+</LinearLayout>
