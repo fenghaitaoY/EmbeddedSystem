@@ -1,5 +1,7 @@
 package com.android.blue.smarthomefunc.model;
 
+import com.android.blue.smarthomefunc.enums.HomepageTypeEnum;
+
 import java.util.List;
 
 /**
@@ -11,7 +13,13 @@ public class HomepageListInfo {
     public String heardTitle;
     public String more;
     public String moreLink;
-    public List<HomepageVideoList> videoLists;
+
+    public String videoName;
+    public String videoTag;
+    public String videoImage;
+    public String videoLink;
+
+    public int type;
 
     public String getHeardTitle() {
         return heardTitle;
@@ -37,55 +45,44 @@ public class HomepageListInfo {
         this.moreLink = moreLink;
     }
 
-    public List<HomepageVideoList> getVideoLists() {
-        return videoLists;
+
+    public String getVideoName() {
+        return videoName;
     }
 
-    public void setVideoLists(List<HomepageVideoList> videoLists) {
-        this.videoLists = videoLists;
+    public void setVideoName(String videoName) {
+        this.videoName = videoName;
     }
 
-
-
-
-    public class HomepageVideoList{
-        public String videoName;
-        public String videoTag;
-        public String videoImage;
-        public String videoLink;
-
-        public String getVideoName() {
-            return videoName;
-        }
-
-        public void setVideoName(String videoName) {
-            this.videoName = videoName;
-        }
-
-        public String getVideoTag() {
-            return videoTag;
-        }
-
-        public void setVideoTag(String videoTag) {
-            this.videoTag = videoTag;
-        }
-
-        public String getVideoImage() {
-            return videoImage;
-        }
-
-        public void setVideoImage(String videoImage) {
-            this.videoImage = videoImage;
-        }
-
-        public String getVideoLink() {
-            return videoLink;
-        }
-
-        public void setVideoLink(String videoLink) {
-            this.videoLink = videoLink;
-        }
+    public String getVideoTag() {
+        return videoTag;
     }
 
+    public void setVideoTag(String videoTag) {
+        this.videoTag = videoTag;
+    }
 
+    public String getVideoImage() {
+        return videoImage;
+    }
+
+    public void setVideoImage(String videoImage) {
+        this.videoImage = videoImage;
+    }
+
+    public String getVideoLink() {
+        return videoLink;
+    }
+
+    public void setVideoLink(String videoLink) {
+        this.videoLink = videoLink;
+    }
+
+    public int getType(){
+        return type;
+    }
+
+    public void setType(int type){
+        this.type = type;
+    }
 }

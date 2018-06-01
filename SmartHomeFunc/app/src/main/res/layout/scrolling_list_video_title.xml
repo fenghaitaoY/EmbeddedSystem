@@ -8,6 +8,7 @@
         android:id="@+id/homepage_title_icon"
         android:layout_width="wrap_content"
         android:layout_height="26dp"
+        android:layout_marginStart="@dimen/margin_10"
         android:src="@drawable/homepage_list_title"
         />
 

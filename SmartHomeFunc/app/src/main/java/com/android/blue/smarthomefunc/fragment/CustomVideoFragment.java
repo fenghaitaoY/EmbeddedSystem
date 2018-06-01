@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -124,7 +125,25 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
 
     private void init(){
         mAdapter = new VideoHomepageRecycleAdapter(homepageListInfos);
-        videoHomepageRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 10);
+        gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int position) {
+                int type = videoHomepageRecyclerView.getAdapter().getItemViewType(position);
+                LogUtils.i(" --------type ="+type);
+                switch (type){
+                    case VideoHomepageRecycleAdapter.HOMEPAGE_TITLE:
+                        return 10;
+                    case VideoHomepageRecycleAdapter.HOMEPAGE_CONTENT:
+                        return 2;
+
+                }
+                return 1;
+            }
+        });
+
+
+        videoHomepageRecyclerView.setLayoutManager(gridLayoutManager);
         videoHomepageRecyclerView.setAdapter(mAdapter);
         videoHomepageRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -157,16 +176,26 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
     @Override
     public void resolutionCompletedNotification() {
         LogUtils.i("");
+
         homepageSlideInfos = mParseWebPages.getHomePageSlideList();
-        homepageListInfos = mParseWebPages.getHomepageListInfos();
+        homepageListInfos.clear();
+        homepageListInfos.addAll(mParseWebPages.getHomepageListInfos());
         mAdapter.notifyDataSetChanged();
         mSlideLooperUtils.startLoop(homepageSlideInfos, scrollingTvOne, scrollingTvTwo, scrollingTvThree, scrollingRecommendIv);
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        LogUtils.i("");
+        mSlideLooperUtils.stopLoop();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        mSlideLooperUtils.stopLoop();
+        LogUtils.i("");
     }
 
 

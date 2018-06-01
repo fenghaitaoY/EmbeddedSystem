@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.HomepageSlideInfo;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
@@ -28,6 +29,7 @@ public class HomepageSlideLooperUtils {
 
     int looperCount = 0;
     int imageCount=0;
+    boolean looperFlag = false;
 
     List<HomepageSlideInfo> mListSlides;
     TextView one;
@@ -46,7 +48,7 @@ public class HomepageSlideLooperUtils {
 
                     break;
             }
-
+            LogUtils.i(" looper handler post delay");
             mHandler.postDelayed(mPostRunnable, 5000);
         }
 
@@ -70,6 +72,17 @@ public class HomepageSlideLooperUtils {
      * 更新执行的逻辑
      */
     private void updateLooper(){
+        if (one == null || two == null || thr == null || iv == null){
+            //累计
+            if (looperCount < mListSlides.size()-1) {
+                looperCount++;
+            }else{
+                looperCount = 0;
+            }
+            return;
+        }
+        LogUtils.i(" looperCount ="+looperCount);
+
         if (looperCount == 0){
             one.setBackgroundColor(mContext.getResources().getColor(R.color.white_96p));
             two.setBackgroundColor(mContext.getResources().getColor(R.color.black_trans));
@@ -144,17 +157,30 @@ public class HomepageSlideLooperUtils {
      * @param imageView
      */
     public void startLoop(List<HomepageSlideInfo> slideInfos, TextView one, TextView two, TextView three, final ImageView imageView){
+        LogUtils.i("");
+        if (looperFlag){
+            return;
+        }
+        looperFlag = true;
+
         if (slideInfos != null && slideInfos.size() > 0){
             for (int i=0;i<slideInfos.size();i++){
-                if (i == 0) one.setText(slideInfos.get(i).getVideoName());
-                if (i == 1) two.setText(slideInfos.get(i).getVideoName());
-                if (i == 2) three.setText(slideInfos.get(i).getVideoName());
+                if (i == 0 &&one != null) {
+                    one.setText(slideInfos.get(i).getVideoName());
+                    this.one = one;
+                }
+                if (i == 1 && two != null) {
+                    two.setText(slideInfos.get(i).getVideoName());
+                    this.two = two;
+                }
+                if (i == 2 && three != null){
+                    three.setText(slideInfos.get(i).getVideoName());
+                    thr = three;
+                }
             }
             mListSlides = slideInfos;
-            this.one = one;
-            this.two = two;
-            thr = three;
-            iv = imageView;
+            if (imageView!= null)
+                iv = imageView;
 
             //初始显示
             looperCount = 0;
@@ -169,6 +195,8 @@ public class HomepageSlideLooperUtils {
      * 当不可见时,停止更新
      */
     public void stopLoop(){
+        LogUtils.i("");
+        looperFlag = false;
         mHandler.removeCallbacks(mPostRunnable);
     }
 }

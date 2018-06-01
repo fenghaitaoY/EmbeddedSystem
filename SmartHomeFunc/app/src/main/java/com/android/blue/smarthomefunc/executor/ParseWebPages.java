@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.android.blue.smarthomefunc.entity.LogUtils;
+import com.android.blue.smarthomefunc.enums.HomepageTypeEnum;
 import com.android.blue.smarthomefunc.model.HomepageListInfo;
 import com.android.blue.smarthomefunc.model.HomepageSlideInfo;
 import com.android.blue.smarthomefunc.model.PlayVideoInfo;
@@ -31,9 +32,9 @@ public class ParseWebPages {
     public static final int SELECT_VIDEO=2;
     public static final int PLAYING_VIDEO=3;
 
+
     public List<HomepageSlideInfo> slides = new ArrayList<>();
     public List<HomepageListInfo> homepageListInfos = new ArrayList<>();
-    public List<HomepageListInfo.HomepageVideoList> homepageVideoLists = new ArrayList<>();
     public VideoSelectInfo selectInfo;
     public PlayVideoInfo playVideoInfo;
 
@@ -119,6 +120,7 @@ public class ParseWebPages {
                     switch (tag){
                         case HOMEPAGE_SLIDE:
                             Elements slideElements = doc.select("div.item");
+                            slides.clear();
                             for (Element e : slideElements){
                                 LogUtils.i( "thread  alt ="+e.select("img").attr("alt")+" , href ="
                                         +e.select("a").attr("href")+" , src = "+e.select("img").attr("src"));
@@ -136,7 +138,7 @@ public class ParseWebPages {
                         case HOMEPAGE_VIDEOS:
 
                             Elements homepageElements = doc.getElementsByClass("box-a");
-
+                            homepageListInfos.clear();
                             for (Element a:homepageElements){
                                 LogUtils.i( "title h3="+a.select("div.title-a").select("h3.title-h3").text()+", " +
                                         ", href="+a.select("div.title-a").select("a").attr("href")+" , more="+
@@ -145,7 +147,29 @@ public class ParseWebPages {
                                 listInfo.setHeardTitle(a.select("div.title-a").select("h3.title-h3").text());
                                 listInfo.setMore(a.select("div.title-a").select("a").text());
                                 listInfo.setMoreLink(a.select("div.title-a").select("a").attr("href"));
-                                listInfo.videoLists = new ArrayList<>();
+
+                              /*  if(listInfo.getHeardTitle().equals("热门推荐")){
+                                    listInfo.setType(HomepageTypeEnum.HOT_RECOMMEND_TITLE);
+                                }else if (listInfo.getHeardTitle().equals("电影")){
+                                    listInfo.setType(HomepageTypeEnum.MOVIE_TITLE);
+                                }else if (listInfo.getHeardTitle().equals("电视剧")){
+                                    listInfo.setType(HomepageTypeEnum.TV_DRAMA_TITLE);
+                                }else if (listInfo.getHeardTitle().equals("综艺")){
+                                    listInfo.setType(HomepageTypeEnum.VARIETY_SHOW_TITLE);
+                                }else if (listInfo.getHeardTitle().equals("动漫")){
+                                    listInfo.setType(HomepageTypeEnum.ANIME_TITLE);
+                                }else if (listInfo.getHeardTitle().equals("恐怖")){
+                                    listInfo.setType(HomepageTypeEnum.HORROR_SHOW_TITLE);
+                                }else if (listInfo.getHeardTitle().equals("音乐")){
+                                    listInfo.setType(HomepageTypeEnum.MUSIC_SHOW_TITLE);
+                                }*/
+                                listInfo.type = 1;
+
+                                if (!TextUtils.isEmpty(listInfo.getHeardTitle())) {
+                                    LogUtils.i("   homepage list info add ");
+                                    homepageListInfos.add(listInfo);
+                                }
+
 
                                 LogUtils.i( "-- size="+a.select("div.box-a-c").select("div.con").size());
                                 int count = a.select("div.box-a-c").select("div.con").size();
@@ -154,15 +178,32 @@ public class ParseWebPages {
                                             " , src="+a.select("div.box-a-c").select("div.con").get(i).select("img").attr("data-src")+
                                             " , num="+a.select("div.box-a-c").select("div.con").get(i).select("span.sNum").text()
                                             +" , sTit="+a.select("div.box-a-c").select("div.con").get(i).select("span.sTit").text());
-                                    HomepageListInfo.HomepageVideoList videoList = listInfo.new HomepageVideoList();
-                                    videoList.setVideoName(a.select("div.box-a-c").select("div.con").get(i).select("span.sTit").text());
-                                    videoList.setVideoImage(a.select("div.box-a-c").select("div.con").get(i).select("img").attr("data-src"));
-                                    videoList.setVideoTag(a.select("div.box-a-c").select("div.con").get(i).select("span.sNum").text());
-                                    videoList.setVideoLink(a.select("div.box-a-c").select("div.con").get(i).select("a").attr("href"));
-                                    homepageVideoLists.add(videoList);
+                                    HomepageListInfo contentList = new HomepageListInfo();
+                                    contentList.setVideoName(a.select("div.box-a-c").select("div.con").get(i).select("span.sTit").text());
+                                    contentList.setVideoImage(a.select("div.box-a-c").select("div.con").get(i).select("img").attr("data-src"));
+                                    contentList.setVideoTag(a.select("div.box-a-c").select("div.con").get(i).select("span.sNum").text());
+                                    contentList.setVideoLink(a.select("div.box-a-c").select("div.con").get(i).select("a").attr("href"));
+
+                                    /*if (listInfo.getType().equals(HomepageTypeEnum.HOT_RECOMMEND_TITLE)) {
+                                        contentList.setType(HomepageTypeEnum.HOT_RECOMMEND_CONTENT);
+                                    }else if (listInfo.getType().equals(HomepageTypeEnum.MOVIE_TITLE)){
+                                        contentList.setType(HomepageTypeEnum.MOVIE_CONTENT);
+                                    }else if (listInfo.getType().equals(HomepageTypeEnum.TV_DRAMA_TITLE)){
+                                        contentList.setType(HomepageTypeEnum.TV_DRAMA_CONTENT);
+                                    }else if (listInfo.getType().equals(HomepageTypeEnum.VARIETY_SHOW_TITLE)){
+                                        contentList.setType(HomepageTypeEnum.VARIETY_SHOW_CONTENT);
+                                    }else if (listInfo.getType().equals(HomepageTypeEnum.ANIME_TITLE)){
+                                        contentList.setType(HomepageTypeEnum.ANIME_CONTENT);
+                                    }else if (listInfo.getType().equals(HomepageTypeEnum.HORROR_SHOW_TITLE)){
+                                        contentList.setType(HomepageTypeEnum.HORROR_SHOW_CONTENT);
+                                    }else if (listInfo.getType().equals(HomepageTypeEnum.MUSIC_SHOW_TITLE)){
+                                        contentList.setType(HomepageTypeEnum.MUSIC_SHOW_CONTENT);
+                                    }*/
+                                    contentList.type=2;
+
+                                    LogUtils.i("   homepage list info add ");
+                                    homepageListInfos.add(contentList);
                                 }
-                                listInfo.videoLists.addAll(homepageVideoLists);
-                                homepageListInfos.add(listInfo);
                             }
 
                             break;
