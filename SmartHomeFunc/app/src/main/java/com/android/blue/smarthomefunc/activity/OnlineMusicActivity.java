@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -36,6 +38,7 @@ import com.android.blue.smarthomefunc.entity.MusicExtrasPara;
 import com.android.blue.smarthomefunc.enums.LoadStateEnum;
 import com.android.blue.smarthomefunc.enums.PlayModeEnum;
 import com.android.blue.smarthomefunc.executor.DownloadOnlineMusic;
+import com.android.blue.smarthomefunc.executor.MusicScannerClient;
 import com.android.blue.smarthomefunc.executor.PlayOnlineMusic;
 import com.android.blue.smarthomefunc.executor.ShareOnlineMusic;
 import com.android.blue.smarthomefunc.http.HttpCallback;
@@ -49,8 +52,10 @@ import com.android.blue.smarthomefunc.model.SingerLIst;
 import com.android.blue.smarthomefunc.model.SongListInfo;
 import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
 import com.android.blue.smarthomefunc.service.PlayService;
+import com.android.blue.smarthomefunc.utils.FileUtils;
 import com.android.blue.smarthomefunc.utils.ImageViewAnimator;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
+import com.android.blue.smarthomefunc.utils.MusicUtils;
 import com.android.blue.smarthomefunc.utils.Preferences;
 import com.android.blue.smarthomefunc.utils.ViewUtils;
 import com.android.blue.smarthomefunc.model.PlayModePopupWindow;
@@ -59,6 +64,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -611,7 +617,13 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
 
             @Override
             public void onExecuteSuccess(Void aVoid) {
-                LogUtils.i("");
+                LogUtils.i("onlineMusic "+FileUtils.getMusicDir());
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        new MusicScannerClient(getApplicationContext(), new File(FileUtils.getMusicDir().concat(FileUtils.getMp3FileName(music.getArtist_name(), music.getTitle()))));
+                    }
+                }, 500);
             }
 
             @Override

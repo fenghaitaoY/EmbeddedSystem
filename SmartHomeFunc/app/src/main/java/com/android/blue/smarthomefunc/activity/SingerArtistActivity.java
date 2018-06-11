@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +36,7 @@ import com.android.blue.smarthomefunc.entity.MusicExtrasPara;
 import com.android.blue.smarthomefunc.enums.LoadStateEnum;
 import com.android.blue.smarthomefunc.enums.PlayModeEnum;
 import com.android.blue.smarthomefunc.executor.DownloadSingerArtistMusic;
+import com.android.blue.smarthomefunc.executor.MusicScannerClient;
 import com.android.blue.smarthomefunc.executor.PlaySingerArtistMusic;
 import com.android.blue.smarthomefunc.executor.ShareOnlineMusic;
 import com.android.blue.smarthomefunc.http.HttpCallback;
@@ -46,6 +48,7 @@ import com.android.blue.smarthomefunc.model.SingerArtistMusic;
 import com.android.blue.smarthomefunc.model.SingerArtistMusicList;
 import com.android.blue.smarthomefunc.model.SingerLIst;
 import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
+import com.android.blue.smarthomefunc.utils.FileUtils;
 import com.android.blue.smarthomefunc.utils.ImageViewAnimator;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 import com.android.blue.smarthomefunc.utils.Preferences;
@@ -56,6 +59,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -421,7 +425,7 @@ public class SingerArtistActivity extends BaseActivity implements OnItemClickLis
     }
 
     @Override
-    public void onDownloadOnlineMusic(int position) {
+    public void onDownloadOnlineMusic(final int position) {
         new DownloadSingerArtistMusic(this, mData.get(position)){
 
             @Override
@@ -431,7 +435,16 @@ public class SingerArtistActivity extends BaseActivity implements OnItemClickLis
 
             @Override
             public void onExecuteSuccess(Void aVoid) {
-
+                LogUtils.i("");
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        new MusicScannerClient(getApplicationContext(),
+                                new File(FileUtils.getMusicDir().
+                                        concat(FileUtils.getMp3FileName(mData.get(position).getAuthor(),
+                                                mData.get(position).getTitle()))));
+                    }
+                }, 500);
             }
 
             @Override

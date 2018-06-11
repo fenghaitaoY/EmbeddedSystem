@@ -20,8 +20,10 @@ import com.android.blue.smarthomefunc.adapter.OnMoreItemListener;
 import com.android.blue.smarthomefunc.adapter.OnMusicAdapterItemClickListener;
 import com.android.blue.smarthomefunc.application.AppCache;
 import com.android.blue.smarthomefunc.entity.LogUtils;
+import com.android.blue.smarthomefunc.executor.MusicScannerClient;
 import com.android.blue.smarthomefunc.model.Music;
 import com.android.blue.smarthomefunc.service.OnPlayerEventListener;
+import com.android.blue.smarthomefunc.utils.FileUtils;
 import com.android.blue.smarthomefunc.utils.ImageViewAnimator;
 import com.android.blue.smarthomefunc.utils.MusicCoverLoaderUtils;
 import com.android.blue.smarthomefunc.utils.MusicUtils;
@@ -136,6 +138,9 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
         musicBarSeekBar.setOnSeekBarChangeListener(this);
     }
 
+    /**
+     * 在线播放的歌曲, 下载后在进入本地列表, bar更新错误及item没有显示已经下载并在播放的状态
+     */
     private void initPlayingMusicBar() {
         if (getPlayService().getPlayingMusic() != null) {
             musicBarSeekBar.setMax((int) getPlayService().getPlayingMusic().getDuration());
@@ -409,8 +414,17 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
                     updateView();
 
                     //刷新媒体库
-                    Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://".concat(music.getPath())));
-                    getApplicationContext().sendBroadcast(intent);
+                   /* Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                    intent.setData(Uri.fromFile(new File(music.getPath())));
+                    sendBroadcast(intent);*/
+
+                    mHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new MusicScannerClient(getApplicationContext(),
+                                    new File(music.getPath()));
+                        }
+                    }, 300);
                 }
             }
         });
