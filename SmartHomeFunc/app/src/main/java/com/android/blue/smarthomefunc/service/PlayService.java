@@ -126,7 +126,8 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
                 if (!AppCache.get().getMusicList().isEmpty()){
                     updatePlayingPosition();
-                    mPlayingMusic = AppCache.get().getMusicList().get(mPlayingPosition);
+                    if (mPlayingMusic == null)
+                        mPlayingMusic = AppCache.get().getMusicList().get(mPlayingPosition);
                 }
                 if (mListener != null){
                     mListener.onMusicListUpdate();
@@ -359,8 +360,9 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
      * 删除或下载后，刷新正在播放的本地歌曲的序号
      */
     public void updatePlayingPosition(){
-        int position = 0;
+        int position = -1;
         long id = Preferences.getCurrentSongId();
+        LogUtils.i(" id = "+id);
         for (int i =0; i< AppCache.get().getMusicList().size();i++){
             if (AppCache.get().getMusicList().get(i).getId() == id){
                 position = i;

@@ -140,9 +140,12 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
 
     /**
      * 在线播放的歌曲, 下载后在进入本地列表, bar更新错误及item没有显示已经下载并在播放的状态
+     * 问题解决:由于下载结束之后会触发列表更新, 不管当前正在播放的music对象是否为null, 都会重新赋值
+     * 导致获得当前播放音乐信息错误
      */
     private void initPlayingMusicBar() {
         if (getPlayService().getPlayingMusic() != null) {
+            LogUtils.i(" init playing musicbar title = "+getPlayService().getPlayingMusic().getTitle());
             musicBarSeekBar.setMax((int) getPlayService().getPlayingMusic().getDuration());
             musicTitle.setText(getPlayService().getPlayingMusic().getTitle());
             musicArtist.setText(getPlayService().getPlayingMusic().getArtist());
@@ -213,6 +216,7 @@ public class LocalMusicActivity extends BaseActivity implements AdapterView.OnIt
             //本地没有歌曲
         } else {
             //本地存在歌曲
+            AppCache.get().getPlayService().updateMusicList(null);
         }
         mLocalMusicAdapter.updatePlayingPosition(getPlayService());
         mLocalMusicAdapter.notifyDataSetChanged();

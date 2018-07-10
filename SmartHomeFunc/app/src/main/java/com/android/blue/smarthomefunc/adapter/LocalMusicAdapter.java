@@ -32,7 +32,7 @@ import butterknife.ButterKnife;
  */
 
 public class LocalMusicAdapter extends BaseAdapter {
-    private int mPlayingPosition;
+    private int mPlayingPosition = -1;
     private OnMusicAdapterItemClickListener mListener;
 
     private OnMoreItemListener mOnMoreItemListener; //more click
@@ -209,8 +209,19 @@ public class LocalMusicAdapter extends BaseAdapter {
     }
 
     public void updatePlayingPosition(PlayService playService){
-        if (playService.getPlayingMusic() != null && playService.getPlayingMusic().getType() == Music.Type.LOCAL){
+        if (playService.getPlayingMusic() != null && playService.getPlayingMusic().getType() == Music.Type.LOCAL) {
             mPlayingPosition = playService.getPlayingPosition();
+        }else if (playService.getPlayingMusic() != null && playService.getPlayingMusic().getType() == Music.Type.ONLINE){
+            for (int i=0; i<AppCache.get().getMusicList().size();i++){
+                LogUtils.i("    update position id ="+AppCache.get().getMusicList().get(i).getId()
+                        + " oneline id ="+playService.getPlayingMusic().getId());
+                if (AppCache.get().getMusicList().get(i).getTitle().equals(playService.getPlayingMusic().getTitle())
+                        && AppCache.get().getMusicList().get(i).getArtist().equals(playService.getPlayingMusic().getArtist())){
+                    mPlayingPosition = i;
+                    LogUtils.i("  position = "+mPlayingPosition);
+                    break;
+                }
+            }
         }else{
             mPlayingPosition = -1;
         }

@@ -2,6 +2,7 @@ package com.android.blue.smarthomefunc.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.activity.DetailVideoActivity;
+import com.android.blue.smarthomefunc.adapter.OnItemClickListener;
 import com.android.blue.smarthomefunc.adapter.VideoHomepageRecycleAdapter;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.executor.IParseWebPageNotify;
@@ -44,7 +47,7 @@ import butterknife.Unbinder;
  * Use the {@link CustomVideoFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CustomVideoFragment extends Fragment implements IParseWebPageNotify, View.OnClickListener{
+public class CustomVideoFragment extends Fragment implements IParseWebPageNotify, View.OnClickListener, OnItemClickListener{
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -142,6 +145,7 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
             }
         });
 
+        mAdapter.setOnItemClickListener(this);
 
         videoHomepageRecyclerView.setLayoutManager(gridLayoutManager);
         videoHomepageRecyclerView.setAdapter(mAdapter);
@@ -232,6 +236,33 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
                 LogUtils.i("num ="+mSlideLooperUtils.getClickSlideItemNum()+" url="+homepageSlideInfos.get(mSlideLooperUtils.getClickSlideItemNum()).getVideoLink());
                 break;
         }
+
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        LogUtils.i(" ---- position = "+position+" , title = "+homepageListInfos.get(position).getVideoName()
+        +" , link ="+homepageListInfos.get(position).getVideoLink()+" , type ="+homepageListInfos.get(position).type
+        +" , morelink ="+homepageListInfos.get(position).getMoreLink());
+        int type = homepageListInfos.get(position).type;
+        switch (type){
+            case 1:
+
+                break;
+
+            case 2:
+                Intent detailIntent = new Intent(getActivity(), DetailVideoActivity.class);
+                detailIntent.putExtra("video_detail_url", ParseWebPages.WUDI.concat(homepageListInfos.get(position).getVideoLink()));
+                detailIntent.putExtra("title_name", homepageListInfos.get(position).getVideoName());
+                startActivity(detailIntent);
+
+                break;
+        }
+
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
 
     }
 }

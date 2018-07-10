@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
@@ -25,6 +26,7 @@ import butterknife.ButterKnife;
 public class VideoHomepageRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<HomepageListInfo> mHomepageLists;
     private Context mContext;
+    private OnItemClickListener mOnItemClickListener;
 
     public static final int HOMEPAGE_TITLE = 1;
     public static final int HOMEPAGE_CONTENT = 2;
@@ -51,19 +53,27 @@ public class VideoHomepageRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
         int type = getItemViewType(position);
         LogUtils.i("position ="+position+" , type = "+type);
         switch (type){
             case HOMEPAGE_TITLE:
-                VideoHomepageTitleHolder videoTitleHolder = (VideoHomepageTitleHolder) holder;
+                final VideoHomepageTitleHolder videoTitleHolder = (VideoHomepageTitleHolder) holder;
 
                 videoTitleHolder.titleName.setText(mHomepageLists.get(position).getHeardTitle());
                 videoTitleHolder.more.setText(mHomepageLists.get(position).getMore());
+
+                videoTitleHolder.more.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        LogUtils.i("--点击 更多-----");
+                        mOnItemClickListener.onItemClick(videoTitleHolder.more, position);
+                    }
+                });
                 break;
             case HOMEPAGE_CONTENT:
-                VideoHomepageHolder contentHolder = (VideoHomepageHolder) holder;
+                final VideoHomepageHolder contentHolder = (VideoHomepageHolder) holder;
 
                 contentHolder.videoListName.setText(mHomepageLists.get(position).getVideoName());
                 contentHolder.introduceTv.setText(mHomepageLists.get(position).getVideoTag());
@@ -71,7 +81,13 @@ public class VideoHomepageRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
                         .placeholder(R.drawable.default_video)
                         .error(R.drawable.default_video)
                         .into(contentHolder.videoListItemImage);
-
+                contentHolder.mRelatvieLayout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        LogUtils.i(" ------点击 电影条目----");
+                        mOnItemClickListener.onItemClick(contentHolder.mRelatvieLayout, position);
+                    }
+                });
                 break;
         }
 
@@ -96,6 +112,12 @@ public class VideoHomepageRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
         return 0;
     }
 
+
+    public void setOnItemClickListener(OnItemClickListener listener){
+        mOnItemClickListener = listener;
+    }
+
+
     class VideoHomepageHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.video_list_iv)
         ImageView videoListItemImage;
@@ -103,6 +125,8 @@ public class VideoHomepageRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
         TextView introduceTv;
         @BindView(R.id.video_list_item_name)
         TextView videoListName;
+        @BindView(R.id.homepage_videos_item)
+        RelativeLayout mRelatvieLayout;
 
         public VideoHomepageHolder(View view){
             super(view);

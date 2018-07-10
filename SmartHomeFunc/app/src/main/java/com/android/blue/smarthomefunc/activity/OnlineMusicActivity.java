@@ -205,7 +205,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
 
     private void initPlayingMusicBar() {
         if (getPlayService().getPlayingMusic() != null) {
-            LogUtils.i("init bar");
+            LogUtils.i("init bar  title =  "+getPlayService().getPlayingMusic().getTitle());
             musicBarSeekBar.setMax((int) getPlayService().getPlayingMusic().getDuration());
             musicTitle.setText(getPlayService().getPlayingMusic().getTitle());
             musicArtist.setText(getPlayService().getPlayingMusic().getArtist());

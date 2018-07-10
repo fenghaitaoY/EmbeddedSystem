@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.android.blue.smarthomefunc.activity.DetailVideoActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_app_bar"
+            android:visibility="visible"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_5">
+
+            <ImageView
+                android:id="@+id/detail_video_iv"
+                android:layout_width="100dp"
+                android:layout_height="120dp"
+                android:scaleType="fitXY"
+                android:layout_marginStart="@dimen/margin_5"
+                android:src="@drawable/default_cover"
+                />
+
+            <TextView
+                android:id="@+id/detail_video_title_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_5"
+                android:layout_toEndOf="@id/detail_video_iv"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text=""/>
+
+            <TextView
+                android:id="@+id/detail_video_ratio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_5"
+                android:layout_toEndOf="@id/detail_video_iv"
+                android:layout_below="@id/detail_video_title_name"
+                android:layout_marginTop="@dimen/margin_5"
+                android:textColor="@color/black"
+                android:text=""
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_10"
+            >
+
+            <TextView
+                android:id="@+id/detail_play_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/video_list"
+                android:textSize="17sp"
+                android:textColor="@color/black"
+                android:layout_marginStart="@dimen/margin_10"
+                />
+
+            <TextView
+                android:id="@+id/detail_play_introduce"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:drawableRight="@drawable/arrow_introduce"
+                android:paddingEnd="@dimen/margin_10"
+                android:text="@string/video_introduce"
+                android:textSize="13sp"
+                android:textColor="@color/gray_intro"
+                />
+
+        </RelativeLayout>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_marginTop="@dimen/margin_5"
+            android:background="@color/summary_gray"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_5"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/video_list"
+                android:textSize="13sp"
+                android:textColor="@color/black"
+                android:layout_marginStart="@dimen/margin_10"
+                />
+
+            <TextView
+                android:id="@+id/detail_play_video_list_choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:drawableRight="@drawable/arrow_introduce"
+                android:paddingEnd="@dimen/margin_10"
+                android:textSize="13sp"
+                android:textColor="@color/gray_intro"
+                />
+
+        </RelativeLayout>
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/detail_play_recycler"
+            android:layout_width="match_parent"
+            android:paddingStart="@dimen/margin_5"
+            android:paddingEnd="@dimen/margin_5"
+            android:layout_height="wrap_content"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+
+
+    </LinearLayout>
+
+
+
+</ScrollView>

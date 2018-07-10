@@ -38,5 +38,5 @@
     <color name="red">#F44336</color>
     <color name="red_30p">#4CF44336</color>
     <color name="grid_back">#451945</color>
-
+    <color name="gray_intro">#bfbfbf</color>
 </resources>

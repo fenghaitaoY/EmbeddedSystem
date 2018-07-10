@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content">
+    android:layout_width="wrap_content" android:layout_height="wrap_content"
+    android:id="@+id/homepage_videos_item"
+    android:layout_margin="@dimen/margin_5">
 
     <ImageView
         android:id="@+id/video_list_iv"
@@ -20,6 +22,7 @@
         android:gravity="center"
         android:background="@color/black_trans"
         android:textColor="@color/white"
+        android:textSize="12sp"
         android:text="高清"
         />
 
@@ -30,6 +33,9 @@
         android:layout_below="@id/video_list_iv"
         android:layout_centerInParent="true"
         android:gravity="center"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textSize="14sp"
         android:text="有你"
         />
 </RelativeLayout>
