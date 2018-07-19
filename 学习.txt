@@ -1216,3 +1216,51 @@ doc.select("div.comments a").addClass("mylinkclass");//为所有链接增加clas
 doc.select("img").removeAttr("onclick"); //删除所有图片的onclick属性
 doc.select("input[type=text]").val("");//清空所有文本输入框中的文本
 
+
+
+
+
+
+
+和栩商场
+
+http://crm.polibo.cn/CRM/index.html 
+账号  苏州谦和（省经销商） --- 总经销商
+
+
+西汇农商
+https://houtai.sztldz.cn/CRM/index.html
+苏州谦和（会员） --- 运营
+
+
+龙跃关
+
+https://crm.cjshsc.com/CRM/index.html
+苏州谦和（合作机构）  ---- 运营中心
+
+
+汇通购
+https://tx-crm.c88.vc/CRM/index.html
+苏州谦和（会员） --- 运营
+
+
+
+密码:qwertasdfg
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

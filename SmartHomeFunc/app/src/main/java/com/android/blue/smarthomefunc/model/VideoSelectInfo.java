@@ -12,7 +12,58 @@ public class VideoSelectInfo {
     public String selectVideoLink;
     public String selectVideoImage;
     public String selectVideoUpdateToast;
+
+    public String videoYears;
+    public String videoArea;
+    public String videoType;
+    public String videoIntro;
+
     public List<SelectVideos> selectVideoLists;
+
+    public List<RecommendVideo> getRecommendVideoList() {
+        return recommendVideoList;
+    }
+
+    public void setRecommendVideoList(List<RecommendVideo> recommendVideoList) {
+        this.recommendVideoList = recommendVideoList;
+    }
+
+    public List<RecommendVideo> recommendVideoList;
+
+
+    public String getVideoIntro() {
+        return videoIntro;
+    }
+
+    public void setVideoIntro(String videoIntro) {
+        this.videoIntro = videoIntro;
+    }
+
+    public String getVideoYears() {
+        return videoYears;
+    }
+
+    public void setVideoYears(String videoYears) {
+        this.videoYears = videoYears;
+    }
+
+    public String getVideoArea() {
+        return videoArea;
+    }
+
+    public void setVideoArea(String videoArea) {
+        this.videoArea = videoArea;
+    }
+
+    public String getVideoType() {
+        return videoType;
+    }
+
+    public void setVideoType(String videoType) {
+        this.videoType = videoType;
+    }
+
+
 
     public String getSelectVideoName() {
         return selectVideoName;

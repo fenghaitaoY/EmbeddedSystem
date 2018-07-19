@@ -133,9 +133,10 @@
         <activity
             android:name=".activity.WebViewVideoActivity"
             android:screenOrientation="portrait" />
-
-        <activity android:name=".activity.DetailVideoActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".activity.DetailVideoActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.PlayingVideoActivity"></activity>
     </application>
 
 </manifest>

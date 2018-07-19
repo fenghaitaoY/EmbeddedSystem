@@ -106,11 +106,13 @@
     <string name="search_none">未搜索到</string>
 
 
-
     <string name="web_video_bd_ratio">BD高清</string>
     <string name="web_video_hd_ratio">HD高清</string>
     <string name="web_video_backup">备用线路</string>
     <string name="web_video_fast_cloud">高速在线云播</string>
     <string name="video_introduce">简介</string>
     <string name="video_list">剧集</string>
+    <string name="video_item_area">地区: <xliff:g id="time">%1$s</xliff:g></string>
+    <string name="video_item_year">年份: <xliff:g id="time">%1$s</xliff:g></string>
+    <string name="video_item_type">分类: <xliff:g id="time">%1$s</xliff:g></string>
 </resources>

@@ -9,6 +9,7 @@ import com.android.blue.smarthomefunc.enums.HomepageTypeEnum;
 import com.android.blue.smarthomefunc.model.HomepageListInfo;
 import com.android.blue.smarthomefunc.model.HomepageSlideInfo;
 import com.android.blue.smarthomefunc.model.PlayVideoInfo;
+import com.android.blue.smarthomefunc.model.RecommendVideo;
 import com.android.blue.smarthomefunc.model.VideoSelectInfo;
 
 import org.jsoup.Jsoup;
@@ -148,21 +149,7 @@ public class ParseWebPages {
                                 listInfo.setMore(a.select("div.title-a").select("a").text());
                                 listInfo.setMoreLink(a.select("div.title-a").select("a").attr("href"));
 
-                              /*  if(listInfo.getHeardTitle().equals("热门推荐")){
-                                    listInfo.setType(HomepageTypeEnum.HOT_RECOMMEND_TITLE);
-                                }else if (listInfo.getHeardTitle().equals("电影")){
-                                    listInfo.setType(HomepageTypeEnum.MOVIE_TITLE);
-                                }else if (listInfo.getHeardTitle().equals("电视剧")){
-                                    listInfo.setType(HomepageTypeEnum.TV_DRAMA_TITLE);
-                                }else if (listInfo.getHeardTitle().equals("综艺")){
-                                    listInfo.setType(HomepageTypeEnum.VARIETY_SHOW_TITLE);
-                                }else if (listInfo.getHeardTitle().equals("动漫")){
-                                    listInfo.setType(HomepageTypeEnum.ANIME_TITLE);
-                                }else if (listInfo.getHeardTitle().equals("恐怖")){
-                                    listInfo.setType(HomepageTypeEnum.HORROR_SHOW_TITLE);
-                                }else if (listInfo.getHeardTitle().equals("音乐")){
-                                    listInfo.setType(HomepageTypeEnum.MUSIC_SHOW_TITLE);
-                                }*/
+
                                 listInfo.type = 1;
 
                                 if (!TextUtils.isEmpty(listInfo.getHeardTitle())) {
@@ -184,21 +171,6 @@ public class ParseWebPages {
                                     contentList.setVideoTag(a.select("div.box-a-c").select("div.con").get(i).select("span.sNum").text());
                                     contentList.setVideoLink(a.select("div.box-a-c").select("div.con").get(i).select("a").attr("href"));
 
-                                    /*if (listInfo.getType().equals(HomepageTypeEnum.HOT_RECOMMEND_TITLE)) {
-                                        contentList.setType(HomepageTypeEnum.HOT_RECOMMEND_CONTENT);
-                                    }else if (listInfo.getType().equals(HomepageTypeEnum.MOVIE_TITLE)){
-                                        contentList.setType(HomepageTypeEnum.MOVIE_CONTENT);
-                                    }else if (listInfo.getType().equals(HomepageTypeEnum.TV_DRAMA_TITLE)){
-                                        contentList.setType(HomepageTypeEnum.TV_DRAMA_CONTENT);
-                                    }else if (listInfo.getType().equals(HomepageTypeEnum.VARIETY_SHOW_TITLE)){
-                                        contentList.setType(HomepageTypeEnum.VARIETY_SHOW_CONTENT);
-                                    }else if (listInfo.getType().equals(HomepageTypeEnum.ANIME_TITLE)){
-                                        contentList.setType(HomepageTypeEnum.ANIME_CONTENT);
-                                    }else if (listInfo.getType().equals(HomepageTypeEnum.HORROR_SHOW_TITLE)){
-                                        contentList.setType(HomepageTypeEnum.HORROR_SHOW_CONTENT);
-                                    }else if (listInfo.getType().equals(HomepageTypeEnum.MUSIC_SHOW_TITLE)){
-                                        contentList.setType(HomepageTypeEnum.MUSIC_SHOW_CONTENT);
-                                    }*/
                                     contentList.type=2;
 
                                     LogUtils.i("   homepage list info add ");
@@ -230,6 +202,47 @@ public class ParseWebPages {
                                 videos.setVideoListLink(preListVideo.get(i).attr("href"));
                                 selectInfo.selectVideoLists.add(videos);
                             }
+
+                            //年份 地区 类型
+                            Elements years = doc.select("div.tabCon").select("ul.ulTxt");
+                            for (int j=0; j< years.size();j++){
+                                if (years.get(j).text().contains("年份")){
+                                    Elements yearsAreaTypes = years.get(j).select("li");
+                                    for (int k=0; k< yearsAreaTypes.size(); k++){
+                                        LogUtils.i("--------li ----"+yearsAreaTypes.get(k).text());
+                                        if (yearsAreaTypes.get(k).text().contains("年份")){
+                                            selectInfo.setVideoYears(yearsAreaTypes.get(k).text());
+                                        }else if (yearsAreaTypes.get(k).text().contains("地区")){
+                                            selectInfo.setVideoArea(yearsAreaTypes.get(k).text());
+                                        }else {
+                                            selectInfo.setVideoType(yearsAreaTypes.get(k).text());
+                                        }
+                                    }
+                                }
+                            }
+
+                            //简介
+                            Elements intro = doc.select("div.tabCon");
+                            String strIntro=null;
+                            strIntro = intro.get(intro.size()-1).text();
+                            strIntro= strIntro.split(">>")[1];
+                            LogUtils.i("intro : "+strIntro.split("收起")[0]);
+                            strIntro = strIntro.split("收起")[0];
+                            selectInfo.setVideoIntro(strIntro);
+
+                            //推荐视频
+                            Elements recEles = doc.select("div.mod_b").select("div.tb_b").select("div.con");
+                            selectInfo.recommendVideoList = new ArrayList<>();
+                            for (int i=0;i<recEles.size();i++){
+                                RecommendVideo recVideo = new RecommendVideo();
+                                recVideo.setRecVideoTitle(recEles.get(i).select("span.sTit").text());
+                                recVideo.setRecVideoLink(recEles.get(i).select("a").attr("href"));
+                                recVideo.setRecVideoCover(recEles.get(i).select("img").attr("data-src"));
+                                recVideo.setRecVideoScore(recEles.get(i).select("span.sNum").text());
+                                LogUtils.i(" ----- rec video = "+recVideo.toString());
+                                selectInfo.recommendVideoList.add(recVideo);
+                            }
+
 
                             break;
                         case PLAYING_VIDEO:

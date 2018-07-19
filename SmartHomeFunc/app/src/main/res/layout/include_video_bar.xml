@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/toolbar_self"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:paddingTop="@dimen/padding_top"
+        android:gravity="center_vertical"
+        >
+
+        <ImageView
+            android:id="@+id/toolbar_back_iv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10"
+            android:src="@drawable/play_main_back_selector"/>
+
+
+        <TextView
+            android:id="@+id/toolbar_back_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_10"
+            android:layout_toRightOf="@id/toolbar_back_iv"
+            android:gravity="center_vertical"
+            android:textColor="@color/dialog_white"
+            />
+
+        <TextView
+            android:id="@+id/toolbar_back_subtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_5"
+            android:layout_toRightOf="@id/toolbar_back_title"
+            android:textColor="@color/dialog_white"
+            />
+
+    </RelativeLayout>
+
+</android.support.constraint.ConstraintLayout>

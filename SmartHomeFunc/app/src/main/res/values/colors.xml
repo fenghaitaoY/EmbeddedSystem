@@ -39,4 +39,17 @@
     <color name="red_30p">#4CF44336</color>
     <color name="grid_back">#451945</color>
     <color name="gray_intro">#bfbfbf</color>
+
+
+
+    <color name="black_trans_one">#00000000</color>
+    <color name="black_trans_two">#3f000000</color>
+    <color name="black_trans_thr">#5f000000</color>
+    <color name="black_trans_four">#6f000000</color>
+    <color name="black_trans_five">#7f000000</color>
+    <color name="black_trans_six">#8f000000</color>
+    <color name="black_trans_seven">#9f000000</color>
+    <color name="black_trans_eight">#bf000000</color>
+    <color name="black_trans_nine">#da000000</color>
+    <color name="black_trans_ten">#ff000000</color>
 </resources>
