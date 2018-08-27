@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/recommend_item_iv"
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/default_video"/>
+
+
+    <TextView
+        android:id="@+id/recommend_item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/recommend_item_iv"
+        android:layout_marginStart="@dimen/margin_5"
+        android:layout_marginTop="@dimen/margin_5"
+        android:text="addadafa"/>
+</RelativeLayout>

@@ -42,44 +42,10 @@
                     android:layout_marginTop="@dimen/margin_10"
                     android:layout_marginEnd="@dimen/margin_10"/>
 
-                <ListView
-                    android:id="@+id/recommend_video_list"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+
+                <include layout="@layout/include_detail_recommend_videos"/>
 
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/default_video" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/default_video" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/default_video" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/default_video" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/default_video" />
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/default_video" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/default_video" />
 
             </LinearLayout>
         </ScrollView>

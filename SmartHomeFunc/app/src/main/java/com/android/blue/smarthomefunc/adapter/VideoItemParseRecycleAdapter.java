@@ -48,11 +48,13 @@ public class VideoItemParseRecycleAdapter extends RecyclerView.Adapter<RecyclerV
                 selectVideos.get(position).getVideoListTitle().endsWith("集")){
             //动态改变组件大小
             RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) videoHolder.listItemVideoBt.getLayoutParams();
-            lp.width = 150;
-            lp.height = 150;
+            lp.width = 80;
+            lp.height = 80;
             videoHolder.listItemVideoBt.setLayoutParams(lp);
 
             videoHolder.listItemVideoBt.setText(String.valueOf(position+1));
+            videoHolder.listItemVideoBt.setTextSize(12);
+            videoHolder.listItemVideoBt.setBackgroundResource(R.drawable.choice_video_item_background_drawable);
         }else{
             videoHolder.listItemVideoBt.setText(selectVideos.get(position).getVideoListTitle());
         }

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:background="@color/dialog_white"
+        android:layout_marginTop="@dimen/margin_5"
+        android:paddingBottom="@dimen/margin_5"
+        android:paddingTop="@dimen/margin_5"
+        android:layout_marginStart="@dimen/margin_20"
+        android:text="@string/related_recommend_bar_title"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:background="@color/dialog_white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_marginStart="@dimen/margin_20"
+            android:background="?android:attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/recommend_item_one_iv"
+                android:layout_width="90dp"
+                android:layout_height="110dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_video" />
+
+
+            <TextView
+                android:id="@+id/recommend_item_one_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_5"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_toRightOf="@id/recommend_item_one_iv"
+                android:text="addadafa" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_5"
+        android:clickable="true"
+        android:background="@color/dialog_white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_marginStart="@dimen/margin_20"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/recommend_item_two_iv"
+                android:layout_width="90dp"
+                android:layout_height="110dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_video" />
+
+
+            <TextView
+                android:id="@+id/recommend_item_two_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_5"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_marginTop="@dimen/margin_10"
+                android:layout_toRightOf="@id/recommend_item_two_iv"
+                android:text="addadafa" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_5"
+        android:clickable="true"
+        android:background="@color/dialog_white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_20"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/recommend_item_thr_iv"
+                android:layout_width="90dp"
+                android:layout_height="110dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_video" />
+
+
+            <TextView
+                android:id="@+id/recommend_item_thr_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_5"
+                android:layout_marginTop="@dimen/margin_10"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_toRightOf="@id/recommend_item_thr_iv"
+                android:text="addadafa" />
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -126,7 +126,7 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
 
                 if (!AppCache.get().getMusicList().isEmpty()){
                     updatePlayingPosition();
-                    if (mPlayingMusic == null)
+                    if (mPlayingMusic == null && mPlayingPosition>=0)
                         mPlayingMusic = AppCache.get().getMusicList().get(mPlayingPosition);
                 }
                 if (mListener != null){
@@ -149,11 +149,14 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
         }else if (position >= AppCache.get().getMusicList().size()){
             position = 0;
         }
-        mPlayingPosition = position;
-        Music music = AppCache.get().getMusicList().get(mPlayingPosition);
+        if (mPlayingPosition >= 0) {
+            mPlayingPosition = position;
+            Music music = AppCache.get().getMusicList().get(mPlayingPosition);
 
-        Preferences.saveCurrentSongId(music.getId());
-        play(music);
+
+            Preferences.saveCurrentSongId(music.getId());
+            play(music);
+        }
     }
 
     /**
@@ -369,8 +372,11 @@ public class PlayService extends Service implements MediaPlayer.OnCompletionList
                 break;
             }
         }
-        mPlayingPosition = position;
-        Preferences.saveCurrentSongId(AppCache.get().getMusicList().get(mPlayingPosition).getId());
+        if (position >=0) {
+            mPlayingPosition = position;
+
+            Preferences.saveCurrentSongId(AppCache.get().getMusicList().get(mPlayingPosition).getId());
+        }
     }
 
     public int getAudioSessionId(){
