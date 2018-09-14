@@ -25,6 +25,7 @@ import butterknife.ButterKnife;
 
 public class VideoItemParseRecycleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<VideoSelectInfo.SelectVideos> selectVideos;
+    private OnItemClickListener mOnItemClickListener;
 
     public VideoItemParseRecycleAdapter(List<VideoSelectInfo.SelectVideos> videos){
         selectVideos = videos;
@@ -40,9 +41,9 @@ public class VideoItemParseRecycleAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         LogUtils.i("----------video item adapter start ");
-        VideoItemViewHolder videoHolder = (VideoItemViewHolder) holder;
+        final VideoItemViewHolder videoHolder = (VideoItemViewHolder) holder;
 
         if (selectVideos.get(position).getVideoListTitle().startsWith("第") &&
                 selectVideos.get(position).getVideoListTitle().endsWith("集")){
@@ -58,6 +59,16 @@ public class VideoItemParseRecycleAdapter extends RecyclerView.Adapter<RecyclerV
         }else{
             videoHolder.listItemVideoBt.setText(selectVideos.get(position).getVideoListTitle());
         }
+
+
+        if (mOnItemClickListener != null){
+            videoHolder.listItemVideoBt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mOnItemClickListener.onItemClick(videoHolder.listItemVideoBt, position);
+                }
+            });
+        }
     }
 
     @Override
@@ -66,7 +77,9 @@ public class VideoItemParseRecycleAdapter extends RecyclerView.Adapter<RecyclerV
     }
 
 
-
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener) {
+        this.mOnItemClickListener = mOnItemClickListener;
+    }
 
     class VideoItemViewHolder extends RecyclerView.ViewHolder{
         @BindView(R.id.video_item_recycle)

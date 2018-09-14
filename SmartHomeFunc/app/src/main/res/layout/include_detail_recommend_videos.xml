@@ -119,4 +119,74 @@
                 android:text="addadafa" />
         </RelativeLayout>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_5"
+        android:clickable="true"
+        android:background="@color/dialog_white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_20"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/recommend_item_four_iv"
+                android:layout_width="90dp"
+                android:layout_height="110dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_video" />
+
+
+            <TextView
+                android:id="@+id/recommend_item_four_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_5"
+                android:layout_marginTop="@dimen/margin_10"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_toRightOf="@id/recommend_item_four_iv"
+                android:text="addadafa" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_5"
+        android:clickable="true"
+        android:background="@color/dialog_white">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_20"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true">
+
+            <ImageView
+                android:id="@+id/recommend_item_five_iv"
+                android:layout_width="90dp"
+                android:layout_height="110dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/default_video" />
+
+
+            <TextView
+                android:id="@+id/recommend_item_five_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_5"
+                android:layout_marginTop="@dimen/margin_10"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:layout_toRightOf="@id/recommend_item_five_iv"
+                android:text="addadafa" />
+        </RelativeLayout>
+    </RelativeLayout>
 </LinearLayout>

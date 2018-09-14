@@ -1,6 +1,7 @@
 package com.android.blue.smarthomefunc.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
@@ -12,7 +13,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -20,6 +20,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
+import com.android.blue.smarthomefunc.adapter.OnItemClickListener;
 import com.android.blue.smarthomefunc.adapter.RecommendVideoBaseAdapter;
 import com.android.blue.smarthomefunc.adapter.VideoItemParseRecycleAdapter;
 import com.android.blue.smarthomefunc.entity.LogUtils;
@@ -34,7 +35,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailVideoActivity extends BaseActivity implements IParseWebPageNotify, View.OnClickListener {
+public class DetailVideoActivity extends BaseActivity implements IParseWebPageNotify, View.OnClickListener, OnItemClickListener {
 
 
     @BindView(R.id.toolbar)
@@ -84,6 +85,14 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
     ImageView recommendItemThrIv;
     @BindView(R.id.recommend_item_thr_title)
     TextView recommendItemThrTitle;
+    @BindView(R.id.recommend_item_four_iv)
+    ImageView recommendItemFourIv;
+    @BindView(R.id.recommend_item_four_title)
+    TextView recommendItemFourTitle;
+    @BindView(R.id.recommend_item_five_iv)
+    ImageView recommendItemFiveIv;
+    @BindView(R.id.recommend_item_five_title)
+    TextView recommendItemFiveTitle;
 
 
     private String url;
@@ -149,7 +158,7 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
             @Override
             public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
-                LogUtils.i("onScroll change scrollY="+scrollY);
+                LogUtils.i("onScroll change scrollY=" + scrollY);
                 if (scrollY >= 0 && scrollY < 340) {
                     toolbarSelf.setBackgroundResource(backColors[scrollY / 34]);
 
@@ -184,7 +193,7 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
     /**
      * 隐藏推荐栏
      */
-    private void hideRecommend(){
+    private void hideRecommend() {
         recommendItemOneIv.setVisibility(View.GONE);
         recommendItemOneTitle.setVisibility(View.GONE);
 
@@ -193,40 +202,97 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
 
         recommendItemThrIv.setVisibility(View.GONE);
         recommendItemThrTitle.setVisibility(View.GONE);
+
+        recommendItemFourIv.setVisibility(View.GONE);
+        recommendItemFourTitle.setVisibility(View.GONE);
+
+        recommendItemFiveIv.setVisibility(View.GONE);
+        recommendItemFiveTitle.setVisibility(View.GONE);
     }
 
 
     /**
      * 显示推荐电影栏
+     *
      * @param videos
      */
-    private void showRecommend(List<RecommendVideo> videos){
-        int size = videos.size();
-        for (int i = 0; i< videos.size(); i++){
-            if (i==0){
-                Glide.with(getApplicationContext())
-                        .load(videos.get(i).getRecVideoCover())
-                        .placeholder(R.drawable.default_cover)
-                        .into(recommendItemOneIv);
+    private void showRecommend(final List<RecommendVideo> videos) {
+        for (int i = 0; i < videos.size(); i++) {
+            if (i == 0) {
+                final int position = 0;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(getApplicationContext())
+                                .load(videos.get(position).getRecVideoCover())
+                                .placeholder(R.drawable.default_cover)
+                                .into(recommendItemOneIv);
+                    }
+                });
+
                 recommendItemOneIv.setVisibility(View.VISIBLE);
                 recommendItemOneTitle.setText(videos.get(i).recVideoTitle);
                 recommendItemOneTitle.setVisibility(View.VISIBLE);
-            }else if (i == 1){
-                Glide.with(getApplicationContext())
-                        .load(videos.get(i).getRecVideoCover())
-                        .placeholder(R.drawable.default_cover)
-                        .into(recommendItemTwoIv);
+            } else if (i == 1) {
+                final int position = 1;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(getApplicationContext())
+                                .load(videos.get(position).getRecVideoCover())
+                                .placeholder(R.drawable.default_cover)
+                                .into(recommendItemTwoIv);
+                    }
+                });
+
                 recommendItemTwoIv.setVisibility(View.VISIBLE);
                 recommendItemTwoTitle.setText(videos.get(i).recVideoTitle);
                 recommendItemTwoTitle.setVisibility(View.VISIBLE);
-            }else if (i == 2){
-                Glide.with(getApplicationContext())
-                        .load(videos.get(i).getRecVideoCover())
-                        .placeholder(R.drawable.default_cover)
-                        .into(recommendItemThrIv);
+            } else if (i == 2) {
+                final int position = 2;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(getApplicationContext())
+                                .load(videos.get(position).getRecVideoCover())
+                                .placeholder(R.drawable.default_cover)
+                                .into(recommendItemThrIv);
+                    }
+                });
+
                 recommendItemThrIv.setVisibility(View.VISIBLE);
                 recommendItemThrTitle.setText(videos.get(i).recVideoTitle);
                 recommendItemThrTitle.setVisibility(View.VISIBLE);
+            } else if (i == 3) {
+                final int position = 3;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(getApplicationContext())
+                                .load(videos.get(position).getRecVideoCover())
+                                .placeholder(R.drawable.default_cover)
+                                .into(recommendItemFourIv);
+                    }
+                });
+
+                recommendItemFourIv.setVisibility(View.VISIBLE);
+                recommendItemFourTitle.setText(videos.get(i).recVideoTitle);
+                recommendItemFourTitle.setVisibility(View.VISIBLE);
+            } else if (i == 4) {
+                final int position = 4;
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Glide.with(getApplicationContext())
+                                .load(videos.get(position).getRecVideoCover())
+                                .placeholder(R.drawable.default_cover)
+                                .into(recommendItemFiveIv);
+                    }
+                });
+
+                recommendItemFiveIv.setVisibility(View.VISIBLE);
+                recommendItemFiveTitle.setText(videos.get(i).recVideoTitle);
+                recommendItemFiveTitle.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -273,7 +339,8 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
 
     private void setAdapter(final VideoSelectInfo vs) {
         mAdapter = new VideoItemParseRecycleAdapter(vs.getSelectVideoLists());
-        //mRecommedAdapter = new RecommendVideoBaseAdapter(vs.getRecommendVideoList());
+
+        mAdapter.setOnItemClickListener(this);
 
         LinearLayoutManager lm = new LinearLayoutManager(this);
         lm.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -282,9 +349,6 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
         videoSelectTvPlaysRecyclerView.setLayoutManager(lm);
         videoSelectTvPlaysRecyclerView.setAdapter(mAdapter);
         mAdapter.notifyDataSetChanged();
-
-   /*     recommendVideoList.setAdapter(mRecommedAdapter);
-        mRecommedAdapter.notifyDataSetChanged();*/
     }
 
 
@@ -295,5 +359,22 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
                 finish();
                 break;
         }
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        LogUtils.i(" position = " + position);
+        Intent playVideoIntent = new Intent(this, PlayingVideoActivity.class);
+        playVideoIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        //播放路径
+
+        playVideoIntent.putExtra("videopath", ParseWebPages.WUDI.concat(mVideoSelectInfo.getSelectVideoLists().get(position).getVideoListLink()));
+        playVideoIntent.putExtra("position", position);
+        startActivity(playVideoIntent);
+    }
+
+    @Override
+    public void onItemLongClick(View view, int position) {
+        LogUtils.i(" position = " + position);
     }
 }

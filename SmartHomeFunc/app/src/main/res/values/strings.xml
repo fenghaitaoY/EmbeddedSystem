@@ -116,4 +116,5 @@
     <string name="video_item_year">年份: <xliff:g id="time">%1$s</xliff:g></string>
     <string name="video_item_type">分类: <xliff:g id="time">%1$s</xliff:g></string>
     <string name="related_recommend_bar_title">相关推荐</string>
+    <string name="buffering">加载中，请稍后...</string>
 </resources>

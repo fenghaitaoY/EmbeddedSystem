@@ -194,8 +194,18 @@ public class ParseWebPages {
                             selectInfo.setSelectVideoUpdateToast(doc.select("div.detailPosterIntro").select("div.introTxt").select("span.sDes").text());
                             selectInfo.selectVideoLists = new ArrayList<>();
 
+                            Elements sTit = doc.select("div.tabCon").select("ul.ulTxt").select("span.sTit");
+                            LogUtils.i("----stit ="+sTit.size());
+                            int videoStyle=0;
+                            for (int abc = 0; abc < sTit.size(); abc++){
+                                LogUtils.i("------------------i ="+abc+" , tit="+sTit.get(abc).text());
+                                if(sTit.get(abc).text().equals("高速在线云播")|| sTit.get(abc).text().equals("极速在线云播")){
+                                    videoStyle++;
+                                }
+                            }
+
                             Elements preListVideo = doc.select("div.tabCon").select("ul.ulNumList").select("a");
-                            for (int i=0; i< preListVideo.size();i++){
+                            for (int i=0; i< preListVideo.size()/videoStyle;i++){
                                 LogUtils.i("pre list title="+preListVideo.get(i).attr("title")+" , href="+preListVideo.get(i).attr("href"));
                                 VideoSelectInfo.SelectVideos videos = new VideoSelectInfo.SelectVideos();
                                 videos.setVideoListTitle(preListVideo.get(i).attr("title"));
@@ -253,7 +263,6 @@ public class ParseWebPages {
 
                                     playVideoInfo = new PlayVideoInfo();
                                     playVideoInfo.playVideoLists = new ArrayList<>();
-                                    PlayVideoInfo.PlayVideoList videoList = new PlayVideoInfo.PlayVideoList();
 
                                     LogUtils.i(" replace =" + htmls[1]);
                                     String[] arr = htmls[1].split("\\$");
@@ -261,9 +270,13 @@ public class ParseWebPages {
                                     int j = 0;
                                     boolean isMgtv = false;
 
-                                    for (int i = 0; i < arr.length; i++) {
+                                    if(htmls[1].contains("mgtv")){
+                                        isMgtv = true;
+                                    }
 
-                                        if (arr[0].equals("芒果视频")) {
+                                    for (int i = 0; i < arr.length; i++) {
+                                        PlayVideoInfo.PlayVideoList videoList = new PlayVideoInfo.PlayVideoList();
+                                        if (arr[0].equals("芒果视频") || String.valueOf(arr).contains("mgtv")) {
                                             isMgtv = true;
                                         }
 
@@ -271,7 +284,9 @@ public class ParseWebPages {
                                         if (isMgtv && !TextUtils.isEmpty(arr[i]) && arr[i].matches(regex)) {
                                             LogUtils.i("https://v6.wudiseo.com/playurl/?type=mgtv&id=" + arr[i]);
                                             arr[i] = "https://v6.wudiseo.com/playurl/?type=mgtv&id=" + arr[i];
+
                                         }
+                                        LogUtils.i("------------------arr[i]= "+arr[i]);
                                         //开始集数或高清名称
                                         if (arr[i].startsWith("第") && arr[i].endsWith("集")) {
                                             LogUtils.i(" video 集数:" + arr[i]);
