@@ -13,6 +13,7 @@ import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.HomepageListInfo;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -78,8 +79,7 @@ public class VideoHomepageRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
                 contentHolder.videoListName.setText(mHomepageLists.get(position).getVideoName());
                 contentHolder.introduceTv.setText(mHomepageLists.get(position).getVideoTag());
                 Glide.with(mContext).load(mHomepageLists.get(position).getVideoImage())
-                        .placeholder(R.drawable.default_video)
-                        .error(R.drawable.default_video)
+                        .apply(new RequestOptions().placeholder(R.drawable.default_video).error(R.drawable.default_video))
                         .into(contentHolder.videoListItemImage);
                 contentHolder.mRelatvieLayout.setOnClickListener(new View.OnClickListener() {
                     @Override

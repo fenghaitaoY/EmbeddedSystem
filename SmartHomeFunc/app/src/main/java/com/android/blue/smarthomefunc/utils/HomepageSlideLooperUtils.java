@@ -3,6 +3,7 @@ package com.android.blue.smarthomefunc.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.ImageView;
@@ -12,7 +13,7 @@ import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.HomepageSlideInfo;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.util.List;
@@ -108,15 +109,8 @@ public class HomepageSlideLooperUtils {
         imageCount = looperCount;
 
         Glide.with(mContext).load(mListSlides.get(looperCount).getVideoImage())
-                .asBitmap()
-                .placeholder(R.drawable.default_video)
-                .error(R.drawable.default_video)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        iv.setImageBitmap(resource);
-                    }
-                });
+                .apply(new RequestOptions().error(R.drawable.default_video).placeholder(R.drawable.default_video))
+                .into(iv);
 
         //累计
         if (looperCount < mListSlides.size()-1) {

@@ -29,6 +29,7 @@ import com.android.blue.smarthomefunc.executor.ParseWebPages;
 import com.android.blue.smarthomefunc.model.RecommendVideo;
 import com.android.blue.smarthomefunc.model.VideoSelectInfo;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -225,7 +226,7 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
                     public void run() {
                         Glide.with(getApplicationContext())
                                 .load(videos.get(position).getRecVideoCover())
-                                .placeholder(R.drawable.default_cover)
+                                .apply(new RequestOptions().placeholder(R.drawable.default_cover))
                                 .into(recommendItemOneIv);
                     }
                 });
@@ -240,7 +241,7 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
                     public void run() {
                         Glide.with(getApplicationContext())
                                 .load(videos.get(position).getRecVideoCover())
-                                .placeholder(R.drawable.default_cover)
+                                .apply(new RequestOptions().placeholder(R.drawable.default_cover))
                                 .into(recommendItemTwoIv);
                     }
                 });
@@ -255,7 +256,7 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
                     public void run() {
                         Glide.with(getApplicationContext())
                                 .load(videos.get(position).getRecVideoCover())
-                                .placeholder(R.drawable.default_cover)
+                                .apply(new RequestOptions().placeholder(R.drawable.default_cover))
                                 .into(recommendItemThrIv);
                     }
                 });
@@ -270,7 +271,7 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
                     public void run() {
                         Glide.with(getApplicationContext())
                                 .load(videos.get(position).getRecVideoCover())
-                                .placeholder(R.drawable.default_cover)
+                                .apply(new RequestOptions().placeholder(R.drawable.default_cover))
                                 .into(recommendItemFourIv);
                     }
                 });
@@ -285,7 +286,7 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
                     public void run() {
                         Glide.with(getApplicationContext())
                                 .load(videos.get(position).getRecVideoCover())
-                                .placeholder(R.drawable.default_cover)
+                                .apply(new RequestOptions().placeholder(R.drawable.default_cover))
                                 .into(recommendItemFiveIv);
                     }
                 });
@@ -308,7 +309,7 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
             public void run() {
                 Glide.with(getApplicationContext())
                         .load(Uri.parse(mVideoSelectInfo.getSelectVideoImage()))
-                        .error(R.drawable.default_video)
+                        .apply(new RequestOptions().error(R.drawable.default_video))
                         .into(videoItemCover);
             }
         });
@@ -317,7 +318,7 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
             public void run() {
                 Glide.with(getApplicationContext())
                         .load(Uri.parse(mVideoSelectInfo.getSelectVideoImage()))
-                        .error(R.drawable.default_video)
+                        .apply(new RequestOptions().error(R.drawable.default_video))
                         .into(videoHeadBackground);
 
             }

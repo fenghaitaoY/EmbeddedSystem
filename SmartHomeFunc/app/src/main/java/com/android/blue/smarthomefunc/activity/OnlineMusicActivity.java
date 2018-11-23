@@ -61,7 +61,7 @@ import com.android.blue.smarthomefunc.utils.ViewUtils;
 import com.android.blue.smarthomefunc.model.PlayModePopupWindow;
 import com.android.blue.smarthomefunc.view.CircleImageView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.io.File;
@@ -171,16 +171,9 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
         getMusic(mOffset);
         Glide.with(this)
                 .load(mSongListInfo.getCoverUrl())
-                .asBitmap()
-                .placeholder(R.drawable.default_cover)
-                .error(R.drawable.default_cover)
-                .override(200, 200)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        collapsingImageView.setImageBitmap(resource);
-                    }
-                });
+                .apply(new RequestOptions().error(R.drawable.default_video).placeholder(R.drawable.default_video)
+                .override(200,200))
+                .into(collapsingImageView);
     }
 
     @Override

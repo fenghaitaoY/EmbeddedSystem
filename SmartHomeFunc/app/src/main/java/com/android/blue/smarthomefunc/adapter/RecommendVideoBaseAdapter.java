@@ -12,6 +12,7 @@ import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.model.RecommendVideo;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -60,7 +61,7 @@ public class RecommendVideoBaseAdapter extends BaseAdapter {
         LogUtils.i("position ="+position);
         Glide.with(viewGroup.getContext())
                 .load(mRecommedVideos.get(position).getRecVideoCover())
-                .placeholder(R.drawable.default_cover)
+                .apply(new RequestOptions().placeholder(R.drawable.default_cover))
                 .into(holder.recommendImage);
         holder.recommendTitle.setText(mRecommedVideos.get(position).getRecVideoTitle());
 

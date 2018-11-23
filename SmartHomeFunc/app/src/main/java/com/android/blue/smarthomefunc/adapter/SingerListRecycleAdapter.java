@@ -1,6 +1,8 @@
 package com.android.blue.smarthomefunc.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +14,11 @@ import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.model.SingerLIst;
 import com.android.blue.smarthomefunc.view.CircleImageView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -43,8 +50,19 @@ public class SingerListRecycleAdapter extends RecyclerView.Adapter<SingerListRec
         holder.singerName.setText(singers.get(position).getName());
         holder.otherSub.setText(singers.get(position).getCountry());
         Glide.with(mContext).load(singers.get(position).getAvatar_big())
-                .error(R.drawable.default_cover)
-                .placeholder(R.drawable.default_cover)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+
+                        return false;
+                    }
+                })
+                .apply(new RequestOptions().error(R.drawable.default_cover).placeholder(R.drawable.default_cover))
                 .into(holder.singerCover);
         holder.layout.setOnClickListener(new View.OnClickListener() {
             @Override

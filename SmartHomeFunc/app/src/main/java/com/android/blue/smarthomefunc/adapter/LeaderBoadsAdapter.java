@@ -17,6 +17,7 @@ import com.android.blue.smarthomefunc.model.OnlineMusicList;
 import com.android.blue.smarthomefunc.model.SongListInfo;
 import com.android.blue.smarthomefunc.utils.SystemUtils;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
 
@@ -153,8 +154,7 @@ public class LeaderBoadsAdapter extends BaseAdapter {
         holder.mSonglistMusic3.setText(info.getMusic3());
         holder.mBillboardName.setText(info.getBillboard());
         Glide.with(mContext).load(info.getCoverUrl())
-                .error(R.drawable.default_cover)
-                .placeholder(R.drawable.default_cover)
+                .apply(new RequestOptions().error(R.drawable.default_cover).placeholder(R.drawable.default_cover))
                 .into(holder.mSonglistCover);
     }
 

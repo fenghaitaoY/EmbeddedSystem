@@ -56,7 +56,7 @@ import com.android.blue.smarthomefunc.utils.ViewUtils;
 import com.android.blue.smarthomefunc.view.CircleImageView;
 import com.android.blue.smarthomefunc.view.CustomDividerItemDecoration;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.SimpleTarget;
 
 import java.io.File;
@@ -144,15 +144,8 @@ public class SingerArtistActivity extends BaseActivity implements OnItemClickLis
         setTitle(mSinger.getName());
 
         Glide.with(this).load(mSinger.getAvatar_big())
-                .asBitmap()
-                .placeholder(R.drawable.default_cover)
-                .error(R.drawable.default_cover)
-                .into(new SimpleTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                        collapsingImageView.setImageBitmap(resource);
-                    }
-                });
+                .apply(new RequestOptions().placeholder(R.drawable.default_cover).error(R.drawable.default_cover))
+                .into(collapsingImageView);
 
         if (mData.isEmpty()) {
             ViewUtils.changViewState(mRecyclerView, lvLoading, lvLoadFail, LoadStateEnum.LOADING);

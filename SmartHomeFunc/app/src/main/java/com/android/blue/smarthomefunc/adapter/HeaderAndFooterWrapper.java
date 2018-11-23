@@ -15,8 +15,8 @@ import com.android.blue.smarthomefunc.utils.RecycleWrapperUtils;
  * 感谢　https://github.com/hongyangAndroid/baseAdapter　作者
  * Created by fht on 3/16/18.
  */
-
-public class HeaderAndFooterWrapper<T> extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+@SuppressWarnings("unchecked")
+public class HeaderAndFooterWrapper extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int BASE_ITEM_TYPE_HEADER = 10000;
     private static final int BASE_ITEM_TYPE_FOOTER = 20000;
 
