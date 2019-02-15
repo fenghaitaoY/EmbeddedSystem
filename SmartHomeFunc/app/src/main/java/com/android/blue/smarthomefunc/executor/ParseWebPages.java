@@ -27,7 +27,7 @@ import java.util.List;
  */
 
 public class ParseWebPages {
-    public static final String WUDI="http://m.wudiseo.com";
+    public static final String WUDI="https://m.5di.tv/";
     public static final int HOMEPAGE_SLIDE=0;
     public static final int HOMEPAGE_VIDEOS=1;
     public static final int SELECT_VIDEO=2;

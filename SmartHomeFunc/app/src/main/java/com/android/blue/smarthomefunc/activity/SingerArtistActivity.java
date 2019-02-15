@@ -20,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -150,8 +151,6 @@ public class SingerArtistActivity extends BaseActivity implements OnItemClickLis
         if (mData.isEmpty()) {
             ViewUtils.changViewState(mRecyclerView, lvLoading, lvLoadFail, LoadStateEnum.LOADING);
         }
-
-
 
     }
 

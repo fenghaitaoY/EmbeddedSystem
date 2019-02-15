@@ -111,17 +111,22 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         videoView = inflater.inflate(R.layout.fragment_custom_video, container, false);
-
+        LogUtils.i("init");
         unbinder = ButterKnife.bind(this, videoView);
         mParseWebPages = ParseWebPages.getInstance();
         mSlideLooperUtils = new HomepageSlideLooperUtils(getContext());
         homepageListInfos = new ArrayList<>();
         init();
+
         return videoView;
     }
 
 
     private void init(){
+        if(videoHomepageRecyclerView == null){
+            videoHomepageRecyclerView = getActivity().findViewById(R.id.video_homepage_recyclerView);
+        }
+
         mAdapter = new VideoHomepageRecycleAdapter(homepageListInfos);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 10);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
@@ -206,7 +211,9 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        unbinder.unbind();
+        LogUtils.i(" unbinder unbind");
+        //此处解绑会导致切换页时发生崩溃 videoHomepageRecyclerView 为null
+        //unbinder.unbind();
     }
 
     @Override

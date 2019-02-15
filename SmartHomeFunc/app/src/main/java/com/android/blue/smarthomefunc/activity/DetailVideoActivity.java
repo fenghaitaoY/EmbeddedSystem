@@ -177,6 +177,7 @@ public class DetailVideoActivity extends BaseActivity implements IParseWebPageNo
         });
 
         init();
+
     }
 
 

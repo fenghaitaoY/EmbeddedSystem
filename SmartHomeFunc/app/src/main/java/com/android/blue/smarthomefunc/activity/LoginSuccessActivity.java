@@ -89,7 +89,9 @@ public class LoginSuccessActivity extends BaseActivity implements DeviceControlF
             shiftingMode.setAccessible(false);
             for (int i = 0; i < bottomMenuView.getChildCount(); i++) {
                 BottomNavigationItemView itemView = (BottomNavigationItemView) bottomMenuView.getChildAt(i);
-                itemView.setShiftingMode(false);
+                /*itemView.setShiftingMode(false);
+                itemView.setChecked(itemView.getItemData().isChecked());*/
+                itemView.setShifting(false);
                 itemView.setChecked(itemView.getItemData().isChecked());
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
