@@ -30,14 +30,19 @@ import com.pili.pldroid.player.widget.PLVideoTextureView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.vov.vitamio.MediaPlayer;
+import io.vov.vitamio.widget.VideoView;
 
 public class PlayingVideoActivity extends BaseActivity implements IParseWebPageNotify{
 
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.plvideo_texture_view)
-    PLVideoTextureView mPLVideoTextureView;
+    /*@BindView(R.id.plvideo_texture_view)
+    PLVideoTextureView mPLVideoTextureView;*/
+    @BindView(R.id.vitamio_videoview)
+    VideoView mVideoViewVitamio;
+
     @BindView(R.id.toolbar_back_iv)
     ImageView toolbarBackIv;
     @BindView(R.id.toolbar_back_title)
@@ -46,8 +51,8 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
     TextView toolbarBackSubtitle;
     @BindView(R.id.toolbar_self)
     RelativeLayout toolbarSelf;
-    @BindView(R.id.CoverView)
-    ImageView mCoverView;
+   /* @BindView(R.id.CoverView)
+    ImageView mCoverView;*/
     @BindView(R.id.LoadingView)
     LinearLayout mLoadingView;
 
@@ -89,8 +94,27 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
 
         LogUtils.i("状态栏 hight = " + getStatusBarHeight());
 
-        MediaController mMediaController = new MediaController(this);
-        mMediaController.setOnClickSpeedAdjustListener(new MediaController.OnClickSpeedAdjustListener() {
+        if(!io.vov.vitamio.LibsChecker.checkVitamioLibs(this)) return;
+
+        //MediaController mMediaController = new MediaController(this);
+
+        mVideoViewVitamio.setMediaController(new io.vov.vitamio.widget.MediaController(this));
+        mVideoViewVitamio.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
+            @Override
+            public void onBufferingUpdate(MediaPlayer mp, int percent) {
+
+            }
+        });
+
+        mVideoViewVitamio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+
+            }
+        });
+
+
+        /*mMediaController.setOnClickSpeedAdjustListener(new MediaController.OnClickSpeedAdjustListener() {
             @Override
             public void onClickNormal() {
                 mPLVideoTextureView.setPlaySpeed(0X00010001);
@@ -139,7 +163,10 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
         mPLVideoTextureView.setLooping(getIntent().getBooleanExtra("loop", false));
 
         mPLVideoTextureView.setBufferingIndicator(mLoadingView); //显示正在加载
-        mPLVideoTextureView.setCoverView(mCoverView); //显示第一页
+        mPLVideoTextureView.setCoverView(mCoverView); //显示第一页*/
+
+       // mVideoViewVitamio.setMediaBufferingIndicator(mLoadingView);
+
 
         AVOptions options = new AVOptions();
         options.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000);
@@ -147,13 +174,16 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
         options.setInteger(AVOptions.KEY_MEDIACODEC, AVOptions.MEDIA_CODEC_SW_DECODE);
         int startPos = getIntent().getIntExtra("start-pos", 0);
         options.setInteger(AVOptions.KEY_START_POSITION, startPos * 1000);
-        mPLVideoTextureView.setAVOptions(options);
+        /*mPLVideoTextureView.setAVOptions(options);
 
         mPLVideoTextureView.setDisplayOrientation(90);
-        mPLVideoTextureView.setDisplayAspectRatio(PLVideoTextureView.ASPECT_RATIO_PAVED_PARENT);
+        mPLVideoTextureView.setDisplayAspectRatio(PLVideoTextureView.ASPECT_RATIO_PAVED_PARENT);*/
 
         //mPLVideoTextureView.setVideoPath("/storage/emulated/0/DCIM/Camera/VID_20180828_140905.mp4");
         //mPLVideoTextureView.setVideoPath("rtmp://live.hkstv.hk.lxdns.com/live/hks");
+
+
+
         mParseWebPages = ParseWebPages.getInstance();
         mParseWebPages.doParsePlayVideo(video_url);
         mParseWebPages.setParseWebPagesCompleted(this);
@@ -184,13 +214,13 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
     @Override
     protected void onPause() {
         super.onPause();
-        mPLVideoTextureView.pause();
+        /*mPLVideoTextureView.pause();*/
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mPLVideoTextureView.stopPlayback();
+        /*mPLVideoTextureView.stopPlayback();*/
     }
 
     @Override
@@ -216,8 +246,16 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
 
         LogUtils.i("link = "+mPlayVideoInfo.getPlayVideoLists().get(position).getVideoLink()+" , position ="+position);
         if(mPlayVideoInfo.getPlayVideoLists().size() > 0) {
-            mPLVideoTextureView.setVideoPath(mPlayVideoInfo.getPlayVideoLists().get(position).getVideoLink());
-            mPLVideoTextureView.start();
+            /*mPLVideoTextureView.setVideoPath(mPlayVideoInfo.getPlayVideoLists().get(position).getVideoLink());
+            mPLVideoTextureView.start();*/
+            mVideoViewVitamio.setVideoPath(mPlayVideoInfo.getPlayVideoLists().get(position).getVideoLink());
+            mVideoViewVitamio.requestFocus();
+            mVideoViewVitamio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+
+                }
+            });
         }
     }
 }

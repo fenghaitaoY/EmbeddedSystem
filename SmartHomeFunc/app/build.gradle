@@ -14,6 +14,7 @@ android {
         ndk {
             moduleName "smarthome"
             ldLibs "log"
+            abiFilters 'armeabi-v7a'
         }
 
     }
@@ -23,11 +24,12 @@ android {
             path file("src/main/jni/Android.mk")
         }
     }
-    sourceSets{
+
+  /*  sourceSets{
         main {
             jniLibs.srcDirs = ['src/main/jniLibs']
         }
-    }
+    }*/
 
     buildTypes {
         release {
@@ -54,7 +56,6 @@ dependencies {
     //butterknife View注入框架
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-
     //进度条
     implementation 'com.wang.avi:library:2.1.3'
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
@@ -66,4 +67,5 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation files('libs/JID3.jar')
     implementation files('libs/pldroid-player-2.1.4.jar')
+    implementation project(':vitamio')
 }

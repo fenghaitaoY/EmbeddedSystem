@@ -10,19 +10,25 @@
         layout="@layout/include_app_bar"
         android:visibility="gone" />
 
-    <com.pili.pldroid.player.widget.PLVideoTextureView
+<!--    <com.pili.pldroid.player.widget.PLVideoTextureView
         android:id="@+id/plvideo_texture_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center" />
+        android:layout_gravity="center" />-->
 
-    <ImageView
+    <io.vov.vitamio.widget.VideoView
+        android:layout_gravity="center"
+        android:id="@+id/vitamio_videoview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+ <!--   <ImageView
         android:id="@+id/CoverView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:scaleType="fitXY"
-        android:src="@drawable/default_video"/>
+        android:src="@drawable/default_video"/>-->
 
     <LinearLayout
         android:id="@+id/LoadingView"
