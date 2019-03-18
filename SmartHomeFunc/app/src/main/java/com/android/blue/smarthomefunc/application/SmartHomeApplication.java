@@ -2,12 +2,15 @@ package com.android.blue.smarthomefunc.application;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.android.blue.smarthomefunc.entity.HCBluetoothControl;
 import com.android.blue.smarthomefunc.entity.LogUtils;
+import com.android.blue.smarthomefunc.executor.ParseWebPages;
 import com.android.blue.smarthomefunc.http.HttpInterceptor;
 import com.android.blue.smarthomefunc.jninative.SmartHomeNativeUtils;
+import com.android.blue.smarthomefunc.service.WebViewIntentService;
 import com.zhy.http.okhttp.OkHttpUtils;
 
 import java.util.ArrayList;
@@ -36,6 +39,14 @@ public class SmartHomeApplication extends Application implements Application.Act
 
         HCBluetoothControl.getInstance(getApplicationContext());//初始蓝牙管理
         SmartHomeNativeUtils.initPath(getCacheDir().getPath()+"/login.txt");
+        //初始清除视频解析列表
+        ParseWebPages.slides.clear();
+        ParseWebPages.homepageListInfos.clear();
+
+        //预加载x5内核
+        Intent x5Intent = new Intent(this, WebViewIntentService.class);
+        startService(x5Intent);
+
     }
 
     private void initOkHttpUtils(){

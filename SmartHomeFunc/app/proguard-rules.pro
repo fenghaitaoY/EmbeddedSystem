@@ -146,17 +146,39 @@
 
 
 #okhttp
--dontwarn okhttp3.**
--keep class okhttp3.**{*;}
+# okhttp -keepattributes SourceFile,LineNumberTable
+-keep class com.parse.*{ *; }
+-dontwarn com.parse.**
+-dontwarn com.squareup.picasso.**
+-keepclasseswithmembernames class * {
+native <methods>;
+}
+-keep class com.squareup.okhttp.** { *;}
 
+-dontwarn com.squareup.okhttp.**
+
+-dontwarn okio.**
+
+#okhttp3
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+-dontwarn okhttp3.**
 
 #okio
+-dontwarn com.squareup.**
 -dontwarn okio.**
--keep class okio.**{*;}
+-keep public class org.codehaus.* { *; }
+-keep public class java.nio.* { *; }
 
 -keep class com.wang.avi.** { *; }
 -keep class com.wang.avi.indicators.** { *; }
 
--keep class com.pili.pldroid.player.** { *; }
--keep class com.qiniu.qplayer.mediaEngine.MediaPlayer{*;}
+-dontwarn org.blinkenlights.jid3.**
 
+-keep public class io.vov.vitamio.MediaPlayer { *; }
+-keep public class io.vov.vitamio.IMediaScannerService { *; }
+-keep public class io.vov.vitamio.MediaScanner { *; }
+-keep public class io.vov.vitamio.MediaScannerClient { *; }
+-keep public class io.vov.vitamio.VitamioLicense { *; }
+-keep public class io.vov.vitamio.Vitamio { *; }
+-keep public class io.vov.vitamio.MediaMetadataRetriever { *; }

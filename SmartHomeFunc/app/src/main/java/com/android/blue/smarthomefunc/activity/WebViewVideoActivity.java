@@ -1,7 +1,9 @@
 package com.android.blue.smarthomefunc.activity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.net.Uri;
 import android.net.http.SslError;
 import android.os.Build;
@@ -10,17 +12,10 @@ import android.os.Handler;
 import android.os.Looper;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.webkit.JsPromptResult;
-import android.webkit.JsResult;
-import android.webkit.SslErrorHandler;
-import android.webkit.WebChromeClient;
-import android.webkit.WebResourceResponse;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -28,6 +23,24 @@ import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.R;
 import com.android.blue.smarthomefunc.entity.LogUtils;
+import com.android.blue.smarthomefunc.utils.X5WebView;
+
+import com.tencent.smtt.export.external.extension.interfaces.IX5WebViewExtension;
+import com.tencent.smtt.export.external.interfaces.IX5WebChromeClient.CustomViewCallback;
+import com.tencent.smtt.export.external.interfaces.JsPromptResult;
+import com.tencent.smtt.export.external.interfaces.JsResult;
+import com.tencent.smtt.export.external.interfaces.SslErrorHandler;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
+import com.tencent.smtt.export.external.interfaces.WebResourceResponse;
+import com.tencent.smtt.sdk.CookieSyncManager;
+import com.tencent.smtt.sdk.DownloadListener;
+import com.tencent.smtt.sdk.ValueCallback;
+import com.tencent.smtt.sdk.WebChromeClient;
+import com.tencent.smtt.sdk.WebSettings;
+import com.tencent.smtt.sdk.WebSettings.LayoutAlgorithm;
+import com.tencent.smtt.sdk.WebView;
+import com.tencent.smtt.sdk.WebViewClient;
+import com.tencent.smtt.utils.TbsLog;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -61,16 +74,22 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
     Handler mHandler = new Handler();
     Thread jsoupThread;
     JsoupRunnable mJsoupRunnable;
+    private String videoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFormat(PixelFormat.TRANSLUCENT);
         setContentView(R.layout.activity_web_view_video);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         ButterKnife.bind(this);
 
-        String urlStr = getIntent().getStringExtra("url");
-        mJsoupRunnable = new JsoupRunnable(urlStr);
+        Intent intent = getIntent();
+        if (intent != null){
+            videoPath = intent.getStringExtra("path");
+        }
+        LogUtils.i("path="+videoPath);
+        mJsoupRunnable = new JsoupRunnable(videoPath);
         jsoupThread = new Thread(mJsoupRunnable);
 
 
@@ -89,14 +108,28 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
         mWebSettings.setDomStorageEnabled(true);
         mWebSettings.setUseWideViewPort(true);
         mWebSettings.setAllowFileAccess(true);
-
+        mWebSettings.setLayoutAlgorithm(LayoutAlgorithm.NARROW_COLUMNS);
+        mWebSettings.setSupportMultipleWindows(false);
+        mWebSettings.setAppCacheEnabled(true);
+        mWebSettings.setDomStorageEnabled(true);
+        mWebSettings.setGeolocationEnabled(true);
+        mWebSettings.setAppCacheMaxSize(Long.MAX_VALUE);
+        mWebSettings.setAppCachePath(this.getDir("appcache",0).getPath());
+        mWebSettings.setDatabasePath(this.getDir("databases", 0).getPath());
+        mWebSettings.setGeolocationDatabasePath(this.getDir("geolocation", 0).getPath());
+        mWebSettings.setPluginState(WebSettings.PluginState.ON_DEMAND);
         mWebSettings.setLoadsImagesAutomatically(true);
-        mWebSettings.setPluginState(WebSettings.PluginState.ON);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mWebSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        CookieSyncManager.createInstance(this);
+        CookieSyncManager.getInstance().sync();
+
+        //去除滚动条
+        IX5WebViewExtension ix5WebViewExtension = webView.getX5WebViewExtension();
+        if (ix5WebViewExtension != null){
+            ix5WebViewExtension.setScrollBarFadingEnabled(false);
         }
-        webView.loadUrl(urlStr);
-        setToolbarTitle(urlStr);
+
+        webView.loadUrl(videoPath);
+        setToolbarTitle(videoPath);
 
         //由于设置了弹窗检验调用结果, 所以需要支持js对话框, webview只是载体, 内容的渲染需要使用webviewchromeClient类去实现
         //通过设置webchromeclient对象处理js的对话框, 设置响应js的alert函数
@@ -107,6 +140,11 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
             public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
                 return false;
 
+            }
+
+            @Override
+            public boolean onJsConfirm(WebView webView, String s, String s1, JsResult jsResult) {
+                return super.onJsConfirm(webView, s, s1, jsResult);
             }
 
             //拦截输入框
@@ -181,6 +219,13 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
             @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, String url) {
                 LogUtils.i("shouldInterceptRequest  url = " + url);
+                //拦截广告
+                if (url.contains("li1l.hlzma.cn")
+                        || url.contains("image.xcxzxc.cn")|| url.contains("p.mendoc.cn")
+                        || url.contains("hm.baidu.com") || url.contains("js/moge/foot")
+                        || url.contains("f5.mtqys.com")){
+                    return new WebResourceResponse(null,null,null);
+                }
                 return super.shouldInterceptRequest(view, url);
             }
 
@@ -203,26 +248,24 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
 
             @Override
             public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
                 LogUtils.i("加载结束");
                 if (webViewActivityLoadingBar != null)
                     webViewActivityLoadingBar.setVisibility(View.GONE);
 
             }
 
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.proceed();
-            }
         });
 
         videoBack.setOnClickListener(this);
 
     }
 
-
-
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        LogUtils.i("-------------------"+webView.getX5WebViewExtension());
+    }
 
     /**
      * 设置title
@@ -292,6 +335,13 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
 
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        if (intent == null || webView == null || intent.getData() == null) return;
+        LogUtils.i(intent.getData().toString());
+        webView.loadUrl(intent.getData().toString());
+
+    }
 
     @Override
     protected void onDestroy() {
@@ -313,5 +363,16 @@ public class WebViewVideoActivity extends BaseActivity implements View.OnClickLi
                 onBackPressed();
                 break;
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            if (webView != null && webView.canGoBack()){
+                webView.goBack();
+                return true;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

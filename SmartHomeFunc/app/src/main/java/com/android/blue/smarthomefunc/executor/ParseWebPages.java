@@ -3,6 +3,7 @@ package com.android.blue.smarthomefunc.executor;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.webkit.WebView;
 
 import com.android.blue.smarthomefunc.entity.LogUtils;
 import com.android.blue.smarthomefunc.enums.HomepageTypeEnum;
@@ -34,8 +35,8 @@ public class ParseWebPages {
     public static final int PLAYING_VIDEO=3;
 
 
-    public List<HomepageSlideInfo> slides = new ArrayList<>();
-    public List<HomepageListInfo> homepageListInfos = new ArrayList<>();
+    public static List<HomepageSlideInfo> slides = new ArrayList<>();
+    public static List<HomepageListInfo> homepageListInfos = new ArrayList<>();
     public VideoSelectInfo selectInfo;
     public PlayVideoInfo playVideoInfo;
 
@@ -58,8 +59,10 @@ public class ParseWebPages {
 
     public void doParseSlideVideo(String url){
         LogUtils.i("url ="+url);
-        doParseWebPageWork(HOMEPAGE_SLIDE, url);
-        doParseWebPageWork(HOMEPAGE_VIDEOS, url);
+        if (getHomePageSlideList().isEmpty())
+            doParseWebPageWork(HOMEPAGE_SLIDE, url);
+        if (getHomepageListInfos().isEmpty())
+            doParseWebPageWork(HOMEPAGE_VIDEOS, url);
     }
 
     public List<HomepageSlideInfo> getHomePageSlideList(){
@@ -335,5 +338,8 @@ public class ParseWebPages {
             }
         }).start();
     }
+
+
+
 
 }

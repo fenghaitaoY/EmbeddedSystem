@@ -1,14 +1,31 @@
 package com.android.blue.smarthomefunc.activity;
 
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
+import android.net.http.SslError;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.JsPromptResult;
+import android.webkit.JsResult;
+import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebResourceResponse;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,16 +38,14 @@ import com.android.blue.smarthomefunc.executor.IParseWebPageNotify;
 import com.android.blue.smarthomefunc.executor.MediaController;
 import com.android.blue.smarthomefunc.executor.ParseWebPages;
 import com.android.blue.smarthomefunc.model.PlayVideoInfo;
-import com.pili.pldroid.player.AVOptions;
-import com.pili.pldroid.player.PLOnBufferingUpdateListener;
-import com.pili.pldroid.player.PLOnCompletionListener;
-import com.pili.pldroid.player.PLOnErrorListener;
-import com.pili.pldroid.player.PLOnVideoSizeChangedListener;
-import com.pili.pldroid.player.widget.PLVideoTextureView;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.vov.vitamio.MediaPlayer;
+import io.vov.vitamio.Vitamio;
 import io.vov.vitamio.widget.VideoView;
 
 public class PlayingVideoActivity extends BaseActivity implements IParseWebPageNotify{
@@ -38,11 +53,8 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    /*@BindView(R.id.plvideo_texture_view)
-    PLVideoTextureView mPLVideoTextureView;*/
     @BindView(R.id.vitamio_videoview)
     VideoView mVideoViewVitamio;
-
     @BindView(R.id.toolbar_back_iv)
     ImageView toolbarBackIv;
     @BindView(R.id.toolbar_back_title)
@@ -51,8 +63,6 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
     TextView toolbarBackSubtitle;
     @BindView(R.id.toolbar_self)
     RelativeLayout toolbarSelf;
-   /* @BindView(R.id.CoverView)
-    ImageView mCoverView;*/
     @BindView(R.id.LoadingView)
     LinearLayout mLoadingView;
 
@@ -66,6 +76,9 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Vitamio.isInitialized(getApplicationContext());
+
         setContentView(R.layout.activity_playing_video);
         ButterKnife.bind(this);
 
@@ -75,9 +88,6 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
 
         View decorView = getWindow().getDecorView();
 
-        //int option = View.SYSTEM_UI_FLAG_FULLSCREEN;
-        // int option = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        //         | View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
 
         int option = View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -94,11 +104,22 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
 
         LogUtils.i("状态栏 hight = " + getStatusBarHeight());
 
-        if(!io.vov.vitamio.LibsChecker.checkVitamioLibs(this)) return;
+        /*if(!io.vov.vitamio.LibsChecker.checkVitamioLibs(this)) return;*/
 
-        //MediaController mMediaController = new MediaController(this);
+        //网页解析
+        mParseWebPages = ParseWebPages.getInstance();
+        mParseWebPages.doParsePlayVideo(video_url);
+        mParseWebPages.setParseWebPagesCompleted(this);
 
-        mVideoViewVitamio.setMediaController(new io.vov.vitamio.widget.MediaController(this));
+        initVideoView();
+        mLoadingView.setVisibility(View.VISIBLE);
+
+
+    }
+
+    private void initVideoView(){
+        MediaController mMediaController = new MediaController(this);
+        mVideoViewVitamio.setMediaController(mMediaController);
         mVideoViewVitamio.setOnBufferingUpdateListener(new MediaPlayer.OnBufferingUpdateListener() {
             @Override
             public void onBufferingUpdate(MediaPlayer mp, int percent) {
@@ -113,81 +134,10 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
             }
         });
 
-
-        /*mMediaController.setOnClickSpeedAdjustListener(new MediaController.OnClickSpeedAdjustListener() {
-            @Override
-            public void onClickNormal() {
-                mPLVideoTextureView.setPlaySpeed(0X00010001);
-            }
-
-            @Override
-            public void onClickFaster() {
-                mPLVideoTextureView.setPlaySpeed(0X00020001);
-            }
-
-            @Override
-            public void onClickSlower() {
-                mPLVideoTextureView.setPlaySpeed(0X00010002);
-            }
-        });
-        mPLVideoTextureView.setMediaController(mMediaController);
-
-        mPLVideoTextureView.setOnVideoSizeChangedListener(new PLOnVideoSizeChangedListener() {
-            @Override
-            public void onVideoSizeChanged(int width, int height) {
-                LogUtils.i(" width ="+width+" , height="+height);
-            }
-        });
-
-        mPLVideoTextureView.setOnBufferingUpdateListener(new PLOnBufferingUpdateListener() {
-            @Override
-            public void onBufferingUpdate(int precent) {
-                LogUtils.i(" precent = "+precent);
-            }
-        });
-
-        mPLVideoTextureView.setOnCompletionListener(new PLOnCompletionListener() {
-            @Override
-            public void onCompletion() {
-                LogUtils.i(" completion ");
-            }
-        });
-
-        mPLVideoTextureView.setOnErrorListener(new PLOnErrorListener() {
-            @Override
-            public boolean onError(int i) {
-                return false;
-            }
-        });
-
-        mPLVideoTextureView.setLooping(getIntent().getBooleanExtra("loop", false));
-
-        mPLVideoTextureView.setBufferingIndicator(mLoadingView); //显示正在加载
-        mPLVideoTextureView.setCoverView(mCoverView); //显示第一页*/
-
-       // mVideoViewVitamio.setMediaBufferingIndicator(mLoadingView);
-
-
-        AVOptions options = new AVOptions();
-        options.setInteger(AVOptions.KEY_PREPARE_TIMEOUT, 10 * 1000);
-        options.setInteger(AVOptions.KEY_LIVE_STREAMING, 0);
-        options.setInteger(AVOptions.KEY_MEDIACODEC, AVOptions.MEDIA_CODEC_SW_DECODE);
-        int startPos = getIntent().getIntExtra("start-pos", 0);
-        options.setInteger(AVOptions.KEY_START_POSITION, startPos * 1000);
-        /*mPLVideoTextureView.setAVOptions(options);
-
-        mPLVideoTextureView.setDisplayOrientation(90);
-        mPLVideoTextureView.setDisplayAspectRatio(PLVideoTextureView.ASPECT_RATIO_PAVED_PARENT);*/
-
-        //mPLVideoTextureView.setVideoPath("/storage/emulated/0/DCIM/Camera/VID_20180828_140905.mp4");
-        //mPLVideoTextureView.setVideoPath("rtmp://live.hkstv.hk.lxdns.com/live/hks");
-
-
-
-        mParseWebPages = ParseWebPages.getInstance();
-        mParseWebPages.doParsePlayVideo(video_url);
-        mParseWebPages.setParseWebPagesCompleted(this);
+        mVideoViewVitamio.setVisibility(View.GONE);
     }
+
+
 
 
     public int getStatusBarHeight() {
@@ -200,10 +150,11 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
     }
 
 
+
     @Override
     protected void onResume() {
         super.onResume();
-        //mPLVideoTextureView.start();
+
     }
 
     @Override
@@ -214,13 +165,14 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
     @Override
     protected void onPause() {
         super.onPause();
-        /*mPLVideoTextureView.pause();*/
+        if (mVideoViewVitamio.isPlaying()){
+            mVideoViewVitamio.stopPlayback();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        /*mPLVideoTextureView.stopPlayback();*/
     }
 
     @Override
@@ -246,16 +198,38 @@ public class PlayingVideoActivity extends BaseActivity implements IParseWebPageN
 
         LogUtils.i("link = "+mPlayVideoInfo.getPlayVideoLists().get(position).getVideoLink()+" , position ="+position);
         if(mPlayVideoInfo.getPlayVideoLists().size() > 0) {
-            /*mPLVideoTextureView.setVideoPath(mPlayVideoInfo.getPlayVideoLists().get(position).getVideoLink());
-            mPLVideoTextureView.start();*/
-            mVideoViewVitamio.setVideoPath(mPlayVideoInfo.getPlayVideoLists().get(position).getVideoLink());
-            mVideoViewVitamio.requestFocus();
-            mVideoViewVitamio.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
 
-                }
-            });
+            mLoadingView.setVisibility(View.GONE);
+
+            String videoPath = mPlayVideoInfo.getPlayVideoLists().get(position).getVideoLink();
+
+            if (videoPath.endsWith("mp4") || videoPath.endsWith("m3u8") || videoPath.endsWith("mkv")
+                || videoPath.endsWith("flv") || videoPath.endsWith("rmvb") || videoPath.endsWith("mms")){
+                playVideo(videoPath);
+
+            }else{
+                LogUtils.i(mParseWebPages.getSelectVideoInfo().getSelectVideoLists().get(position).getVideoListLink());
+                videoPath = mParseWebPages.getSelectVideoInfo().getSelectVideoLists().get(position).getVideoListLink();
+                Intent webVideo = new Intent(this, WebViewVideoActivity.class);
+                webVideo.putExtra("path", ParseWebPages.WUDI+videoPath);
+                startActivity(webVideo);
+                finish();
+            }
         }
     }
+
+
+    private void playVideo(String path){
+        mVideoViewVitamio.setVisibility(View.VISIBLE);
+        mVideoViewVitamio.setVideoPath(path);
+        mVideoViewVitamio.requestFocus();
+        mVideoViewVitamio.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setPlaybackSpeed(1.0f);
+            }
+        });
+    }
+
+
 }

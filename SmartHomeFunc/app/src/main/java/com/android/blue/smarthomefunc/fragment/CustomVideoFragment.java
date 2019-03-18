@@ -66,9 +66,6 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
     private ParseWebPages mParseWebPages;
     private HomepageSlideLooperUtils mSlideLooperUtils;
 
-    List<HomepageSlideInfo> homepageSlideInfos;
-    List<HomepageListInfo> homepageListInfos;
-
     VideoHomepageRecycleAdapter mAdapter;
 
 
@@ -115,7 +112,7 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
         unbinder = ButterKnife.bind(this, videoView);
         mParseWebPages = ParseWebPages.getInstance();
         mSlideLooperUtils = new HomepageSlideLooperUtils(getContext());
-        homepageListInfos = new ArrayList<>();
+
         init();
 
         return videoView;
@@ -127,13 +124,12 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
             videoHomepageRecyclerView = getActivity().findViewById(R.id.video_homepage_recyclerView);
         }
 
-        mAdapter = new VideoHomepageRecycleAdapter(homepageListInfos);
+        mAdapter = new VideoHomepageRecycleAdapter(ParseWebPages.getInstance().getHomepageListInfos());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 10);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
                 int type = videoHomepageRecyclerView.getAdapter().getItemViewType(position);
-                LogUtils.i(" --------type ="+type);
                 switch (type){
                     case VideoHomepageRecycleAdapter.HOMEPAGE_TITLE:
                         return 10;
@@ -150,11 +146,15 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
         videoHomepageRecyclerView.setLayoutManager(gridLayoutManager);
         videoHomepageRecyclerView.setAdapter(mAdapter);
         videoHomepageRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
+        mAdapter.notifyDataSetChanged();
 
 
         //解析滚动推荐
-        mParseWebPages.doParseSlideVideo(ParseWebPages.WUDI);
+        if (ParseWebPages.getInstance().getHomePageSlideList().isEmpty()
+                || ParseWebPages.getInstance().getHomepageListInfos().isEmpty()) {
+            mParseWebPages.doParseSlideVideo(ParseWebPages.WUDI);
+        }
+
         mParseWebPages.setParseWebPagesCompleted(this);
         scrollingTvOne.setOnClickListener(this);
         scrollingTvTwo.setOnClickListener(this);
@@ -172,20 +172,18 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
     @Override
     public void onResume() {
         super.onResume();
-        if (homepageSlideInfos != null && homepageSlideInfos.size() > 0){
-            mSlideLooperUtils.startLoop(homepageSlideInfos, scrollingTvOne, scrollingTvTwo, scrollingTvThree, scrollingRecommendIv);
+        if (ParseWebPages.getInstance().getHomePageSlideList() != null && ParseWebPages.getInstance().getHomePageSlideList().size() > 0){
+            mSlideLooperUtils.startLoop(ParseWebPages.getInstance().getHomePageSlideList(), scrollingTvOne, scrollingTvTwo, scrollingTvThree, scrollingRecommendIv);
         }
     }
 
     @Override
     public void resolutionCompletedNotification() {
-        LogUtils.i("");
+        LogUtils.i("start");
 
-        homepageSlideInfos = mParseWebPages.getHomePageSlideList();
-        homepageListInfos.clear();
-        homepageListInfos.addAll(mParseWebPages.getHomepageListInfos());
         mAdapter.notifyDataSetChanged();
-        mSlideLooperUtils.startLoop(homepageSlideInfos, scrollingTvOne, scrollingTvTwo, scrollingTvThree, scrollingRecommendIv);
+        mSlideLooperUtils.startLoop(ParseWebPages.getInstance().getHomePageSlideList(), scrollingTvOne, scrollingTvTwo, scrollingTvThree, scrollingRecommendIv);
+        LogUtils.i("end");
     }
 
 
@@ -211,7 +209,6 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        LogUtils.i(" unbinder unbind");
         //此处解绑会导致切换页时发生崩溃 videoHomepageRecyclerView 为null
         //unbinder.unbind();
     }
@@ -220,22 +217,23 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.scrolling_tv_one:
-                if (homepageSlideInfos.size() > 0) {
+                if (ParseWebPages.getInstance().getHomePageSlideList().size() > 0) {
                     mSlideLooperUtils.clickUpdateLooper(0);
                 }
                 break;
             case R.id.scrolling_tv_two:
-                if (homepageSlideInfos.size() >= 1) {
+                if (ParseWebPages.getInstance().getHomePageSlideList().size() >= 1) {
                     mSlideLooperUtils.clickUpdateLooper(1);
                 }
                 break;
             case R.id.scrolling_tv_three:
-                if (homepageSlideInfos.size() >= 2) {
+                if (ParseWebPages.getInstance().getHomePageSlideList().size() >= 2) {
                     mSlideLooperUtils.clickUpdateLooper(2);
                 }
                 break;
             case R.id.scrolling_recommend_iv:
-                LogUtils.i("num ="+mSlideLooperUtils.getClickSlideItemNum()+" url="+homepageSlideInfos.get(mSlideLooperUtils.getClickSlideItemNum()).getVideoLink());
+                LogUtils.i("num ="+mSlideLooperUtils.getClickSlideItemNum()+
+                        " url="+ParseWebPages.getInstance().getHomePageSlideList().get(mSlideLooperUtils.getClickSlideItemNum()).getVideoLink());
                 break;
         }
 
@@ -243,6 +241,7 @@ public class CustomVideoFragment extends Fragment implements IParseWebPageNotify
 
     @Override
     public void onItemClick(View view, int position) {
+        List<HomepageListInfo> homepageListInfos = ParseWebPages.getInstance().getHomepageListInfos();
         LogUtils.i(" ---- position = "+position+" , title = "+homepageListInfos.get(position).getVideoName()
         +" , link ="+homepageListInfos.get(position).getVideoLink()+" , type ="+homepageListInfos.get(position).type
         +" , morelink ="+homepageListInfos.get(position).getMoreLink());

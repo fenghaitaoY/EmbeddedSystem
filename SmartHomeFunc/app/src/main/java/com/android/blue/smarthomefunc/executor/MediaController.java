@@ -9,13 +9,11 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -23,7 +21,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.blue.smarthomefunc.entity.LogUtils;
-import com.pili.pldroid.player.IMediaController;
 
 import java.util.Locale;
 
@@ -32,9 +29,9 @@ import java.util.Locale;
  * Created by fht on 8/28/18.
  */
 
-public class MediaController extends FrameLayout implements IMediaController {
+public class MediaController extends io.vov.vitamio.widget.MediaController {
 
-    private IMediaController.MediaPlayerControl mPlayer;
+    private MediaPlayerControl mPlayer;
     private Context mContext;
     private PopupWindow mWindow;
     private int mAnimStyle;
@@ -208,7 +205,7 @@ public class MediaController extends FrameLayout implements IMediaController {
 
     private void disableUnsupportedButtons() {
         try {
-            if (mPauseButton != null && !mPlayer.canPause())
+            if (mPauseButton != null)
                 mPauseButton.setEnabled(false);
         } catch (IncompatibleClassChangeError ex) {
         }
@@ -484,6 +481,7 @@ public class MediaController extends FrameLayout implements IMediaController {
         mPlayer = player;
         updatePausePlay();
     }
+
 
     @Override
     public void show() {

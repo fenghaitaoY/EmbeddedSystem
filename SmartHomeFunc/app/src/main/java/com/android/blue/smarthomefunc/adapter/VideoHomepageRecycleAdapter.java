@@ -40,7 +40,7 @@ public class VideoHomepageRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LogUtils.i("viewType="+viewType);
+        //LogUtils.i("viewType="+viewType);
         mContext = parent.getContext();
 
         if (viewType == HOMEPAGE_TITLE) {
@@ -57,7 +57,7 @@ public class VideoHomepageRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
         int type = getItemViewType(position);
-        LogUtils.i("position ="+position+" , type = "+type);
+        //LogUtils.i("position ="+position+" , type = "+type);
         switch (type){
             case HOMEPAGE_TITLE:
                 final VideoHomepageTitleHolder videoTitleHolder = (VideoHomepageTitleHolder) holder;
@@ -96,7 +96,7 @@ public class VideoHomepageRecycleAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public int getItemCount() {
-        LogUtils.i("size ="+mHomepageLists.size());
+        //LogUtils.i("size ="+mHomepageLists.size());
         return mHomepageLists.size();
     }
 

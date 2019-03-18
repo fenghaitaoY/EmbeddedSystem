@@ -14,7 +14,7 @@ android {
         ndk {
             moduleName "smarthome"
             ldLibs "log"
-            abiFilters 'armeabi-v7a'
+            abiFilters "armeabi-v7a"
         }
 
     }
@@ -25,6 +25,10 @@ android {
         }
     }
 
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
   /*  sourceSets{
         main {
             jniLibs.srcDirs = ['src/main/jniLibs']
@@ -36,6 +40,7 @@ android {
             minifyEnabled true
             //代码混淆 true 打开混淆，　false关闭混淆
             zipAlignEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -66,6 +71,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.0.0'
     implementation 'org.jsoup:jsoup:1.11.3'
     implementation files('libs/JID3.jar')
-    implementation files('libs/pldroid-player-2.1.4.jar')
     implementation project(':vitamio')
+    implementation files('libs/tbs_sdk_thirdapp_v4.3.0.1020_43633_sharewithdownload_withoutGame_obfs_20190111_105200.jar')
 }

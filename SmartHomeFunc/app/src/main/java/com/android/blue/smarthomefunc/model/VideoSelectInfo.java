@@ -8,15 +8,15 @@ import java.util.List;
  */
 
 public class VideoSelectInfo {
-    public String selectVideoName;
-    public String selectVideoLink;
-    public String selectVideoImage;
-    public String selectVideoUpdateToast;
+    private String selectVideoName;
+    private String selectVideoLink;
+    private String selectVideoImage;
+    private String selectVideoUpdateToast;
 
-    public String videoYears;
-    public String videoArea;
-    public String videoType;
-    public String videoIntro;
+    private String videoYears;
+    private String videoArea;
+    private String videoType;
+    private String videoIntro;
 
     public List<SelectVideos> selectVideoLists;
 
@@ -106,8 +106,8 @@ public class VideoSelectInfo {
     }
 
     public static class SelectVideos {
-        public String videoListTitle;
-        public String videoListLink;
+        private String videoListTitle;
+        private String videoListLink;
 
         public String getVideoListTitle() {
             return videoListTitle;
