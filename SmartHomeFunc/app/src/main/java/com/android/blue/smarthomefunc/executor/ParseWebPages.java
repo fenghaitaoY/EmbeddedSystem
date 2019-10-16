@@ -2,7 +2,6 @@ package com.android.blue.smarthomefunc.executor;
 
 import android.os.Handler;
 import android.text.TextUtils;
-import android.util.Log;
 import android.webkit.WebView;
 
 import com.android.blue.smarthomefunc.entity.LogUtils;
@@ -21,6 +20,8 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import io.vov.vitamio.utils.Log;
 
 /**
  * 解析网页类
@@ -202,18 +203,21 @@ public class ParseWebPages {
                             int videoStyle=0;
                             for (int abc = 0; abc < sTit.size(); abc++){
                                 LogUtils.i("------------------i ="+abc+" , tit="+sTit.get(abc).text());
-                                if(sTit.get(abc).text().equals("高速在线云播")|| sTit.get(abc).text().equals("极速在线云播")){
+                                if(sTit.get(abc).text().equals("高速在线云播")|| sTit.get(abc).text().equals("极速在线云播")
+                                        || sTit.get(abc).text().equals("CKPLAYER") || sTit.get(abc).text().equals("酷云")){
                                     videoStyle++;
                                 }
                             }
 
                             Elements preListVideo = doc.select("div.tabCon").select("ul.ulNumList").select("a");
-                            for (int i=0; i< preListVideo.size()/videoStyle;i++){
-                                LogUtils.i("pre list title="+preListVideo.get(i).attr("title")+" , href="+preListVideo.get(i).attr("href"));
-                                VideoSelectInfo.SelectVideos videos = new VideoSelectInfo.SelectVideos();
-                                videos.setVideoListTitle(preListVideo.get(i).attr("title"));
-                                videos.setVideoListLink(preListVideo.get(i).attr("href"));
-                                selectInfo.selectVideoLists.add(videos);
+                            if (videoStyle > 0) {
+                                for (int i = 0; i < preListVideo.size(); i++) {
+                                    LogUtils.i("pre list title=" + preListVideo.get(i).attr("title") + " , href=" + preListVideo.get(i).attr("href"));
+                                    VideoSelectInfo.SelectVideos videos = new VideoSelectInfo.SelectVideos();
+                                    videos.setVideoListTitle(preListVideo.get(i).attr("title"));
+                                    videos.setVideoListLink(preListVideo.get(i).attr("href"));
+                                    selectInfo.selectVideoLists.add(videos);
+                                }
                             }
 
                             //年份 地区 类型
@@ -236,12 +240,14 @@ public class ParseWebPages {
 
                             //简介
                             Elements intro = doc.select("div.tabCon");
-                            String strIntro=null;
-                            strIntro = intro.get(intro.size()-1).text();
-                            strIntro= strIntro.split(">>")[1];
-                            LogUtils.i("intro : "+strIntro.split("收起")[0]);
-                            strIntro = strIntro.split("收起")[0];
-                            selectInfo.setVideoIntro(strIntro);
+                            String strIntro = null;
+                            Elements input = intro.select("input");
+                            String value = input.attr("value");
+                            if (!value.isEmpty()) {
+                                value = value.split("<a style")[0];
+                                selectInfo.setVideoIntro(value);
+                            }
+                            LogUtils.i("==简介:"+value);
 
                             //推荐视频
                             Elements recEles = doc.select("div.mod_b").select("div.tb_b").select("div.con");

@@ -344,7 +344,7 @@ public class OnlineMusicActivity extends BaseActivity implements OnItemClickList
                 for (OnlineMusic music : mData) {
                     LogUtils.i("music" + music.getTitle());
                 }
-                mRecyclerView.addItemDecoration(mDivider);
+                            mRecyclerView.addItemDecoration(mDivider);
                 mHeaderAndFooterWrapper.notifyDataSetChanged();
 
                 LogUtils.i("item count =" + mHeaderAndFooterWrapper.getItemCount() + "  rece item count=" + recycleAdapter.getItemCount());

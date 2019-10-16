@@ -118,8 +118,7 @@ public class DeviceControlFragment extends Fragment implements OnItemClickListen
     private HCBluetoothControl mHCBleControl;
 
     private static DeviceControlFragment fragment;
-    private DeviceControlFragment() {
-    }
+
 
     /**
      * Use this factory method to create a new instance of

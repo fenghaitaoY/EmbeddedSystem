@@ -158,7 +158,7 @@ public class MusicFragment extends Fragment implements OnPlayerEventListener, Se
     }
 
     private void initMusicBar(){
-        if (getPlayService().getPlayingMusic() != null) {
+        if (getPlayService() != null && getPlayService().getPlayingMusic() != null) {
             mBarImageCover.setImageBitmap(MusicCoverLoaderUtils.getInstance().loadThumbnail(getPlayService().getPlayingMusic()));
             mSeekbar.setMax((int) getPlayService().getPlayingMusic().getDuration());
             mMusicTitle.setText(getPlayService().getPlayingMusic().getTitle());
